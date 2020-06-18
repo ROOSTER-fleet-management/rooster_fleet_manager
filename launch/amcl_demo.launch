@@ -1,0 +1,23 @@
+<launch>
+
+  <!-- Run Gazebo with Ridgeback model -->
+ <include file="$(find ridgeback_gazebo)/launch/ridgeback_world.launch"/>
+
+  <!-- Run the map server -->
+ <arg name="map_file" default="$(find simple_sim)/maps/mymap.yaml"/>
+ <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!--- Run AMCL -->
+ <include file="$(find ridgeback_navigation)/launch/include/amcl.launch" />
+
+  <!--- Run Move Base -->
+ <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" />
+
+  <!--Run rviz with config-->
+
+ <param name="use_gui" value="true"/>
+ <arg name="config" default="localization" />
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ridgeback_viz)/rviz/$(arg config).rviz" />
+
+
+</launch>
