@@ -23,7 +23,7 @@ def done_cb(status, result):
 
 rospy.init_node('send_goal')
 
-navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+navclient = actionlib.SimpleActionClient('r1/move_base',MoveBaseAction)
 navclient.wait_for_server()
 
 # Example of navigation goal
@@ -40,9 +40,9 @@ goal.target_pose.pose.orientation.z = 0.662
 goal.target_pose.pose.orientation.w = 0.750
 
 navclient.send_goal(goal, done_cb, active_cb, feedback_cb)
-finished = navclient.wait_for_result()
+#finished = navclient.wait_for_result()
 
-if not finished:
-    rospy.logerr("Action server not available!")
-else:
-    rospy.loginfo ( navclient.get_result())
+#if not finished:
+#    rospy.logerr("Action server not available!")
+#else:
+#    rospy.loginfo ( navclient.get_result())

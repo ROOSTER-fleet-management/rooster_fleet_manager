@@ -6,7 +6,10 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 # Callbacks definition
 
-def move_robot(x_coord, y_coord):
+def move_robot(x_coord, y_coord, robot_id):
+    navclient = actionlib.SimpleActionClient(robot_id+'move_base',MoveBaseAction)
+    navclient.wait_for_server()
+
     goal = MoveBaseGoal()
     goal.target_pose.header.frame_id = "map"
     goal.target_pose.header.stamp = rospy.Time.now()
@@ -65,9 +68,13 @@ storage_1 = Location('Storage #1', -13, -4)
 
 storage_2 = Location('Storage #2', -11, 11)
 
+storage_3 = Location('Storage #3', 7, -3)
+
 assembly_station_1 = Location('Assembly station #1', 7, -10)
 
 assembly_station_2 = Location('Assembly station #2', 7, 9)
+
+assembly_station_3 = Location('Assembly station #3', -1, 7)
 
 start_point = input('where is a cargo? \n "1" for Storage #1 \n "2" for Storage #2 \n')
 if start_point == 1:
@@ -90,8 +97,8 @@ task_for_robot.task_info()
 #---------------------------
 rospy.init_node('send_goal')
 
-navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
-navclient.wait_for_server()
+#navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+#navclient.wait_for_server()
 
 print('press any key to execute logistic task from storage to assembly line')
 user_input1 = input()

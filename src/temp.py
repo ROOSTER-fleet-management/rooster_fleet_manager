@@ -3,16 +3,51 @@
 import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-
+import time
+from multiprocessing import Process
+import sys
 # Callbacks definition
 
-def move_robot(x_coord, y_coord):
+def move_robot(robot_id, x_start, y_start, x_finish, y_finish):
+    rospy.init_node(robot_id[0:2]+'send_goal')
+    navclient = actionlib.SimpleActionClient(robot_id+'move_base',MoveBaseAction)
+    navclient.wait_for_server()
+
     goal = MoveBaseGoal()
     goal.target_pose.header.frame_id = "map"
     goal.target_pose.header.stamp = rospy.Time.now()
 
-    goal.target_pose.pose.position.x = x_coord
-    goal.target_pose.pose.position.y = y_coord
+    goal.target_pose.pose.position.x = x_start
+    goal.target_pose.pose.position.y = y_start
+    goal.target_pose.pose.position.z = 0.0
+    goal.target_pose.pose.orientation.x = 0.0
+    goal.target_pose.pose.orientation.y = 0.0
+    goal.target_pose.pose.orientation.z = 0.662
+    goal.target_pose.pose.orientation.w = 0.750
+
+    #navclient.send_goal(goal, done_cb, active_cb, feedback_cb)
+    navclient.send_goal(goal, done_cb, active_cb)
+    finished = navclient.wait_for_result()
+
+    if not finished:
+        rospy.logerr("Action server not available!")
+    else:
+        rospy.loginfo ( navclient.get_result())
+    t = 20
+    time.sleep(t)
+    i=0
+    while i<t:
+        print('sleeping ', i)
+        i = i+1
+    navclient = actionlib.SimpleActionClient(robot_id+'move_base',MoveBaseAction)
+    navclient.wait_for_server()
+
+    goal = MoveBaseGoal()
+    goal.target_pose.header.frame_id = "map"
+    goal.target_pose.header.stamp = rospy.Time.now()
+
+    goal.target_pose.pose.position.x = x_finish
+    goal.target_pose.pose.position.y = y_finish
     goal.target_pose.pose.position.z = 0.0
     goal.target_pose.pose.orientation.x = 0.0
     goal.target_pose.pose.orientation.y = 0.0
@@ -26,6 +61,8 @@ def move_robot(x_coord, y_coord):
         rospy.logerr("Action server not available!")
     else:
         rospy.loginfo ( navclient.get_result())
+    
+
 
 def active_cb(extra):
     rospy.loginfo("Goal pose being processed")
@@ -60,49 +97,25 @@ class Task:
         print('Task info: ' 'id', self.task_task_id, 'go from', self.task_start_location.location_name, 'to', self.task_finish_location.location_name)
 
 
-storage_1 = Location('Storage #1', -13, -4)
-#j1.location_info()
 
-storage_2 = Location('Storage #2', -11, 11)
-
-assembly_station_1 = Location('Assembly station #1', 7, -10)
-
-assembly_station_2 = Location('Assembly station #2', 7, 9)
-
-start_point = input('where is a cargo? \n "1" for Storage #1 \n "2" for Storage #2 \n')
-if start_point == 1:
-    start_point = storage_1
-else:
-    start_point = storage_2
-#print(start_point.location_info())
-
-finish_point = input('where to move a cargo? \n "1" for Assembly station #1 \n "2" for Assembly station #2 \n')
-if finish_point == 1:
-    finish_point = assembly_station_1
-else:
-    finish_point = assembly_station_2
-#print(finish_point.location_info())
-
-task_for_robot = Task('1', start_point, finish_point)
-task_for_robot.task_info()
-#print(task_for_robot.task_start_location.location_x_coordinate)
-#input('have a look')
 #---------------------------
-rospy.init_node('send_goal')
 
-navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
-navclient.wait_for_server()
+
+#navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+#navclient.wait_for_server()
 
 print('press any key to execute logistic task from storage to assembly line')
 user_input1 = input()
 
 #move to a start point
-move_robot(task_for_robot.task_start_location.location_x_coordinate, task_for_robot.task_start_location.location_y_coordinate)
 
-print('press any key if loading is finished and robot can move to a finish point')
-user_input = input()
 
-#move to a finish point
-move_robot(task_for_robot.task_finish_location.location_x_coordinate, task_for_robot.task_finish_location.location_y_coordinate)
-
+p1 = Process(target=move_robot('r3/', -13, -4, 7, -10))
+p1.start()
+time.sleep(5)
+p2 = Process(target=move_robot('r2/', -11, 11, 7, 9))
+p2.start()
+time.sleep(5)
+p3 = Process(target=move_robot('r1/', 7, -3, -1, 7))
+p2.start()
 print('task finished')
