@@ -96,7 +96,7 @@ task_for_robot.task_info()
 #input('have a look')
 #---------------------------
 rospy.init_node('send_goal')
-
+robot_ns = "rdg01/"
 #navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
 #navclient.wait_for_server()
 
@@ -104,12 +104,12 @@ print('press any key to execute logistic task from storage to assembly line')
 user_input1 = input()
 
 #move to a start point
-move_robot(task_for_robot.task_start_location.location_x_coordinate, task_for_robot.task_start_location.location_y_coordinate)
+move_robot(task_for_robot.task_start_location.location_x_coordinate, task_for_robot.task_start_location.location_y_coordinate, robot_ns)
 
 print('press any key if loading is finished and robot can move to a finish point')
 user_input = input()
 
 #move to a finish point
-move_robot(task_for_robot.task_finish_location.location_x_coordinate, task_for_robot.task_finish_location.location_y_coordinate)
+move_robot(task_for_robot.task_finish_location.location_x_coordinate, task_for_robot.task_finish_location.location_y_coordinate, robot_ns)
 
 print('task finished')

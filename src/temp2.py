@@ -46,12 +46,15 @@ def func2():
 
 def count(how_long_count):
     i = 1
+    print("Counting")
     while i < how_long_count:
         print(i)
         i=i+1
 
 if __name__=='__main__':
-    p1 = Process(target=count(3))
+    p1 = Process(target=count(10))
     p1.start()
-    p2 = Process(target=count(5))
+    print("started process p1")
+    p2 = Process(target=count(10))
     p2.start()
+    print("started process p2")
