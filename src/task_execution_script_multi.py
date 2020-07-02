@@ -3,113 +3,130 @@
 import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-
-# Callbacks definition
-
-def move_robot(x_coord, y_coord, robot_id):
-    navclient = actionlib.SimpleActionClient(robot_id+'move_base',MoveBaseAction)
-    navclient.wait_for_server()
-
-    goal = MoveBaseGoal()
-    goal.target_pose.header.frame_id = "map"
-    goal.target_pose.header.stamp = rospy.Time.now()
-
-    goal.target_pose.pose.position.x = x_coord
-    goal.target_pose.pose.position.y = y_coord
-    goal.target_pose.pose.position.z = 0.0
-    goal.target_pose.pose.orientation.x = 0.0
-    goal.target_pose.pose.orientation.y = 0.0
-    goal.target_pose.pose.orientation.z = 0.662
-    goal.target_pose.pose.orientation.w = 0.750
-
-    navclient.send_goal(goal, done_cb, active_cb, feedback_cb)
-    finished = navclient.wait_for_result()
-
-    if not finished:
-        rospy.logerr("Action server not available!")
-    else:
-        rospy.loginfo ( navclient.get_result())
-
-def active_cb(extra):
-    rospy.loginfo("Goal pose being processed")
-
-def feedback_cb(feedback):
-    rospy.loginfo("Current location: "+str(feedback))
-
-def done_cb(status, result):
-    if status == 3:
-        rospy.loginfo("Goal reached")
-    if status == 2 or status == 8:
-        rospy.loginfo("Goal cancelled")
-    if status == 4:
-        rospy.loginfo("Goal aborted")
+from task_item_class import RobotMoveBase, AwaitingLoadCompletion
 
 class Location:
-    def __init__(self, name, x_coordinate, y_coordinate):
-        self.location_name = name
-        self.location_x_coordinate = x_coordinate
-        self.location_y_coordinate = y_coordinate
+    """ Class with location information (name, position, orientation) based on map reference frame. """
+    def __init__(self, name, x_coordinate, y_coordinate, theta):
+        self.name = name            # Name of the location, string
+        self.x = x_coordinate       # X position in map frame in meters, float
+        self.y = y_coordinate       # Y position in map frame in meters, float
+        self.theta = theta          # Orientation (yaw angle) in map frame in radians, float
 
-    def location_info(self):
-        print('Location info: ', self.location_name, self.location_x_coordinate, self.location_y_coordinate)
+    def info(self):
+        print(
+            "Location info [" + self.name + "]: x, y, theta = " + str(self.x) + 
+            ", " + str(self.y) + ", " + str(self.theta))
 
 class Task:
-    def __init__(self, task_id, start_location, finish_location):
-        self.task_task_id = task_id
-        self.task_start_location = start_location
-        self.task_finish_location = finish_location
+    """ Class which contains individual overal task details and a list of task-items. """
+    def __init__(self, task_id, robot_id=None):
+        self.id = task_id
+        self.robot_id = robot_id
+        self.status = 0 if not self.robot_id else 1     # 0 = PENDING, 1 = ASSIGNED, 2 = ACTIVE, 3 = SUCCEEDED, 4 = ABORTED
+        self.item_count = 0
+        self.item_current = None
+        self.item_list = []
 
-    def task_info(self):
-        print('Task info: ' 'id', self.task_task_id, 'go from', self.task_start_location.location_name, 'to', self.task_finish_location.location_name)
+    def add_item(self, item):
+        """ Add a single item to the task's item list and update item count. """
+        self.item_list.append(item)
+        self.item_count = len(self.item_list)
 
+    def add_items(self, list_of_items):
+        """ Add a multiple items from a list to the task's item list and update item count. """
+        for item in list_of_items:
+            self.item_list.append(item)
+        self.item_count = len(self.item_list)
 
-storage_1 = Location('Storage #1', -13, -4)
-#j1.location_info()
+    def assign_robot(self, robot_id):
+        """ Assign a robot_id to this task, if status is either pending or assigned. """
+        if self.status == 0 or self.status == 1:
+            self.robot_id = robot_id
+            self.status = 1
 
-storage_2 = Location('Storage #2', -11, 11)
+    def start_task(self):
+        """ Start executing the first item in the task's item_list if the status = 1 (ASSIGNED). """
+        if self.status == 1:
+            self.status = 2         # Set status to active
+            self.item_current = 0   # Set the current item to the 1st item in the list
+            self.item_list[self.item_current].start(self.robot_id, self.item_current, self.item_cb)
+        else:
+            rospy.loginfo(self.id + " Task status is not equal to assigned; cannot start the task.")
+    
+    def next_item(self):
+        """ Start executing the next item in the task's item_list, if the status is still 2 (ACTIVE). """
+        if self.status == 2:
+            self.item_current += 1
+            self.item_list[self.item_current].start(self.robot_id, self.item_current, self.item_cb)
 
-storage_3 = Location('Storage #3', 7, -3)
+    def item_cb(self, data):
+        """ Callback method for the items in the task's item list to call upon completion/cancellation/abort. """
+        print("Item cb: ", data)
+        item_id = data[0]
+        item_status = data[1]
+        if item_id == self.item_current:
+            # item_status can be:    0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED
 
-assembly_station_1 = Location('Assembly station #1', 7, -10)
+            if item_status == 3:
+                # Succesful completion of the item.
+                if self.item_current + 1 < len(self.item_list):
+                    # Continue with next.
+                    self.next_item()
+                else:
+                    # End of the task's item_list reached. Task is complete.
+                    self.status = 3
+                    self.info()
 
-assembly_station_2 = Location('Assembly station #2', 7, 9)
+        else:
+            rospy.loginfo("Mismatch between item callback ID and task's current item.")
 
-assembly_station_3 = Location('Assembly station #3', -1, 7)
+    def info(self):
+        print(
+            "Task info [" + str(self.id) + "]: status = " + str(self.status) + 
+            ", robot_id = " + str(self.robot_id) + ", items = " + str(self.item_count) + 
+            ", current item = " + str(self.item_current)) #+ "\nItem list = " + str(self.item_list))
 
-start_point = input('where is a cargo? \n "1" for Storage #1 \n "2" for Storage #2 \n')
-if start_point == 1:
-    start_point = storage_1
-else:
-    start_point = storage_2
-#print(start_point.location_info())
+if __name__ == '__main__':
+    try:
+        # Initialize the node
+        rospy.init_node('simple_fleet_manager')
 
-finish_point = input('where to move a cargo? \n "1" for Assembly station #1 \n "2" for Assembly station #2 \n')
-if finish_point == 1:
-    finish_point = assembly_station_1
-else:
-    finish_point = assembly_station_2
-#print(finish_point.location_info())
+        # Testing the adding of multiple Location class instances
+        location_1 = Location('Storage #1', -0.5, -2.5, 1.57)
+        # location_1.info()
 
-task_for_robot = Task('1', start_point, finish_point)
-task_for_robot.task_info()
-#print(task_for_robot.task_start_location.location_x_coordinate)
-#input('have a look')
-#---------------------------
-rospy.init_node('send_goal')
-robot_ns = "rdg01/"
-#navclient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
-#navclient.wait_for_server()
+        location_2 = Location('Assembly station #1', 4.5, 2.5, 3.1415/2.0)
+        # location_2.info()
 
-print('press any key to execute logistic task from storage to assembly line')
-user_input1 = input()
+        location_3 = Location("Storage #2", -2.0, 0.0, 3.1415)
+        # location_3.info()
 
-#move to a start point
-move_robot(task_for_robot.task_start_location.location_x_coordinate, task_for_robot.task_start_location.location_y_coordinate, robot_ns)
+        location_4 = Location("Assembly station #2", -5.0, 4.5, 6.283)
+        # location_4.info()
 
-print('press any key if loading is finished and robot can move to a finish point')
-user_input = input()
+        # Testing the adding of multiple Task class instances and their functionality.
+        task_1 = Task("task001")
+        task_1.add_item(RobotMoveBase(location_1))      # Items can be added 1 by 1
+        task_1.add_item(AwaitingLoadCompletion())
+        list_of_items = [RobotMoveBase(location_2), RobotMoveBase(location_1), RobotMoveBase(location_2)]
+        task_1.add_items(list_of_items)                 # Or multiple at a time in a list.
+        task_1.info()
 
-#move to a finish point
-move_robot(task_for_robot.task_finish_location.location_x_coordinate, task_for_robot.task_finish_location.location_y_coordinate, robot_ns)
+        task_2 = Task("task002", "rdg02")               # Robot id can be assigned immediately or left blank and assigned later.
+        list_of_items = [RobotMoveBase(location_3), AwaitingLoadCompletion(), RobotMoveBase(location_4), RobotMoveBase(location_3), RobotMoveBase(location_4)]
+        task_2.add_items(list_of_items)
+        task_2.info()
 
-print('task finished')
+        task_1.start_task()             # Try starting task even though robot_id is not assigned. It should loginfo.
+        task_1.assign_robot("rdg01")    # Assigning a robot_id to the task
+        task_1.start_task()             # Try starting the task again. It should succeed this time.
+        task_1.info()
+
+        task_2.start_task()             # In parallel call another robot to perform a task.
+        task_2.info()
+
+        # Spin the node while tasks are being executing, while receiving messages, callbacks etc.
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
