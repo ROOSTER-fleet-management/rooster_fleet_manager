@@ -117,11 +117,20 @@ class AwaitingLoadCompletion:
         Updates the instance status and calls the higher level task_callback.
         """
         if self.task_callback:      # Only process callback if this item was started.
-            print(data)
+            # Input received from user/system,
             if data.data == 3:
-                # print("SUCCEEDED!")
+                # Loading was completed succesfully.
                 self.status = 3
+            elif data.data == 2:
+                # Loading was cancelled by user.
+                self.status = 2
+            elif data.data == 4:
+                # Loading encountered an error and had to abort.
+                self.status = 4
             
+            if data.data == 2 or data.data == 3 or data.data == 4:   # User input meaning some kind of end: cancel, succes or abort.
+                self.input_subcriber.unregister()   # Unsubscribe to topic, as this item of the task is done.
+
             self.task_callback([self.item_id, self.status])     # Call the higher level Task callback.
     
     def get_status(self):

@@ -62,7 +62,7 @@ class Task:
 
     def item_cb(self, data):
         """ Callback method for the items in the task's item list to call upon completion/cancellation/abort. """
-        print("Item cb: ", data)
+        print(self.id + ". Item cb: " + str(data))
         item_id = data[0]
         item_status = data[1]
         if item_id == self.item_current:
@@ -77,6 +77,12 @@ class Task:
                     # End of the task's item_list reached. Task is complete.
                     self.status = 3
                     self.info()
+            elif item_status == 2 or item_status == 4:
+                # The item was cancelled/aborted, update task status
+                self.status = 4
+            elif item_status == 1:
+                # The item is still active, don't do anything.
+                pass
 
         else:
             rospy.loginfo("Mismatch between item callback ID and task's current item.")
