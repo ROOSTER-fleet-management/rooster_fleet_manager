@@ -8,6 +8,15 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from task_item_class import ItemEnum, RobotMoveBase, AwaitingLoadCompletion
 
+#region #################### TODOLIST #########################
+# TODO 1. Add option to remove task from TaskQueue.
+# TODO 2. Add method which will assign task to available robot:
+# TODO 2a. Keep track of available robots.
+# TODO 2b. Check when a robot is available for a task
+# TODO 2c. Assign task to selected robot and start the task, change this robot's status to busy.
+#endregion ####################################################
+
+
 class Location:
     """ Class with location information (name, position, orientation) based on map reference frame. """
     def __init__(self, id, name, x_coordinate, y_coordinate, theta):
@@ -246,12 +255,12 @@ if __name__ == '__main__':
         filepath = os.getcwd()+"/"+"example_tasks_json.JSON"
         task_queue.add_tasks_from_JSON(filepath)            # Adding one or multiple tasks from JSON file to the TaskQueue.
         print("TaskQueue's length after tasks JSON: " + str(len(task_queue.task_list)))
-        
+
         print("\nInfo on all Tasks in the TaskQueue:")
         for task in task_queue.task_list:
             task.info()
         
-        # # Testing the adding of multiple Task class instances and their functionality.
+        # # Testing the adding of multiple Task class instances and their functionality.    OLD CODE FOR TEMPORARY REFERENCE
         # task_1 = Task("task001")
         # task_1.add_item(RobotMoveBase(location_1))      # Items can be added 1 by 1
         # task_1.add_item(AwaitingLoadCompletion())
