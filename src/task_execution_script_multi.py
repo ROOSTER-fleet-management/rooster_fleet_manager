@@ -1,7 +1,10 @@
 #! /usr/bin/env python
+import json         # Used for reading JSON files (loading tasks to TaskQueue)
+import os           # Used to get base filename and file and directory handling
 
 import rospy
 import actionlib
+
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from task_item_class import ItemEnum, RobotMoveBase, AwaitingLoadCompletion
 
@@ -109,7 +112,7 @@ class TaskQueue:
         # Item order matters, so don't just loop over the dictionary, but check size and loop over item id's
         item_list_length = len(task_dict["item_list"])
         for item_id in range(item_list_length):
-            item_dict = task_dict["item_list"][item_id]
+            item_dict = task_dict["item_list"][str(item_id)]
             # Add item based on defined item type.
             if item_dict["item_type"] == ItemEnum.ROBOTMOVEBASE:
                 location = location_dict[item_dict["location_id"]]
@@ -132,8 +135,18 @@ class TaskQueue:
         # Task order matters, so don't just loop over the dictionary, but check size and loop over task id's
         tasks_dict_length = len(tasks_dict)
         for task_id in range(tasks_dict_length):
-            task_dict = tasks_dict[task_id]
+            task_dict = tasks_dict[str(task_id)]
             self.add_task_from_dict(task_dict)
+
+    def add_tasks_from_JSON(self, filepath):
+        """ Add one or multiple tasks to the TaskQueue from a JSON file. """
+        # Load JSON file into dictionary
+        loaddata_dict = None
+        with open(filepath) as json_loadfile:
+            loaddata_dict = json.load(json_loadfile)
+        
+        # Add tasks from loaded JSON dictionary to the TaskQueue
+        self.add_tasks_from_dict(loaddata_dict)
 
 if __name__ == '__main__':
     try:
@@ -160,12 +173,12 @@ if __name__ == '__main__':
             "robot_id" : None,
             #"status" : 0,
             "item_list" : {
-                0 : {
+                "0" : {
                     "item_id" : 0,
                     "item_type" : ItemEnum.ROBOTMOVEBASE,
                     "location_id" : "loc01"
                 },
-                1 : {
+                "1" : {
                     "item_id" : 1,
                     "item_type" : ItemEnum.AWAITINGLOADCOMPLETION
                 }
@@ -179,47 +192,47 @@ if __name__ == '__main__':
 
         # Setting up multiple tasks in a dictionary to be added to the TaskQueue at once.
         example_multiple_tasks_dict = {
-            0 : {
+            "0" : {
                 "task_id" : "task002",
                 "robot_id" : "rdg02",
                 #"status" : 0,
                 "item_list" : {
-                    0 : {
+                    "0" : {
                         "item_id" : 0,
                         "item_type" : ItemEnum.ROBOTMOVEBASE,
                         "location_id" : "loc03"
                     },
-                    1 : {
+                    "1" : {
                         "item_id" : 1,
                         "item_type" : ItemEnum.AWAITINGLOADCOMPLETION
                     },
-                    2 : {
+                    "2" : {
                         "item_id" : 2,
                         "item_type" : ItemEnum.ROBOTMOVEBASE,
                         "location_id" : "loc04"
                     },
-                    3 : {
+                    "3" : {
                         "item_id" : 3,
                         "item_type" : ItemEnum.ROBOTMOVEBASE,
                         "location_id" : "loc03"
                     }
                 }
             },
-            1 : {
+            "1" : {
                 "task_id" : "task003",
                 "robot_id" : None,
                 #"status" : 0,
                 "item_list" : {
-                    0 : {
+                    "0" : {
                         "item_id" : 0,
                         "item_type" : ItemEnum.ROBOTMOVEBASE,
                         "location_id" : "loc02"
                     },
-                    1 : {
+                    "1" : {
                         "item_id" : 1,
                         "item_type" : ItemEnum.AWAITINGLOADCOMPLETION
                     },
-                    2 : {
+                    "2" : {
                         "item_id" : 2,
                         "item_type" : ItemEnum.ROBOTMOVEBASE,
                         "location_id" : "loc01"
@@ -228,8 +241,16 @@ if __name__ == '__main__':
             }
         }
         task_queue.add_tasks_from_dict(example_multiple_tasks_dict)     # Adding multiple tasks from the dictionary to the TaskQueue.
-        print("TaskQueue's length: " + str(len(task_queue.task_list)))
+        print("TaskQueue's length after multiple tasks from dict: " + str(len(task_queue.task_list)))
 
+        filepath = os.getcwd()+"/"+"example_tasks_json.JSON"
+        task_queue.add_tasks_from_JSON(filepath)            # Adding one or multiple tasks from JSON file to the TaskQueue.
+        print("TaskQueue's length after tasks JSON: " + str(len(task_queue.task_list)))
+        
+        print("\nInfo on all Tasks in the TaskQueue:")
+        for task in task_queue.task_list:
+            task.info()
+        
         # # Testing the adding of multiple Task class instances and their functionality.
         # task_1 = Task("task001")
         # task_1.add_item(RobotMoveBase(location_1))      # Items can be added 1 by 1
