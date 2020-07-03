@@ -6,14 +6,20 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from tf.transformations import quaternion_from_euler
 from std_msgs.msg import UInt8
 
+class ItemEnum:
+    """Class that acts as an enum."""
+    ROBOTMOVEBASE = "RobotMoveBase"
+    AWAITINGLOADCOMPLETION = "AwaitingLoadCompletion"
+
 class RobotMoveBase:
     """
     Item class: RobotMobeBase, implements move_base action calls to robot navigation stack.
     Used by the higher level Task class to populate a list with its task items.
     """
     def __init__(self, location):
-        self.id = None              # ID of the robot to perform the move_base on
-        self.location = location    # location of the goal of the move_base.
+        self.id = None                      # ID of the robot to perform the move_base on
+        self.location = location            # location of the goal of the move_base.
+        self.type = ItemEnum.ROBOTMOVEBASE  # Item type.
 
     #region Callback definitions
     def active_cb(self):
@@ -97,6 +103,7 @@ class AwaitingLoadCompletion:
     def __init__(self):
         self.id = None      # ID of the robot awaiting loading.
         self.status = 0     # 0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED
+        self.type = ItemEnum.AWAITINGLOADCOMPLETION     # Item type
 
     def start(self, robot_id, item_id, task_callback):
         """
