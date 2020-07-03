@@ -156,6 +156,20 @@ class TaskQueue:
         
         # Add tasks from loaded JSON dictionary to the TaskQueue
         self.add_tasks_from_dict(loaddata_dict)
+    
+    def remove_task(self, task_id):
+        index_for_removal = None
+        for index, task in enumerate(self.task_list):
+            if task.id == task_id:
+                index_for_removal = index
+                break
+
+        if index_for_removal:
+            self.task_list.pop(index_for_removal)
+            # TODO Handle the case when task was actually being executed/active at this point.
+        else:
+            rospy.loginfo("Cannot find task with id "+task_id+" in TaskQueue's task_list.")
+
 
 if __name__ == '__main__':
     try:
@@ -259,6 +273,9 @@ if __name__ == '__main__':
         print("\nInfo on all Tasks in the TaskQueue:")
         for task in task_queue.task_list:
             task.info()
+        
+        task_queue.remove_task("task005")       # Remove task with id "task005" from the TaskQueue.
+        print("\nTaskQueue's length after removing 'task005': " + str(len(task_queue.task_list)))
         
         # # Testing the adding of multiple Task class instances and their functionality.    OLD CODE FOR TEMPORARY REFERENCE
         # task_1 = Task("task001")
