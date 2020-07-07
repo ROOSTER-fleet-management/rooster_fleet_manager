@@ -10,10 +10,12 @@ from task_item_class import ItemEnum, RobotMoveBase, AwaitingLoadCompletion
 
 #region #################### TODOLIST #########################
 # DONE 1. Add option to remove task from TaskQueue.
-# TODO 2. Add method which will assign task to available robot:
-# TODO 2a. Keep track of available robots.
-# TODO 2b. Check when a robot is available for a task
-# TODO 2c. Assign task to selected robot and start the task, change this robot's status to 3 (EXECUTING_TASK).
+# DONE 2. Add method which will assign task to available robot:
+# DONE 2a. Keep track of available robots.
+# DONE 2b. Check when a robot is available for a task
+# DONE 2c. Assign task to selected robot and start the task, change this robot's status to 3 (EXECUTING_TASK).
+# TODO 3. Deal with pre-assinged Tasks
+# TODO 4. Set up Task Dispatcher (starting assigned tasks)
 #endregion ####################################################
 
 # - Retrieve all robot ids (e.g. their namespace names) from the rosparameter server -
@@ -186,6 +188,19 @@ class TaskQueue:
         else:
             rospy.loginfo("Cannot find task with id "+task_id+" in TaskQueue's task_list.")
 
+    def allocate_task(self):
+        """ Loops through the TaskQueue, finds the first pending Task and matches it with an available Robot. """
+        for task in self.task_list:
+            if task.status == 0:
+                # Found a task which is still pending, now find available robot.
+                for robot in robot_list:
+                    if robot.status == 0:
+                        # Found a robot which is available (standby)
+                        robot.status = 2
+                        robot.task_id = task.id
+                        task.assign_robot(robot.id)
+                        return True
+        return False
 
 if __name__ == '__main__':
     try:
@@ -288,6 +303,7 @@ if __name__ == '__main__':
         print("TaskQueue's length after multiple tasks from dict: " + str(len(task_queue.task_list)))
 
         filepath = os.getcwd()+"/"+"example_tasks_json.JSON"
+        print(filepath)
         task_queue.add_tasks_from_JSON(filepath)            # Adding one or multiple tasks from JSON file to the TaskQueue.
         print("TaskQueue's length after tasks JSON: " + str(len(task_queue.task_list)))
 
@@ -297,7 +313,22 @@ if __name__ == '__main__':
         
         task_queue.remove_task("task005")       # Remove task with id "task005" from the TaskQueue.
         print("\nTaskQueue's length after removing 'task005': " + str(len(task_queue.task_list)))
+
+        print("Before allocation, first task, first robot.")
+        task_queue.task_list[0].info()
+        print(robot_list[0].status)
+
+        task_queue.allocate_task()      # Allocate/assign the first task to the first available robot.
+
+        print("After allocation, first task, first robot.")
+        task_queue.task_list[0].info()  # Check if the first task in the list is now allocated.
+        print(robot_list[0].status)
         
+        task_queue.allocate_task()      # Try allocating next task in queue.
+        task_queue.task_list[1].info()
+        task_queue.task_list[2].info()
+
+
         # # Testing the adding of multiple Task class instances and their functionality.    OLD CODE FOR TEMPORARY REFERENCE
         # task_1 = Task("task001")
         # task_1.add_item(RobotMoveBase(location_1))      # Items can be added 1 by 1
