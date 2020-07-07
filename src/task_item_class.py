@@ -8,8 +8,8 @@ from std_msgs.msg import UInt8
 
 class ItemEnum:
     """Class that acts as an enum."""
-    ROBOTMOVEBASE = "RobotMoveBase"
-    AWAITINGLOADCOMPLETION = "AwaitingLoadCompletion"
+    ROBOTMOVEBASE = 0
+    AWAITINGLOADCOMPLETION = 1
 
 class RobotMoveBase:
     """

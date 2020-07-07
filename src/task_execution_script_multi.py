@@ -30,7 +30,7 @@ class Robot:
     def __init__(self, id, status=0, task_id=None):
         self.id = id                # Unique identifier for this robot, e.g. "rdg01"
         self.status = status        # Status of the robot (0=STANDBY, 1=CHARGING, 2=ASSIGNED, 3=EXECUTING_TASK, 4=ERROR)
-        self.task_id = task_id
+        self.task_id = task_id      # The unique id of the task the robot is assigned to.
 
 
 class Location:
