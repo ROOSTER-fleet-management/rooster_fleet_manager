@@ -9,12 +9,28 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from task_item_class import ItemEnum, RobotMoveBase, AwaitingLoadCompletion
 
 #region #################### TODOLIST #########################
-# TODO 1. Add option to remove task from TaskQueue.
+# DONE 1. Add option to remove task from TaskQueue.
 # TODO 2. Add method which will assign task to available robot:
 # TODO 2a. Keep track of available robots.
 # TODO 2b. Check when a robot is available for a task
-# TODO 2c. Assign task to selected robot and start the task, change this robot's status to busy.
+# TODO 2c. Assign task to selected robot and start the task, change this robot's status to 3 (EXECUTING_TASK).
 #endregion ####################################################
+
+# - Retrieve all robot ids (e.g. their namespace names) from the rosparameter server -
+# - Note: This parameter only exsists if the robots were launched using the multi_robot_sim GUI! -
+# - Note: Launching robots using the multi_robot_sim GUI is the preferred method! -
+robot_namespaces = rospy.get_param("/robot_list")
+print("Robot list: ")
+for robot in robot_namespaces:
+    print(robot)
+
+
+class Robot:
+    """ Class with robot information (robot id, status, assigned task id) """
+    def __init__(self, id, status=0, task_id=None):
+        self.id = id                # Unique identifier for this robot, e.g. "rdg01"
+        self.status = status        # Status of the robot (0=STANDBY, 1=CHARGING, 2=ASSIGNED, 3=EXECUTING_TASK, 4=ERROR)
+        self.task_id = task_id
 
 
 class Location:
@@ -173,6 +189,11 @@ class TaskQueue:
 
 if __name__ == '__main__':
     try:
+        # Retrieve robots and set up a list of available Robot instances
+        robot_list = []
+        for robot in robot_namespaces:
+            robot_list.append(Robot(robot))
+        
         # Initialize the node
         rospy.init_node('simple_fleet_manager')
 
