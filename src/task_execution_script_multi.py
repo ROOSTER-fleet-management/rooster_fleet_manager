@@ -14,8 +14,9 @@ from task_item_class import ItemEnum, RobotMoveBase, AwaitingLoadCompletion
 # DONE 2a. Keep track of available robots.
 # DONE 2b. Check when a robot is available for a task
 # DONE 2c. Assign task to selected robot and start the task, change this robot's status to 3 (EXECUTING_TASK).
-# TODO 3. Deal with pre-assinged Tasks
-# TODO 4. Set up Task Dispatcher (starting assigned tasks)
+# DONE 3. Deal with pre-assinged Tasks
+# DONE 4. Set up Task Dispatcher (starting assigned tasks)
+# TODO 5. Set up Task Handler (deleting finished tasks from Active Tasks list and updating robot status)
 #endregion ####################################################
 
 # - Retrieve all robot ids (e.g. their namespace names) from the rosparameter server -
@@ -54,7 +55,7 @@ class Task:
     def __init__(self, task_id, robot_id=None):
         self.id = task_id                               # Unique identifier for this task, e.g. "task001"
         self.robot_id = robot_id                        # Unique identifier for an existing robot, e.g. "rdg01"
-        self.status = 0 if not self.robot_id else 1     # 0 = PENDING, 1 = ASSIGNED, 2 = ACTIVE, 3 = SUCCEEDED, 4 = ABORTED
+        self.status = 0                                 # 0 = PENDING, 1 = ASSIGNED, 2 = ACTIVE, 3 = SUCCEEDED, 4 = ABORTED
         self.item_count = 0                             # Current number of items for this task in the Task's item_list
         self.item_current = None                        # The item currently active.
         self.item_list = []                             # List of items for this Task.
@@ -125,9 +126,10 @@ class Task:
             ", current item = " + str(self.item_current)) #+ "\nItem list = " + str(self.item_list))
 
 class TaskQueue:
-    """ Class which contains a list of Task instances (pending or assigned). """
+    """ Class which contains a lists of Task instances (pending or active). """
     def __init__(self):
-        self.task_list = []
+        self.pending_task_list = []
+        self.active_task_list = []
 
     def add_task_from_dict(self, task_dict):
         """ Add a Task to the TaskQueue from a dictionary containing a Task's specifications. """
@@ -150,12 +152,9 @@ class TaskQueue:
             item_list.append(item)
         
         # Generated Task instance with specifications and add to the task list.
-        task = Task(task_id)
-        if robot_id:
-            task.assign_robot(robot_id)
-        # task.status - status
+        task = Task(task_id, robot_id)
         task.add_items(item_list)
-        self.task_list.append(task)
+        self.pending_task_list.append(task)
 
     def add_tasks_from_dict(self, tasks_dict):
         """ Add multile Tasks to the TaskQueue from a dictionary containing multiple Tasks each with its specifications. """
@@ -175,32 +174,58 @@ class TaskQueue:
         # Add tasks from loaded JSON dictionary to the TaskQueue
         self.add_tasks_from_dict(loaddata_dict)
     
-    def remove_task(self, task_id):
+    def remove_pending_task(self, task_id):
         index_for_removal = None
-        for index, task in enumerate(self.task_list):
+        for index, task in enumerate(self.pending_task_list):
             if task.id == task_id:
                 index_for_removal = index
                 break
 
         if index_for_removal:
-            self.task_list.pop(index_for_removal)
+            self.pending_task_list.pop(index_for_removal)
             # TODO Handle the case when task was actually being executed/active at this point.
         else:
-            rospy.loginfo("Cannot find task with id "+task_id+" in TaskQueue's task_list.")
+            rospy.loginfo("Cannot find task with id "+task_id+" in TaskQueue's pending_task_list.")
 
-    def allocate_task(self):
-        """ Loops through the TaskQueue, finds the first pending Task and matches it with an available Robot. """
-        for task in self.task_list:
-            if task.status == 0:
+    def allocate_pending_task(self):
+        """
+        Loops through the TaskQueue,
+        finds the first pending Task and matches it with an available Robot.
+        If succesful, it removes this Task from the pending tasks list and returns
+        the allocated Task instance, otherwise returns None.
+        """
+        allocated_task_index = None
+        for index, task in enumerate(self.pending_task_list):
+            if allocated_task_index != None:
+                print("Allocated index: " + str(allocated_task_index))
+                break
+            elif task.status == 0:
+                print("Trying for index: " + str(index))
                 # Found a task which is still pending, now find available robot.
                 for robot in robot_list:
                     if robot.status == 0:
                         # Found a robot which is available (standby)
-                        robot.status = 2
-                        robot.task_id = task.id
-                        task.assign_robot(robot.id)
-                        return True
-        return False
+                        # Check if the task has not got a robot pre-assigned OR the pre-assigned robot_id matches the robot's id
+                        if (not task.robot_id) or (task.robot_id == robot.id): 
+                            robot.status = 2
+                            robot.task_id = task.id
+                            task.assign_robot(robot.id)
+                            allocated_task_index = index
+                            break
+        
+        if allocated_task_index != None:
+            return self.pending_task_list.pop(allocated_task_index)
+        else:
+            return None
+    
+    def dispatch_task(self, task):
+        """ Dispatch the provided task; starting the task and adding it to the Active Tasks list. """
+        task.start_task()
+        for robot in robot_list:
+            if robot.id == task.robot_id and robot.task_id == task.id:
+                robot.status = 3
+        self.active_task_list.append(task)
+
 
 if __name__ == '__main__':
     try:
@@ -224,7 +249,7 @@ if __name__ == '__main__':
         }
 
         task_queue = TaskQueue()    # Create the TaskQueue
-        print("TaskQueue's list BEFORE task assignment from dict: " +str(task_queue.task_list))  # TaskQueue is empty.
+        print("TaskQueue's list BEFORE task assignment from dict: " +str(task_queue.pending_task_list))  # TaskQueue is empty.
 
         # Set up a single task in a dictionary to be added to the TaskQueue.
         example_task_dict = {
@@ -244,10 +269,10 @@ if __name__ == '__main__':
             }
         }
         task_queue.add_task_from_dict(example_task_dict)    # Adding task from the dictionary to the TaskQueue.
-        print("TaskQueue's list AFTER task assignment from dict: " +str(task_queue.task_list))
+        print("TaskQueue's list AFTER task assignment from dict: " +str(task_queue.pending_task_list))
         print("TaskQueue's first task: ")
-        task_queue.task_list[0].info()
-        print("TaskQueue's first task's first item: " + str(task_queue.task_list[0].item_list[0]))
+        task_queue.pending_task_list[0].info()
+        print("TaskQueue's first task's first item: " + str(task_queue.pending_task_list[0].item_list[0]))
 
         # Setting up multiple tasks in a dictionary to be added to the TaskQueue at once.
         example_multiple_tasks_dict = {
@@ -300,34 +325,45 @@ if __name__ == '__main__':
             }
         }
         task_queue.add_tasks_from_dict(example_multiple_tasks_dict)     # Adding multiple tasks from the dictionary to the TaskQueue.
-        print("TaskQueue's length after multiple tasks from dict: " + str(len(task_queue.task_list)))
+        print("TaskQueue's length after multiple tasks from dict: " + str(len(task_queue.pending_task_list)))
 
         filepath = os.getcwd()+"/"+"example_tasks_json.JSON"
         print(filepath)
         task_queue.add_tasks_from_JSON(filepath)            # Adding one or multiple tasks from JSON file to the TaskQueue.
-        print("TaskQueue's length after tasks JSON: " + str(len(task_queue.task_list)))
+        print("TaskQueue's length after tasks JSON: " + str(len(task_queue.pending_task_list)))
 
-        print("\nInfo on all Tasks in the TaskQueue:")
-        for task in task_queue.task_list:
+        print("\nInfo on all pending Tasks in the TaskQueue:")
+        for task in task_queue.pending_task_list:
             task.info()
         
-        task_queue.remove_task("task005")       # Remove task with id "task005" from the TaskQueue.
-        print("\nTaskQueue's length after removing 'task005': " + str(len(task_queue.task_list)))
+        task_queue.remove_pending_task("task005")       # Remove task with id "task005" from the TaskQueue.
+        print("\nTaskQueue's length after removing 'task005': " + str(len(task_queue.pending_task_list)))
 
         print("Before allocation, first task, first robot.")
-        task_queue.task_list[0].info()
-        print(robot_list[0].status)
+        task_queue.pending_task_list[0].info()
+        print(robot_list[0].id, robot_list[0].status)
 
-        task_queue.allocate_task()      # Allocate/assign the first task to the first available robot.
+        tmp_task = task_queue.allocate_pending_task()           # Allocate/assign the first task to the first available robot.
+        print(tmp_task)
+        if tmp_task != None:
+            task_queue.dispatch_task(tmp_task)                  # Dispatch the allocated task, starting it.
 
         print("After allocation, first task, first robot.")
-        task_queue.task_list[0].info()  # Check if the first task in the list is now allocated.
-        print(robot_list[0].status)
+        task_queue.pending_task_list[0].info()  # Check if the first task in the list is now allocated.
+        print(robot_list[0].id, robot_list[0].status)
         
-        task_queue.allocate_task()      # Try allocating next task in queue.
-        task_queue.task_list[1].info()
-        task_queue.task_list[2].info()
+        tmp_task = task_queue.allocate_pending_task()           # Try allocating next task in queue.
+        print(tmp_task)
+        if tmp_task != None:
+            task_queue.dispatch_task(tmp_task)                  # Dispatch the allocated task, starting it.
 
+        print("\nInfo on all pending Tasks in the TaskQueue:")
+        for task in task_queue.pending_task_list:
+            task.info()
+
+        print("\nInfo on all active Tasks in the TaskQueue:")
+        for task in task_queue.active_task_list:
+            task.info()
 
         # # Testing the adding of multiple Task class instances and their functionality.    OLD CODE FOR TEMPORARY REFERENCE
         # task_1 = Task("task001")
