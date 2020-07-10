@@ -6,20 +6,30 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from tf.transformations import quaternion_from_euler
 from std_msgs.msg import UInt8
 
-class ItemEnum:
-    """Class that acts as an enum."""
+class TaskType:
+    """Class that acts as an enum for the different kinds of tasks."""
     ROBOTMOVEBASE = 0
     AWAITINGLOADCOMPLETION = 1
 
+class TaskStatus:
+    """ Class that acts as Enumerator for Task status. """
+    # 0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED
+    PENDING = 0
+    ACTIVE = 1
+    CANCELLED = 2
+    SUCCEEDED = 3
+    ABORTED = 4
+    
+
 class RobotMoveBase:
     """
-    Item class: RobotMobeBase, implements move_base action calls to robot navigation stack.
-    Used by the higher level Task class to populate a list with its task items.
+    Task class: RobotMobeBase, implements move_base action calls to robot navigation stack.
+    Used by the higher level Job class to populate a list with its job tasks.
     """
     def __init__(self, location):
         self.id = None                      # ID of the robot to perform the move_base on
         self.location = location            # location of the goal of the move_base.
-        self.type = ItemEnum.ROBOTMOVEBASE  # Item type.
+        self.type = TaskType.ROBOTMOVEBASE  # Task type.
 
     #region Callback definitions
     def active_cb(self):
@@ -41,31 +51,33 @@ class RobotMoveBase:
         """
         Callback for stopping of goal.
         Connected to actionlib send_goal call.
+        move_base callback status options: PENDING=0, ACTIVE=1, PREEMPTED=2, SUCCEEDED=3,
+        ABORTED=4, REJECTED=5, PREEMPTING=6, RECALLING=7, RECALLED=8, LOST=9.
         """
-        callback_status = 0             # 0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED
+        callback_status = None
         if status == 3:
-            callback_status = 3
+            callback_status = TaskStatus.SUCCEEDED
             rospy.loginfo(self.id + ". Goal reached")
         if status == 2 or status == 8:
-            callback_status = 2
+            callback_status = TaskStatus.CANCELLED
             rospy.loginfo(self.id + ". Goal cancelled")
         if status == 4:
-            callback_status = 4
+            callback_status = TaskStatus.ABORTED
             rospy.loginfo(self.id + ". Goal aborted")
         
-        if self.task_callback:
-            self.task_callback([self.item_id, callback_status])
+        if self.job_callback:
+            self.job_callback([self.task_id, callback_status])
     #endregion
 
-    def start(self, robot_id, item_id, task_callback):
+    def start(self, robot_id, task_id, job_callback):
         """
-        Start the item's specific action.
-        All task items should have this method: 'start', with these
-        arguments: 'self', 'robot_id', 'item_id', 'task_callback'.
+        Start the task's specific action.
+        All job tasks should have this method: 'start', with these
+        arguments: 'self', 'robot_id', 'task_id', 'job_callback'.
         """
         self.id = robot_id
-        self.item_id = item_id
-        self.task_callback = task_callback
+        self.task_id = task_id
+        self.job_callback = job_callback
         self.move_robot()
 
     def move_robot(self):
@@ -97,49 +109,51 @@ class RobotMoveBase:
 
 class AwaitingLoadCompletion:
     """
-    Item class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the robot as succeeded, cancelled, aborted.
-    Used by the higher level Task class to populate a list with its task items.
+    Task class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the robot as succeeded, cancelled, aborted.
+    Used by the higher level Job class to populate a list with its job tasks.
     """
     def __init__(self):
-        self.id = None      # ID of the robot awaiting loading.
-        self.status = 0     # 0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED
-        self.type = ItemEnum.AWAITINGLOADCOMPLETION     # Item type
+        self.id = None                                  # ID of the robot awaiting loading.
+        self.status = TaskStatus.PENDING                # PENDING, ACTIVE, CANCELLED, SUCCEEDED, ABORTED
+        self.type = TaskType.AWAITINGLOADCOMPLETION     # Task type
 
-    def start(self, robot_id, item_id, task_callback):
+    def start(self, robot_id, task_id, job_callback):
         """
-        Start the item's specific action.
-        All task items should have this method: 'start', with these
-        arguments: 'self', 'robot_id', 'item_id', 'task_callback'.
+        Start the task's specific action.
+        All job tasks should have this method: 'start', with these
+        arguments: 'self', 'robot_id', 'task_id', 'job_callback'.
         """
         self.id = robot_id
-        self.item_id = item_id
-        self.task_callback = task_callback
-        self.status = 1
+        self.task_id = task_id
+        self.job_callback = job_callback
+        self.status = TaskStatus.ACTIVE
         self.input_subcriber = rospy.Subscriber(self.id + "/LoadInput", UInt8, self.input_cb)	# Subscribe to /'robot_id'/LoadInput topic to listen for published user/system input.
         rospy.loginfo(self.id + ". Awaiting load completion input...")
     
     def input_cb(self, data):
         """
         Callback method for any user or system input.
-        Updates the instance status and calls the higher level task_callback.
+        Updates the instance status and calls the higher level job_callback.
+        load status option: PENDING=0 ACTIVE=1, CANCELLED=2, SUCCEEDED=3,
+        ABORTED=4.
         """
-        if self.task_callback:      # Only process callback if this item was started.
+        if self.job_callback:      # Only process callback if this task was started.
             # Input received from user/system,
             if data.data == 3:
                 # Loading was completed succesfully.
-                self.status = 3
+                self.status = TaskStatus.SUCCEEDED
             elif data.data == 2:
                 # Loading was cancelled by user.
-                self.status = 2
+                self.status = TaskStatus.CANCELLED
             elif data.data == 4:
                 # Loading encountered an error and had to abort.
-                self.status = 4
+                self.status = TaskStatus.ABORTED
             
             if data.data == 2 or data.data == 3 or data.data == 4:   # User input meaning some kind of end: cancel, succes or abort.
-                self.input_subcriber.unregister()   # Unsubscribe to topic, as this item of the task is done.
+                self.input_subcriber.unregister()   # Unsubscribe to topic, as this task of the job is done.
 
-            self.task_callback([self.item_id, self.status])     # Call the higher level Task callback.
+            self.job_callback([self.task_id, self.status])     # Call the higher level Job callback.
     
     def get_status(self):
-        """ Retrieve the status of the 'AwaitingLoadCompletion'  item. """
+        """ Retrieve the status of the 'AwaitingLoadCompletion'  task. """
         return self.status
