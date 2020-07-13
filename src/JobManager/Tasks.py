@@ -1,18 +1,14 @@
 #! /usr/bin/env python
 
-
-############# ! NOTE ! NOTE ! NOTE ! NOTE ! NOTE ! NOTE !NOTE ! NOTE ! ####################
-#
-# This file will be removed soon and is replaced by JobManager/Tasks.py
-#
-###########################################################################################
-
-
 import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from tf.transformations import quaternion_from_euler
 from std_msgs.msg import UInt8
+
+#region ################## TODOLIST ########################
+# TODO 1. Add Task class and make other task classes inherit from it.
+#endregion #################################################
 
 class TaskType:
     """Class that acts as an enum for the different kinds of tasks."""
@@ -27,17 +23,42 @@ class TaskStatus:
     CANCELLED = 2
     SUCCEEDED = 3
     ABORTED = 4
-    
 
-class RobotMoveBase:
+class Task(object):
+    """
+    Base class from which specific child task classes inherit.
+    """
+    def __init__(self, tasktype, child_start):
+        self.id = None                          # ID of the MEx to perform the task on/with
+        self.status = TaskStatus.PENDING        # Status of this task.
+        self.type = tasktype                    # Type of the task, defined by child.
+        self.child_start = child_start          # The child's task specific start method.
+    
+    def start(self, mex_id, task_id, job_callback):
+        """
+        Start the task's specific action.
+        All job tasks should have this method: 'start', with these
+        arguments: 'self', 'mex_id', 'task_id', 'job_callback'.
+        """
+        self.id = mex_id
+        self.task_id = task_id
+        self.job_callback = job_callback
+        self.status = TaskStatus.ACTIVE
+        self.child_start()
+
+    def get_status(self):
+        """ Return the status of the task. """
+        return self.status
+
+
+class RobotMoveBase(Task):
     """
     Task class: RobotMoveBase, implements move_base action calls to robot navigation stack.
     Used by the higher level Job class to populate a list with its job tasks.
     """
     def __init__(self, location):
-        self.id = None                      # ID of the robot to perform the move_base on
+        super(RobotMoveBase, self).__init__(TaskType.ROBOTMOVEBASE, self.move_robot)
         self.location = location            # location of the goal of the move_base.
-        self.type = TaskType.ROBOTMOVEBASE  # Task type.
 
     #region Callback definitions
     def active_cb(self):
@@ -77,16 +98,16 @@ class RobotMoveBase:
             self.job_callback([self.task_id, callback_status])
     #endregion
 
-    def start(self, mex_id, task_id, job_callback):
-        """
-        Start the task's specific action.
-        All job tasks should have this method: 'start', with these
-        arguments: 'self', 'mex_id', 'task_id', 'job_callback'.
-        """
-        self.id = mex_id
-        self.task_id = task_id
-        self.job_callback = job_callback
-        self.move_robot()
+    # def child_start(self, mex_id, task_id, job_callback):
+    #     """
+    #     Start the task child's specific action.
+    #     All job tasks should have this method: 'start', with these
+    #     arguments: 'self', 'mex_id', 'task_id', 'job_callback'.
+    #     """
+    #     self.id = mex_id
+    #     self.task_id = task_id
+    #     self.job_callback = job_callback
+    #     self.move_robot()
 
     def move_robot(self):
         """ Start a move_base action using actionlib. """
@@ -109,32 +130,43 @@ class RobotMoveBase:
         self.navclient.send_goal(goal, done_cb=self.done_cb, active_cb=self.active_cb, feedback_cb=self.feedback_cb)
     
     def get_status(self):
-        """ Retrieve the status of the move_base action. """
+        """ 
+        Overwrites base class get_status, but inherits using super().
+        Retrieve the status of the move_base action. 
+        """
         if self.navclient:
-            return self.navclient.get_state()
-        else:
-            return None     # Return None if the navclient was not initialized yet.
+            # navclient state options: PENDING=0, ACTIVE=1, PREEMPTED=2, SUCCEEDED=3,
+            # ABORTED=4, REJECTED=5, PREEMPTING=6, RECALLING=7, RECALLED=8, LOST=9.
+            navclient_state = self.navclient.get_state()
 
-class AwaitingLoadCompletion:
+            if navclient_state == 0 or navclient_state == 1:
+                self.status = TaskStatus.ACTIVE
+            elif navclient_state == 2 or navclient_state == 5 or navclient_state == 8:
+                self.status = TaskStatus.CANCELLED
+            elif navclient_state == 3:
+                self.status = TaskStatus.SUCCEEDED
+            elif navclient_state == 4 or navclient_state == 9:
+                self.status = TaskStatus.ACTIVE
+        
+        super(RobotMoveBase, self).get_status()
+
+class AwaitingLoadCompletion(Task):
     """
     Task class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the MEx as succeeded, cancelled, aborted.
     Used by the higher level Job class to populate a list with its job tasks.
     """
     def __init__(self):
-        self.id = None                                  # ID of the MEx awaiting loading.
-        self.status = TaskStatus.PENDING                # PENDING, ACTIVE, CANCELLED, SUCCEEDED, ABORTED
-        self.type = TaskType.AWAITINGLOADCOMPLETION     # Task type
+        super(AwaitingLoadCompletion, self).__init__(TaskType.AWAITINGLOADCOMPLETION, self.child_start)
+        # self.id = None                                  # ID of the MEx awaiting loading.
+        # self.status = TaskStatus.PENDING                # PENDING, ACTIVE, CANCELLED, SUCCEEDED, ABORTED
+        # self.type = TaskType.AWAITINGLOADCOMPLETION     # Task type
 
-    def start(self, mex_id, task_id, job_callback):
-        """
-        Start the task's specific action.
-        All job tasks should have this method: 'start', with these
-        arguments: 'self', 'mex_id', 'task_id', 'job_callback'.
-        """
-        self.id = mex_id
-        self.task_id = task_id
-        self.job_callback = job_callback
-        self.status = TaskStatus.ACTIVE
+    def child_start(self):
+        """ Start the task's specific action, subscribing to the /LoadInput topic on the MEx's namespace. """
+        # self.id = mex_id
+        # self.task_id = task_id
+        # self.job_callback = job_callback
+        # self.status = TaskStatus.ACTIVE
         self.input_subcriber = rospy.Subscriber(self.id + "/LoadInput", UInt8, self.input_cb)	# Subscribe to /'mex_id'/LoadInput topic to listen for published user/system input.
         rospy.loginfo(self.id + ". Awaiting load completion input...")
     
@@ -162,6 +194,6 @@ class AwaitingLoadCompletion:
 
             self.job_callback([self.task_id, self.status])     # Call the higher level Job callback.
     
-    def get_status(self):
-        """ Retrieve the status of the 'AwaitingLoadCompletion'  task. """
-        return self.status
+    # def get_status(self):
+    #     """ Retrieve the status of the 'AwaitingLoadCompletion'  task. """
+    #     return self.status

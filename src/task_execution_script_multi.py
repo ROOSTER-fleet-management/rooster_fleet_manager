@@ -1,4 +1,13 @@
 #! /usr/bin/env python
+
+
+############# ! NOTE ! NOTE ! NOTE ! NOTE ! NOTE ! NOTE !NOTE ! NOTE ! ####################
+#
+# This file will be removed soon and is replaced by job_manager.py
+#
+###########################################################################################
+
+
 import json         # Used for reading JSON files (loading jobs to JobQueue)
 import os           # Used to get base filename and file and directory handling
 
@@ -10,13 +19,13 @@ from task_class import TaskStatus, TaskType, RobotMoveBase, AwaitingLoadCompleti
 
 #region #################### TODOLIST #########################
 # DONE 1. Add option to remove job from JobQueue.
-# DONE 2. Add method which will assign job to available robot:
-# DONE 2a. Keep track of available robots.
-# DONE 2b. Check when a robot is available for a job
-# DONE 2c. Assign job to selected robot and start the job, change this robot's status to 3 (EXECUTING_TASK).
+# DONE 2. Add method which will assign job to available MEx:
+# DONE 2a. Keep track of available MExs.
+# DONE 2b. Check when a MEx is available for a job
+# DONE 2c. Assign job to selected MEx and start the job, change this MEx's status to 3 (EXECUTING_TASK).
 # DONE 3. Deal with pre-assinged Jobs
 # DONE 4. Set up Job Dispatcher (starting assigned jobs)
-# TODO 5. Set up Job Handler (deleting finished jobs from Active Jobs list and updating robot status)
+# TODO 5. Refactor code into modules with classes/methods.
 #endregion ####################################################
 
 
@@ -38,20 +47,20 @@ class JobStatus:
     SUCCEEDED = 3
     ABORTED = 4
 
-class RobotStatus:
-    """ Class that acts as Enumerator fro Robot status. """
+class MExStatus:
+    """ Class that acts as Enumerator for Mobile Executor (MEx) status. """
     STANDBY = 0
     CHARGING = 1
     ASSIGNED = 2
     EXECUTING_TASK = 3
     ERROR = 4
 
-class Robot:
-    """ Class with robot information (robot id, status, assigned job id) """
-    def __init__(self, id, status=RobotStatus.STANDBY, job_id=None):
-        self.id = id                # Unique identifier for this robot, e.g. "rdg01"
-        self.status = status        # Status of the robot (STANDBY, CHARGING, ASSIGNED, EXECUTING_TASK, ERROR)
-        self.job_id = job_id        # The unique id of the job the robot is assigned to.
+class MobileExecutor:
+    """ Class with Mobile Executor (MEx) information (MEx id, status, assigned job id) """
+    def __init__(self, id, status=MExStatus.STANDBY, job_id=None):
+        self.id = id                # Unique identifier for this MEx, e.g. "rdg01"
+        self.status = status        # Status of the MEx (STANDBY, CHARGING, ASSIGNED, EXECUTING_TASK, ERROR)
+        self.job_id = job_id        # The unique id of the job the MEx is assigned to.
 
 
 class Location:
@@ -70,9 +79,9 @@ class Location:
 
 class Job:
     """ Class which contains overal job details and a list of job-tasks for individual jobs. """
-    def __init__(self, job_id, robot_id=None):
+    def __init__(self, job_id, mex_id=None):
         self.id = job_id                                # Unique identifier for this job, e.g. "job001"
-        self.robot_id = robot_id                        # Unique identifier for an existing robot, e.g. "rdg01"
+        self.mex_id = mex_id                            # Unique identifier for an existing Mobile Executor (MEx), e.g. "rdg01"
         self.status = JobStatus.PENDING                 # PENDING, ASSIGNED, ACTIVE, SUCCEEDED, ABORTED
         self.task_count = 0                             # Current number of tasks for this job in the Job's task_list
         self.task_current = None                        # The task currently active.
@@ -89,10 +98,10 @@ class Job:
             self.task_list.append(task)
         self.task_count = len(self.task_list)
 
-    def assign_robot(self, robot_id):
-        """ Assign a robot_id to this job, if status is either pending or assigned. """
+    def assign_mex(self, mex_id):
+        """ Assign a mex_id to this job, if status is either pending or assigned. """
         if self.status == JobStatus.PENDING or self.status == JobStatus.ASSIGNED:
-            self.robot_id = robot_id
+            self.mex_id = mex_id
             self.status = JobStatus.ASSIGNED
 
     def start_job(self):
@@ -100,7 +109,7 @@ class Job:
         if self.status == JobStatus.ASSIGNED:
             self.status = JobStatus.ACTIVE        # Set status to active
             self.task_current = 0   # Set the current task to the 1st task in the list
-            self.task_list[self.task_current].start(self.robot_id, self.task_current, self.task_cb)
+            self.task_list[self.task_current].start(self.mex_id, self.task_current, self.task_cb)
         else:
             rospy.loginfo(self.id + " Job status is not equal to assigned; cannot start the job.")
     
@@ -108,7 +117,7 @@ class Job:
         """ Start executing the next task in the job's task_list, if the status is still ACTIVE. """
         if self.status == JobStatus.ACTIVE:
             self.task_current += 1
-            self.task_list[self.task_current].start(self.robot_id, self.task_current, self.task_cb)
+            self.task_list[self.task_current].start(self.mex_id, self.task_current, self.task_cb)
 
     def task_cb(self, data):
         """ Callback method for the tasks in the job's task list to call upon completion/cancellation/abort. """
@@ -140,7 +149,7 @@ class Job:
     def info(self):
         print(
             "Job info [" + str(self.id) + "]: status = " + str(self.status) + 
-            ", robot_id = " + str(self.robot_id) + ", tasks = " + str(self.task_count) + 
+            ", mex_id = " + str(self.mex_id) + ", tasks = " + str(self.task_count) + 
             ", current task = " + str(self.task_current)) #+ "\nTask list = " + str(self.task_list))
 
 class JobQueue:
@@ -152,7 +161,7 @@ class JobQueue:
     def add_job_from_dict(self, job_dict):
         """ Add a Job to the JobQueue from a dictionary containing a Job's specifications. """
         job_id = job_dict["job_id"]
-        robot_id = job_dict["robot_id"]
+        mex_id = job_dict["mex_id"]
         # status = job_dict["status"]
         task_list = []
 
@@ -170,7 +179,7 @@ class JobQueue:
             task_list.append(task)
         
         # Generated Job instance with specifications and add to the job list.
-        job = Job(job_id, robot_id)
+        job = Job(job_id, mex_id)
         job.add_tasks(task_list)
         self.pending_job_list.append(job)
 
@@ -208,7 +217,7 @@ class JobQueue:
     def allocate_pending_job(self):
         """
         Loops through the JobQueue,
-        finds the first pending Job and matches it with an available Robot.
+        finds the first pending Job and matches it with an available MEx.
         If succesful, it removes this Job from the pending jobs list and returns
         the allocated Job instance, otherwise returns None.
         """
@@ -219,15 +228,15 @@ class JobQueue:
                 break
             elif job.status == JobStatus.PENDING:
                 print("Trying for index: " + str(index))
-                # Found a job which is still pending, now find available robot.
-                for robot in robot_list:
-                    if robot.status == RobotStatus.STANDBY:
-                        # Found a robot which is available (standby)
-                        # Check if the job has not got a robot pre-assigned OR the pre-assigned robot_id matches the robot's id
-                        if (not job.robot_id) or (job.robot_id == robot.id): 
-                            robot.status = RobotStatus.ASSIGNED
-                            robot.job_id = job.id
-                            job.assign_robot(robot.id)
+                # Found a job which is still pending, now find available MEx.
+                for mex in mex_list:
+                    if mex.status == MExStatus.STANDBY:
+                        # Found a MEx which is available (standby)
+                        # Check if the job has not got a MEx pre-assigned OR the pre-assigned mex_id matches the MEx's id
+                        if (not job.mex_id) or (job.mex_id == mex.id): 
+                            mex.status = MExStatus.ASSIGNED
+                            mex.job_id = job.id
+                            job.assign_mex(mex.id)
                             allocated_job_index = index
                             break
         
@@ -239,21 +248,21 @@ class JobQueue:
     def dispatch_job(self, job):
         """ Dispatch the provided job; starting the job and adding it to the Active Jobs list. """
         job.start_job()
-        for robot in robot_list:
-            if robot.id == job.robot_id and robot.job_id == job.id:
-                robot.status = RobotStatus.EXECUTING_TASK
+        for mex in mex_list:
+            if mex.id == job.mex_id and mex.job_id == job.id:
+                mex.status = MExStatus.EXECUTING_TASK
         self.active_job_list.append(job)
 
 
 if __name__ == '__main__':
     try:
-        # Retrieve robots and set up a list of available Robot instances
-        robot_list = []
+        # Retrieve robots and set up a list of available MobileExecutor (MEx) instances
+        mex_list = []
         for robot in robot_namespaces:
-            robot_list.append(Robot(robot))
+            mex_list.append(MobileExecutor(robot))
         
         # Initialize the node
-        rospy.init_node('simple_fleet_manager')
+        rospy.init_node('job_manager')
 
         # Testing the adding of multiple Location class instances, storing them in a dictionary.
         location_dict = {
@@ -272,7 +281,7 @@ if __name__ == '__main__':
         # Set up a single job in a dictionary to be added to the JobQueue.
         example_job_dict = {
             "job_id" : "job001",
-            "robot_id" : None,
+            "mex_id" : None,
             #"status" : 0,
             "task_list" : {
                 "0" : {
@@ -296,7 +305,7 @@ if __name__ == '__main__':
         example_multiple_jobs_dict = {
             "0" : {
                 "job_id" : "job002",
-                "robot_id" : "rdg02",
+                "mex_id" : "rdg02",
                 #"status" : 0,
                 "task_list" : {
                     "0" : {
@@ -322,7 +331,7 @@ if __name__ == '__main__':
             },
             "1" : {
                 "job_id" : "job003",
-                "robot_id" : None,
+                "mex_id" : None,
                 #"status" : 0,
                 "task_list" : {
                     "0" : {
@@ -357,18 +366,18 @@ if __name__ == '__main__':
         job_queue.remove_pending_job("job005")       # Remove job with id "job005" from the JobQueue.
         print("\nJobQueue's length after removing 'job005': " + str(len(job_queue.pending_job_list)))
 
-        print("Before allocation, first job, first robot.")
+        print("Before allocation, first job, first MEx.")
         job_queue.pending_job_list[0].info()
-        print(robot_list[0].id, robot_list[0].status)
+        print(mex_list[0].id, mex_list[0].status)
 
-        tmp_job = job_queue.allocate_pending_job()           # Allocate/assign the first job to the first available robot.
+        tmp_job = job_queue.allocate_pending_job()           # Allocate/assign the first job to the first available MEx.
         print(tmp_job)
         if tmp_job != None:
             job_queue.dispatch_job(tmp_job)                  # Dispatch the allocated job, starting it.
 
-        print("After allocation, first job, first robot.")
+        print("After allocation, first job, first MEx.")
         job_queue.pending_job_list[0].info()  # Check if the first job in the list is now allocated.
-        print(robot_list[0].id, robot_list[0].status)
+        print(mex_list[0].id, mex_list[0].status)
         
         tmp_job = job_queue.allocate_pending_job()           # Try allocating next job in queue.
         print(tmp_job)
@@ -391,17 +400,17 @@ if __name__ == '__main__':
         # job_1.add_tasks(list_of_tasks)                 # Or multiple at a time in a list.
         # job_1.info()
 
-        # job_2 = Job("job002", "rdg02")               # Robot id can be assigned immediately or left blank and assigned later.
+        # job_2 = Job("job002", "rdg02")               # MEx id can be assigned immediately or left blank and assigned later.
         # list_of_tasks = [RobotMoveBase(location_3), AwaitingLoadCompletion(), RobotMoveBase(location_4), RobotMoveBase(location_3), RobotMoveBase(location_4)]
         # job_2.add_tasks(list_of_tasks)
         # job_2.info()
 
-        # job_1.start_job()             # Try starting job even though robot_id is not assigned. It should loginfo.
-        # job_1.assign_robot("rdg01")    # Assigning a robot_id to the job
+        # job_1.start_job()             # Try starting job even though mex_id is not assigned. It should loginfo.
+        # job_1.assign_mex("rdg01")     # Assigning a mex_id to the job
         # job_1.start_job()             # Try starting the job again. It should succeed this time.
         # job_1.info()
 
-        # job_2.start_job()             # In parallel call another robot to perform a job.
+        # job_2.start_job()             # In parallel call another MEx to perform a job.
         # job_2.info()
 
         # Spin the node while jobs are being executing, while receiving messages, callbacks etc.
