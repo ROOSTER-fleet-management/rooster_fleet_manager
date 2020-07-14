@@ -17,6 +17,7 @@ def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
     """
 
     # TODO First query the MEx Sentinal for an up-to-date MExs list.
+    error_code = 0
 
     allocated_job_index = None
     for index, job in enumerate(pending_jobs_list):
@@ -62,4 +63,4 @@ def job_refiner(active_jobs_list, mexs_list, rough_job):
     
     # TODO Send update to MEx Sentinel to update the started MEx state.
     active_jobs_list.append(refined_job)
-    return refined_job
+    return 0    # Return a 0, no errors.
