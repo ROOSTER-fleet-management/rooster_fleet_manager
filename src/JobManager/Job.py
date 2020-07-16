@@ -5,6 +5,7 @@ import rospy
 from Tasks import TaskStatus
 from MobileExecutor import MExStatus, MobileExecutor
 
+#region Enumerators
 class JobStatus:
     """ Class that acts as Enumerator for Job status. """
     PENDING = 0
@@ -13,15 +14,24 @@ class JobStatus:
     SUCCEEDED = 3
     ABORTED = 4
 
+class JobPriority:
+    """ Class that acts as Enumerator for Job Priority levels. """
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    CRITICAL = 4
+#endregion
+
 class Job:
     """ Class which contains overall job details and a list of job-tasks for individual jobs. """
-    def __init__(self, job_id, mex_id=None):
+    def __init__(self, job_id, mex_id=None, priority=JobPriority.LOW):
         self.id = job_id                                # Unique identifier for this job, e.g. "job001"
         self.mex_id = mex_id                            # Unique identifier for an existing Mobile Executor (MEx), e.g. "rdg01"
         self.status = JobStatus.PENDING                 # PENDING, ASSIGNED, ACTIVE, SUCCEEDED, ABORTED
         self.task_count = 0                             # Current number of tasks for this job in the Job's task_list
         self.task_current = None                        # The task currently active.
         self.task_list = []                             # List of tasks for this Job.
+        self.priority = priority                        # Priority of the job, default LOW. Levels: LOW, MEDIUM, HIGH, CRITICAL
 
     def add_task(self, task):
         """ Add a single task to the job's task list and update task count. """
