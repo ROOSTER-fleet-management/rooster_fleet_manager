@@ -7,7 +7,7 @@ from tf.transformations import quaternion_from_euler
 from std_msgs.msg import UInt8
 
 #region ################## TODOLIST ########################
-# TODO 1. Add Task class and make other task classes inherit from it.
+# DONE 1. Add Task class and make other task classes inherit from it.
 #endregion #################################################
 
 class TaskType:
@@ -98,17 +98,6 @@ class RobotMoveBase(Task):
             self.job_callback([self.task_id, callback_status])
     #endregion
 
-    # def child_start(self, mex_id, task_id, job_callback):
-    #     """
-    #     Start the task child's specific action.
-    #     All job tasks should have this method: 'start', with these
-    #     arguments: 'self', 'mex_id', 'task_id', 'job_callback'.
-    #     """
-    #     self.id = mex_id
-    #     self.task_id = task_id
-    #     self.job_callback = job_callback
-    #     self.move_robot()
-
     def move_robot(self):
         """ Start a move_base action using actionlib. """
         self.navclient = actionlib.SimpleActionClient(self.id + '/move_base',MoveBaseAction)
@@ -157,16 +146,9 @@ class AwaitingLoadCompletion(Task):
     """
     def __init__(self):
         super(AwaitingLoadCompletion, self).__init__(TaskType.AWAITINGLOADCOMPLETION, self.child_start)
-        # self.id = None                                  # ID of the MEx awaiting loading.
-        # self.status = TaskStatus.PENDING                # PENDING, ACTIVE, CANCELLED, SUCCEEDED, ABORTED
-        # self.type = TaskType.AWAITINGLOADCOMPLETION     # Task type
 
     def child_start(self):
         """ Start the task's specific action, subscribing to the /LoadInput topic on the MEx's namespace. """
-        # self.id = mex_id
-        # self.task_id = task_id
-        # self.job_callback = job_callback
-        # self.status = TaskStatus.ACTIVE
         self.input_subcriber = rospy.Subscriber(self.id + "/LoadInput", UInt8, self.input_cb)	# Subscribe to /'mex_id'/LoadInput topic to listen for published user/system input.
         rospy.loginfo(self.id + ". Awaiting load completion input...")
     
@@ -193,7 +175,3 @@ class AwaitingLoadCompletion(Task):
                 self.input_subcriber.unregister()   # Unsubscribe to topic, as this task of the job is done.
 
             self.job_callback([self.task_id, self.status])     # Call the higher level Job callback.
-    
-    # def get_status(self):
-    #     """ Retrieve the status of the 'AwaitingLoadCompletion'  task. """
-    #     return self.status

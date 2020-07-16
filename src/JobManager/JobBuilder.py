@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from Job import Job
+from Job import Job, JobPriority
 from Tasks import *
 from Location import Location
 
@@ -18,10 +18,21 @@ location_dict = {
 
 def job_builder(pending_jobs_list, order, job_index):
     index = "00" + str(job_index) if job_index < 10 else ( "0" + str(job_index) if job_index < 100 else str(job_index) )
-    rough_job = Job("job"+index)
+    rough_job = Job("job"+index, priority=order)
 
     # TODO Replace the below hardcoded tasks with actual order interpretation and rough job creation!
     rough_job.add_task(AwaitingLoadCompletion())
     rough_job.add_task(RobotMoveBase(location_dict["loc01"]))
 
-    pending_jobs_list.append(rough_job)
+    # Loop over the current list of Pending Jobs with index, find the last spot in the list  within the same priority section.
+    for index, job in enumerate(pending_jobs_list):
+        priority = job.priority
+        if priority < rough_job.priority:
+            print("Inserting Rough Job (" + rough_job.id + ") at position " + str(index))
+            pending_jobs_list.insert(index, rough_job)
+            break
+    else:   # Looped over all jobs in the pending_jobs_list and it wasn't inserted, so just append to the end.
+        print("Appending Rough Job (" + rough_job.id + ") to end")
+        pending_jobs_list.append(rough_job)
+        
+    return job_index + 1

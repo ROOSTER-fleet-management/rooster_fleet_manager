@@ -37,13 +37,16 @@ def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
                         job.assign_mex(mex.id)
                         allocated_job_index = index
                         break
-    
+    else:
+        # Loop ended without a break
+        error_code = 1      # Could not allocate Job to MEx.
+
     if allocated_job_index != None:
         rough_job = pending_jobs_list.pop(allocated_job_index)      # Removes the allocated job from the Pending Jobs lists.
         # TODO Send update to MEx Sentinel to update the assigned MEx state.
         return job_refiner(active_jobs_list, mexs_list, rough_job)
     else:
-        return None     # Failed to allocate any pending jobs. Return None. TODO: Return error code based on why it failed.
+        return error_code     # Failed to allocate any pending jobs.
 
 
 def job_refiner(active_jobs_list, mexs_list, rough_job):
