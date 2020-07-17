@@ -14,6 +14,7 @@ class TaskType:
     """Class that acts as an enum for the different kinds of tasks."""
     ROBOTMOVEBASE = 0
     AWAITINGLOADCOMPLETION = 1
+    AWAITINGUNLOADCOMPLETION = 2
 
 class TaskStatus:
     """ Class that acts as Enumerator for Task status. """
@@ -175,3 +176,17 @@ class AwaitingLoadCompletion(Task):
                 self.input_subcriber.unregister()   # Unsubscribe to topic, as this task of the job is done.
 
             self.job_callback([self.task_id, self.status])     # Call the higher level Job callback.
+
+class AwaitingUnloadCompletion(AwaitingLoadCompletion):
+    """
+    Task class: AwaitingUnloadCompletion, waits for input from user or system to mark unloading of the MEx as succeeded, cancelled, aborted.
+    Used by the higher level Job class to populate a list with its job tasks.
+    Inherets from AwaitingLoadCompletion.
+    """
+    def __init__(self):
+        super(AwaitingUnloadCompletion, self).__init__()
+    
+    def child_start(self):
+        """ Start the task's specific action, subscribing to the /UnloadInput topic on the MEx's namespace. """
+        self.input_subcriber = rospy.Subscriber(self.id + "/UnloadInput", UInt8, self.input_cb) # Subscribe to /'mex_id'/UnloadInput topic to listen for published user/system input.
+        rospy.loginfo(self.id + ". Awaiting unload completion input...")
