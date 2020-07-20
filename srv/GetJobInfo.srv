@@ -1,0 +1,5 @@
+string job_id           # The Job's Unique ID to find information on.
+---
+uint8 error_status      # The status of this service request, 0 for succes, 1 for failure.
+string error_report     # Text report of the status in case of failure.
+JobInfo job_info        # A JobInfo.msg containing information about the job including a list of TaskInfo.msg.
