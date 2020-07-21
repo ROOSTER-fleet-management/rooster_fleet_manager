@@ -47,21 +47,21 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
+ add_message_files(
+   FILES
+   MexInfo.msg
+   MexListInfo.msg
 #   Message2.msg
-# )
+ )
 
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-<<<<<<< HEAD
   AssignJobToMex.srv
+  ChangeMexStatus.srv
+  GetMexStatus.srv
 #   Service2.srv
-=======
   Order.srv
->>>>>>> 2da19151716ec40efb1d843c92bff396c44095ad
 )
 
 ## Generate actions in the 'action' folder
@@ -74,11 +74,8 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-<<<<<<< HEAD
   std_msgs  # Or other packages containing msgs
-=======
   std_msgs
->>>>>>> 2da19151716ec40efb1d843c92bff396c44095ad
 )
 
 ################################################
@@ -113,12 +110,9 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES simple_sim
-<<<<<<< HEAD
   CATKIN_DEPENDS
   rospy
-=======
  CATKIN_DEPENDS rospy message_runtime
->>>>>>> 2da19151716ec40efb1d843c92bff396c44095ad
 #  DEPENDS system_lib
 )
 

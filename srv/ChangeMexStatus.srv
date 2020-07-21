@@ -1,0 +1,4 @@
+string mex_id
+int8 mex_new_status
+---
+bool success

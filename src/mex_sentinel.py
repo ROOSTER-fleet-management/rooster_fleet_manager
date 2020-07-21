@@ -5,8 +5,9 @@ from enum import Enum
 from JobManager.Job import Job
 from std_srvs.srv import Empty, EmptyResponse # you import the service message python classes generated from Empty.srv.
 import time
-from simple_sim.srv import AssignJobToMex,AssignJobToMexResponse 
-
+from simple_sim.srv import AssignJobToMex, AssignJobToMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse
+from simple_sim.msg import MexInfo, MexListInfo
+from std_msgs.msg import String
 class MExStatus(Enum):
     """ Class that acts as Enumerator for Mobile Executor (MEx) status. """
     STANDBY = 0
@@ -22,10 +23,11 @@ class MobileExecutor:
         self.status = status        # Status of the MEx (STANDBY, CHARGING, ASSIGNED, EXECUTING_TASK, ERROR)
         self.job_id = job_id        # The unique id of the job the MEx is assigned to.
     def mex_info(self):
-        print('Mobile executor #' + str(self.id) + '\nStatus: ' + str(self.status.name) + '\nJob_id: ' + str(self.job_id) + '\n')
+        #print('Mobile executor #' + str(self.id) + '\nStatus: ' + str(self.status.name) + '\nJob_id: ' + str(self.job_id) + '\n')
         #rospy.loginfo('Mobile executor #' + str(self.id) + '\nStatus: ' + str(self.status.name) + '\nJob_id: ' + str(self.job_id) + '\n')
-        #mexinfo = ('Mobile executor #' + str(self.id) + '\nStatus: ' + str(self.status.name) + '\nJob_id: ' + str(self.job_id) + '\n')
-        #return mexinfo
+        #mexinfo = str('Mobile executor #' + str(self.id) + '\nStatus: ' + str(self.status.name) + '\nJob_id: ' + str(self.job_id) + '\n')
+        mexinfo = str('Mobile executor #' + str(self.id) + '; Status: ' + str(self.status.name) + '; Job_id: ' + str(self.job_id))
+        return mexinfo
 #--------------------MEX initialization--------------------------
 rdg01 = MobileExecutor('rdg01')
 #rdg01.mex_info()
@@ -38,8 +40,10 @@ rdg03 = MobileExecutor('rdg03')
 
 mex_list = [rdg01, rdg02, rdg03]
 #---------------------------------------------------------------
+#def count_status(mex_status_value):
 
-def my_callback_1(request):
+
+def get_mex_list(request):
     #all_mex_with_status = []
     for i in mex_list:
         #all_mex_with_status.append(i.mex_info())
@@ -80,13 +84,60 @@ def de_assign_job(request):
         response.success = False
     return response
 
+def get_mex_status(request):
+    flag = False
+    response = GetMexStatusResponse()
+    for i in mex_list:
+        if i.id == request.mex_id:
+            response.mex_status = i.status.name
+            response.job_id = str(i.job_id)
+            flag = True
+    if flag == True:
+        return response
+
+def change_mex_status(request):
+    flag = None
+    for i in mex_list:
+        if i.id == request.mex_id:
+            i.status = MExStatus(request.mex_new_status)
+            flag = True
+    if flag == True:
+        response = ChangeMexStatusResponse()
+        response.success = True
+    else:
+        response = ChangeMexStatusResponse()
+        response.success = False
+    return response
+
+def mex_list_info():
+    pub = rospy.Publisher('mex_list_info', MexListInfo, queue_size=10)
+    rate = rospy.Rate(1) # 30hz
+    while not rospy.is_shutdown():
+        mexlistinfo = MexListInfo()
+        mexlistinfo.stamp = rospy.Time.now()
+        mexlistinfo.total_mex_number = len(mex_list)
+        for i in mex_list:
+            mexlistinfo.mex_list_info_array.append(i.mex_info())        
+        #hello_str = "hello world %s" % rospy.get_time()
+        #rospy.loginfo(hello_str)
+        pub.publish(mexlistinfo)
+        rate.sleep()
+
+
 rospy.init_node('get_mex_list_service_server')
 
-get_mex_list_service = rospy.Service('/get_mex_list', Empty , my_callback_1) # create the Service called my_service with the defined callback
+#get_mex_list_service = rospy.Service('/mex/get_mex_list', Empty , get_mex_list) # create the Service called my_service with the defined callback
 
-assign_job_to_mex_service = rospy.Service('/assign_job_to_mex', AssignJobToMex, assign_job)
+assign_job_to_mex_service = rospy.Service('/mex/assign_job_to_mex', AssignJobToMex, assign_job)
 
-de_assign_job_from_mex_service = rospy.Service('/de_assign_job_from_mex', AssignJobToMex, de_assign_job)
+de_assign_job_from_mex_service = rospy.Service('/mex/de_assign_job_from_mex', AssignJobToMex, de_assign_job)
+
+get_mex_status_service = rospy.Service('/mex/get_mex_status', GetMexStatus, get_mex_status)
+
+change_mex_status_service = rospy.Service('/mex/change_mex_status', ChangeMexStatus, change_mex_status)
+
+mex_list_info()
+#rdg01.mex_info()
 
 rospy.spin() # maintain the service open.
 
