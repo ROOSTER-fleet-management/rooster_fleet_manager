@@ -5,18 +5,19 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from tf.transformations import quaternion_from_euler
 from std_msgs.msg import UInt8
+from enum import Enum
 
 #region ################## TODOLIST ########################
 # DONE 1. Add Task class and make other task classes inherit from it.
 #endregion #################################################
 
-class TaskType:
+class TaskType(Enum):
     """Class that acts as an enum for the different kinds of tasks."""
     ROBOTMOVEBASE = 0
     AWAITINGLOADCOMPLETION = 1
     AWAITINGUNLOADCOMPLETION = 2
 
-class TaskStatus:
+class TaskStatus(Enum):
     """ Class that acts as Enumerator for Task status. """
     # 0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED
     PENDING = 0

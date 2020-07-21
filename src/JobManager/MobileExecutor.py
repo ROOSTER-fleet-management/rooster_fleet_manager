@@ -13,4 +13,4 @@ class MobileExecutor:
     def __init__(self, id, status=MExStatus.STANDBY, job_id=None):
         self.id = id                # Unique identifier for this MEx, e.g. "rdg01"
         self.status = status        # Status of the MEx (STANDBY, CHARGING, ASSIGNED, EXECUTING_TASK, ERROR)
-        self.job_id = job_id        # The unique id of the job the MEx is assigned to.
+        self.job_id = job_id        # The unique id of the job the MEx is assigned to. LOL
