@@ -4,9 +4,10 @@ import rospy
 
 from Tasks import TaskStatus
 from MobileExecutor import MExStatus, MobileExecutor
+from enum import Enum
 
 #region Enumerators
-class JobStatus:
+class JobStatus(Enum):
     """ Class that acts as Enumerator for Job status. """
     PENDING = 0
     ASSIGNED = 1
@@ -14,7 +15,7 @@ class JobStatus:
     SUCCEEDED = 3
     ABORTED = 4
 
-class JobPriority:
+class JobPriority(Enum):
     """ Class that acts as Enumerator for Job Priority levels. """
     LOW = 1
     MEDIUM = 2

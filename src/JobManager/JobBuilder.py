@@ -16,7 +16,7 @@ def job_builder(pending_jobs_list, order, job_index, location_dict):
     priority = order[1]
     rough_job = Job("job"+index, priority=priority)
 
-    if keyword == OrderKeyword.TRANSPORT:
+    if keyword == OrderKeyword.TRANSPORT.name:
         # Transport order, consists of moving somewhere, getting loaded, moving somewhere, getting unloaded.
         from_loc = order[2]
         to_loc = order[3]
@@ -24,15 +24,15 @@ def job_builder(pending_jobs_list, order, job_index, location_dict):
         rough_job.add_task(AwaitingLoadCompletion())
         rough_job.add_task(RobotMoveBase(location_dict[to_loc]))
         rough_job.add_task(AwaitingUnloadCompletion())
-    elif keyword == OrderKeyword.MOVE:
+    elif keyword == OrderKeyword.MOVE.name:
         # Move order, consists of moving somehwere.
         to_loc = order[2]
         rough_job.add_task(RobotMoveBase(location_dict[to_loc]))
 
     # Loop over the current list of Pending Jobs with index, find the last spot in the list within the same priority section.
     for index, job in enumerate(pending_jobs_list):
-        priority = job.priority
-        if priority < rough_job.priority:
+        priority = job.priority.value
+        if priority < rough_job.priority.value:
             print("Inserting Rough Job (" + rough_job.id + ") at position " + str(index))
             pending_jobs_list.insert(index, rough_job)
             break

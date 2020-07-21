@@ -1,12 +1,13 @@
 #! /usr/bin/env python
+from enum import Enum
 
-class OrderResponseStatus:
+class OrderResponseStatus(Enum):
     """ Class that acts as Enumerator for Order Response status. """
     # 0 = SUCCES, 1 = ERROR
     SUCCES = 0
     ERROR = 1
 
-class OrderKeyword:
+class OrderKeyword(Enum):
     """ Class that acts as Enumerator for Order keywords. """
     TRANSPORT = 0
     MOVE = 1
@@ -17,6 +18,6 @@ class OrderTypeArgCount:
     # Example incoming order: [transport, priority, from_location, to_location]
     # Example incoming order: [move, priority, to_location]
     # Example incoming order: [follow, priority, leader_id]
-    TRANSPORT = 4
-    MOVE = 3
-    FOLLOW = 3
+    TRANSPORT = 2
+    MOVE = 1
+    FOLLOW = 1
