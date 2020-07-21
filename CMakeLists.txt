@@ -53,12 +53,16 @@ add_message_files(
   ActiveJob.msg
   JobInfo.msg
   TaskInfo.msg
+  MexInfo.msg
+  MexListInfo.msg
 )
 
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
   AssignJobToMex.srv
+  ChangeMexStatus.srv
+  GetMexStatus.srv
   PlaceOrder.srv
   GetPendingJobs.srv
   GetActiveJobs.srv
@@ -110,9 +114,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES simple_sim
-  CATKIN_DEPENDS
-  rospy
-  message_runtime
+  CATKIN_DEPENDS rospy message_runtime
 #  DEPENDS system_lib
 )
 
