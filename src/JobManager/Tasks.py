@@ -38,7 +38,7 @@ class Task(object):
     def start(self, mex_id, task_id, job_callback):
         """
         Start the task's specific action.
-        All job tasks should have this method: 'start', with these
+        All job tasks should have this method (through inheritance): 'start', with these
         arguments: 'self', 'mex_id', 'task_id', 'job_callback'.
         """
         self.id = mex_id
@@ -84,19 +84,18 @@ class RobotMoveBase(Task):
         move_base callback status options: PENDING=0, ACTIVE=1, PREEMPTED=2, SUCCEEDED=3,
         ABORTED=4, REJECTED=5, PREEMPTING=6, RECALLING=7, RECALLED=8, LOST=9.
         """
-        callback_status = None
         if status == 3:
-            callback_status = TaskStatus.SUCCEEDED
+            self.status = TaskStatus.SUCCEEDED
             rospy.loginfo(self.id + ". Goal reached")
         if status == 2 or status == 8:
-            callback_status = TaskStatus.CANCELLED
+            self.status = TaskStatus.CANCELLED
             rospy.loginfo(self.id + ". Goal cancelled")
         if status == 4:
-            callback_status = TaskStatus.ABORTED
+            self.status = TaskStatus.ABORTED
             rospy.loginfo(self.id + ". Goal aborted")
         
         if self.job_callback:
-            self.job_callback([self.task_id, callback_status])
+            self.job_callback([self.task_id, self.status])
     #endregion
 
     def move_robot(self):

@@ -16,10 +16,6 @@ def job_builder(pending_jobs_list, order, job_index, location_dict):
     priority = order[1]
     rough_job = Job("job"+index, priority=priority)
 
-    # TODO Replace the below hardcoded tasks with actual order interpretation and rough job creation!
-    # rough_job.add_task(AwaitingLoadCompletion())
-    # rough_job.add_task(RobotMoveBase(location_dict["loc01"]))
-
     if keyword == OrderKeyword.TRANSPORT:
         # Transport order, consists of moving somewhere, getting loaded, moving somewhere, getting unloaded.
         from_loc = order[2]

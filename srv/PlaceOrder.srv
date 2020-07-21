@@ -1,4 +1,4 @@
 string[] order_args     # List of strings containing the order keyword and its arguments.
 ---
-uint8 status            # Response status, if order process succeeded or failed.
+uint8 error_status      # Response status, if order process succeeded(0) or failed(1).
 string error_report     # Explaining text of the error in case there was one. 
