@@ -63,7 +63,6 @@ add_service_files(
   AssignJobToMex.srv
   ChangeMexStatus.srv
   GetMexStatus.srv
-  Order.srv
   PlaceOrder.srv
   GetPendingJobs.srv
   GetActiveJobs.srv
