@@ -4,9 +4,12 @@ import rospy
 
 from Tasks import TaskStatus
 from MobileExecutor import MExStatus, MobileExecutor
+from enum import Enum
+
+ # TODO: Send updates to MEx Sentinel to update MEx status.
 
 #region Enumerators
-class JobStatus:
+class JobStatus(Enum):
     """ Class that acts as Enumerator for Job status. """
     PENDING = 0
     ASSIGNED = 1
@@ -14,7 +17,7 @@ class JobStatus:
     SUCCEEDED = 3
     ABORTED = 4
 
-class JobPriority:
+class JobPriority(Enum):
     """ Class that acts as Enumerator for Job Priority levels. """
     LOW = 1
     MEDIUM = 2
@@ -24,7 +27,7 @@ class JobPriority:
 
 class Job:
     """ Class which contains overall job details and a list of job-tasks for individual jobs. """
-    def __init__(self, job_id, mex_id=None, priority=JobPriority.LOW):
+    def __init__(self, job_id, completion_cb, mex_id=None, priority=JobPriority.LOW, ):
         self.id = job_id                                # Unique identifier for this job, e.g. "job001"
         self.mex_id = mex_id                            # Unique identifier for an existing Mobile Executor (MEx), e.g. "rdg01"
         self.status = JobStatus.PENDING                 # PENDING, ASSIGNED, ACTIVE, SUCCEEDED, ABORTED
@@ -32,6 +35,7 @@ class Job:
         self.task_current = None                        # The task currently active.
         self.task_list = []                             # List of tasks for this Job.
         self.priority = priority                        # Priority of the job, default LOW. Levels: LOW, MEDIUM, HIGH, CRITICAL
+        self.completion_callback = completion_cb        # Callback function to call when Job has finished.
 
     def add_task(self, task):
         """ Add a single task to the job's task list and update task count. """
@@ -81,11 +85,13 @@ class Job:
                 else:
                     # End of the job's task_list reached. Job is complete.
                     self.status = JobStatus.SUCCEEDED
-                    # TODO: Remove itself from the Active Jobs list and free up the MEx, send update to MEx Sentinel to update MEx status.
                     self.info()
+                    self.completion_callback(self.id, self.mex_id)
             elif task_status == TaskStatus.CANCELLED or task_status == TaskStatus.ABORTED:
                 # The task was cancelled/aborted, update job status
                 self.status = JobStatus.ABORTED
+                self.info()
+                self.completion_callback(self.id, self.mex_id)
             elif task_status == TaskStatus.ACTIVE:
                 # The task is still active, don't do anything.
                 pass

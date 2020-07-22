@@ -5,7 +5,7 @@ import os           # Used to get base filename and file and directory handling
 import rospy
 import actionlib
 
-from JobManager.Tasks import TaskStatus, TaskType, RobotMoveBase, AwaitingLoadCompletion
+#from JobManager.Tasks import TaskStatus, TaskType, RobotMoveBase, AwaitingLoadCompletion
 from JobManager.Job import JobStatus, Job, JobPriority
 from JobManager.Location import Location
 from JobManager.JobBuilder import job_builder
@@ -33,20 +33,20 @@ def order_service_cb(request):
     order_response = PlaceOrderResponse()
 
     # NOTE RUDIMENTARY ORDER PROCESSING, RIGID IN NATURE. 
-    if int(request.order_args[0]) == OrderKeyword.TRANSPORT: # Keyword: TRANSPORT.
-        # Expecting: [transport, priority, from_location, to_location]
+    if request.keyword == OrderKeyword.TRANSPORT.name: # Keyword: TRANSPORT.
+        # Expecting: transport, priority, [from_location, to_location]
         if len(request.order_args) == OrderTypeArgCount.TRANSPORT:
-            priority = int(request.order_args[1])   # Check if it's >= 1 and <= 4.
-            from_loc = request.order_args[2]        # Check if it's in the known locations dictionary
-            to_loc = request.order_args[3]          # Check if it's in the known locations dictionary
+            priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
+            from_loc = request.order_args[0]        # Check if it's in the known locations dictionary
+            to_loc = request.order_args[1]          # Check if it's in the known locations dictionary
             if (priority >= 1 and priority <= 4) and (from_loc in location_dict) and (to_loc in location_dict):
                 # Succesful check on keyword and arguments, add order to order_list.
-                order_response.error_status = OrderResponseStatus.SUCCES
+                order_response.error_status = OrderResponseStatus.SUCCES.name
                 order_response.error_report = ""
-                order_list.append([int(request.order_args[0]), priority, from_loc, to_loc])
+                order_list.append([request.keyword, JobPriority(priority), from_loc, to_loc])
             else:
                 # Error occured, set status to ERROR and supply erorr report.
-                order_response.error_status = OrderResponseStatus.ERROR
+                order_response.error_status = OrderResponseStatus.ERROR.name
                 order_response.error_report = \
                     "[TRANSPORT] Invalid priority (" + str(not (priority >= 1 and priority <= 4)) + \
                     ") or location argument (" + \
@@ -54,38 +54,78 @@ def order_service_cb(request):
                     ")."
         else:
             # Error occured, set status to ERROR and supply erorr report.
-            order_response.error_status = OrderResponseStatus.ERROR
+            order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[TRANSPORT] Invalid number of arguments, expected " + \
                 str(OrderTypeArgCount.TRANSPORT) + \
                 ", received " + str(len(request.order_args))
         
-    elif int(request.order_args[0]) == OrderKeyword.MOVE:    # Keyword: MOVE.
-        # Expecting: [move, priority, to_location]
+    elif request.keyword == OrderKeyword.MOVE.name:    # Keyword: MOVE.
+        # Expecting: move, priority, [to_location]
         if len(request.order_args) == OrderTypeArgCount.MOVE:
-            priority = int(request.order_args[1])   # Check if it's >= 1 and <= 4.
-            to_loc = request.order_args[2]          # Check if it's in the known locations dictionary
+            priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
+            to_loc = request.order_args[0]          # Check if it's in the known locations dictionary
             if (priority >= 1 and priority <= 4) and (to_loc in location_dict):
                 # Succesful check on keyword and arguments, add order to order_list.
-                order_response.error_status = OrderResponseStatus.SUCCES
+                order_response.error_status = OrderResponseStatus.SUCCES.name
                 order_response.error_report = ""
-                order_list.append([int(request.order_args[0]), priority, to_loc])
+                order_list.append([request.keyword, JobPriority(priority), to_loc])
             else:
-                # Error occured, set status to ERROR and supply erorr report.
-                order_response.error_status = OrderResponseStatus.ERROR
+                # Error occured, set status to ERROR and supply error report.
+                order_response.error_status = OrderResponseStatus.ERROR.name
                 order_response.error_report = "[MOVE] Invalid priority (" + \
                     str(not (priority >= 1 and priority <= 4)) + \
                     ") or location argument (" + \
                     str(not (to_loc in location_dict) ) + ")."
         else:
             # Error occured, set status to ERROR and supply erorr report.
-            order_response.error_status = OrderResponseStatus.ERROR
+            order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[MOVE] Invalid number of arguments, expected " + \
                 str(OrderTypeArgCount.MOVE) + \
                 ", received " + str(len(request.order_args))
+
+    elif request.keyword == OrderKeyword.LOAD.name:     # Keyword: LOAD
+        # Expecting: load, priority, []
+        if len(request.order_args) == OrderTypeArgCount.LOAD:
+            priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
+            if (priority >= 1 and priority <= 4):
+                # Succesful check on keyword and arguments, add order to order_list.
+                order_response.error_status = OrderResponseStatus.SUCCES.name
+                order_response.error_report = ""
+                order_list.append([request.keyword, JobPriority(priority)])
+            else:
+                # Error occured, set status to ERROR and supply error report.
+                order_response.error_status = OrderResponseStatus.ERROR.name
+                order_response.error_report = "[LOAD] Invalid priority."
+        else:
+            # Error occured, set status to ERROR and supply error report.
+            order_response.error_status = OrderResponseStatus.ERROR.name
+            order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
+                str(OrderTypeArgCount.LOAD) + \
+                ", received " + str(len(request.order_args))
+
+    elif request.keyword == OrderKeyword.UNLOAD.name:     # Keyword: UNLOAD
+        # Expecting: load, priority, []
+        if len(request.order_args) == OrderTypeArgCount.UNLOAD:
+            priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
+            if (priority >= 1 and priority <= 4):
+                # Succesful check on keyword and arguments, add order to order_list.
+                order_response.error_status = OrderResponseStatus.SUCCES.name
+                order_response.error_report = ""
+                order_list.append([request.keyword, JobPriority(priority)])
+            else:
+                # Error occured, set status to ERROR and supply error report.
+                order_response.error_status = OrderResponseStatus.ERROR.name
+                order_response.error_report = "[LOAD] Invalid priority."
+        else:
+            # Error occured, set status to ERROR and supply error report.
+            order_response.error_status = OrderResponseStatus.ERROR.name
+            order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
+                str(OrderTypeArgCount.UNLOAD) + \
+                ", received " + str(len(request.order_args))
     else:
         # Error occured, set status to ERROR and supply erorr report.
-        order_response.error_status = OrderResponseStatus.ERROR   # Could not interpret order keyword.
-        order_response.error_report = "Invalid keyword."
+        order_response.error_status = OrderResponseStatus.ERROR.name
+        order_response.error_report = "Invalid keyword."    # Could not interpret order keyword.
 
     # print("Order service is done, current order_list: " + str(order_list))
     return order_response # the service Response class, in this case PlaceOrderResponse
@@ -97,7 +137,7 @@ def get_pending_jobs_service_cb(request):
     pending_jobs_response.jobs_count = len(pending_job_list)
     for job in pending_job_list:
         pending_job = PendingJob()
-        pending_job.priority = job.priority
+        pending_job.priority = job.priority.name
         pending_job.job_id = job.id
         pending_job.task_count = job.task_count
         pending_jobs_response.jobs.append(pending_job)
@@ -111,14 +151,15 @@ def get_active_jobs_service_cb(request):
     for job in active_job_list:
         active_job = ActiveJob()
         active_job.job_id = job.id
-        active_job.status = job.status
-        active_job.priority = job.priority
+        active_job.status = job.status.name
+        active_job.priority = job.priority.name
         active_job.mex_id = job.mex_id
         active_job.task_count = job.task_count
         active_job.current_task = job.task_current
         active_jobs_response.jobs.append(active_job)
     return active_jobs_response
 
+# - GetJobInfo service callback -
 def get_job_info_service_cb(request):
     job_id_to_find = request.job_id
     print("A service request for the Get Job Info has been received for " + job_id_to_find + ".")
@@ -134,23 +175,24 @@ def get_job_info_service_cb(request):
                 found_job = job
                 break
         else:
-            job_info_response.error_status = 1  # TODO Replace with error messages enum.
+            job_info_response.error_status = "ERROR"  # TODO Replace with error messages enum.
             job_info_response.error_report = "Could not find " + job_id_to_find + " in pending or active job lists."
     
     if found_job != None:
         job_information = JobInfo()
         job_information.job_id = found_job.id
-        job_information.status = found_job.status
-        job_information.priority = found_job.priority
+        job_information.status = found_job.status.name
+        job_information.priority = found_job.priority.name
         job_information.mex_id = found_job.mex_id if not found_job.mex_id == None else ""
         job_information.task_count = found_job.task_count 
         job_information.current_task = found_job.task_current if not found_job.task_current == None else 0
         for task in found_job.task_list:
             task_info = TaskInfo()
-            task_info.status = task.status
-            task_info.type = task.type
+            task_info.status = task.status.name
+            task_info.type = task.type.name
             job_information.task_list.append(task_info)
         job_info_response.job_info = job_information
+        job_info_response.error_status = "SUCCES"
 
     return job_info_response
 #endregion
@@ -159,7 +201,7 @@ def get_job_info_service_cb(request):
 
 # - Order list timer callback -
 def order_list_timer_cb(event):
-    # print("Order list timer callback, processing order_list and building rough jobs.")
+    #print("Order list timer callback, processing order_list and building rough jobs.")
     process_order_list()
 
 # - Job allocator timer callback -
@@ -169,11 +211,31 @@ def job_allocator_timer_cb(event):
 
 #endregion
 
+#region Job completion callback definition
+def job_completion_cb(job_id, mex_id):
+    print("Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
+    # Free up MEx from local mex_list. TODO Actually update the MEx Sentinel instead here.
+    for mex in mex_list:
+        if mex.id == mex_id and mex.job_id == job_id:
+            mex.status = MExStatus.STANDBY
+    # Remove completed Job from the active_job_list. 
+    index_to_pop = None
+    for index, job in enumerate(active_job_list):
+        if job.id == job_id:
+            index_to_pop = index
+            break
+    else:
+        # Couldn't find job_id in active_job_list... Handle this?
+        pass
+    if not index_to_pop == None:
+        active_job_list.pop(index_to_pop)
+#endregion
+
 def process_order_list():
     # Build jobs from all orders in the order_list, then clear the order_list.
     global job_index
     for order in order_list:
-        job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict)
+        job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)
     del order_list[:]
 
 
@@ -191,8 +253,7 @@ if __name__ == '__main__':
         job_index = 1
 
         # Testing the adding of multiple Location class instances, storing them in a dictionary.
-        # TODO Replace this with a dynamic(?) dictionary which is constructed from the sentinel? 
-        #       Or which is loaded from a config file but can be adjusted on-line?
+        # TODO Replace this with a dynamic(?) dictionary which is constructed from the MEx Sentinel.
         location_dict = {
             "loc01" : Location("loc01", "Storage #1", -0.5, -2.5, 1.57),
             "loc02" : Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0),
