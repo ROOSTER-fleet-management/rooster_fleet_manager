@@ -12,12 +12,18 @@ class OrderKeyword(Enum):
     TRANSPORT = 0
     MOVE = 1
     FOLLOW = 2
+    LOAD = 3
+    UNLOAD = 4
 
 class OrderTypeArgCount:
     """ Class that acts as Constants for Order types and the number of arguments associated with them. """
-    # Example incoming order: [transport, priority, from_location, to_location]
-    # Example incoming order: [move, priority, to_location]
-    # Example incoming order: [follow, priority, leader_id]
+    # Example incoming order: TRANSPORT, priority, [from_location, to_location]
+    # Example incoming order: MOVE, priority, [to_location]
+    # Example incoming order: FOLLOW, priority, [leader_id]
+    # Example incoming order: LOAD, priority, []
+    # Example incoming order: UNLOAD, priority, []
     TRANSPORT = 2
     MOVE = 1
     FOLLOW = 1
+    LOAD = 0
+    UNLOAD = 0

@@ -31,9 +31,10 @@ def order_service_cb(request):
     print("Order service has been called with: " + str(request))
     # print("Arguments: ", request.order_args, "List size: ", len(request.order_args) )
     order_response = PlaceOrderResponse()
+
     # NOTE RUDIMENTARY ORDER PROCESSING, RIGID IN NATURE. 
     if request.keyword == OrderKeyword.TRANSPORT.name: # Keyword: TRANSPORT.
-        # Expecting: [transport, priority, from_location, to_location]
+        # Expecting: transport, priority, [from_location, to_location]
         if len(request.order_args) == OrderTypeArgCount.TRANSPORT:
             priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
             from_loc = request.order_args[0]        # Check if it's in the known locations dictionary
@@ -59,7 +60,7 @@ def order_service_cb(request):
                 ", received " + str(len(request.order_args))
         
     elif request.keyword == OrderKeyword.MOVE.name:    # Keyword: MOVE.
-        # Expecting: [move, priority, to_location]
+        # Expecting: move, priority, [to_location]
         if len(request.order_args) == OrderTypeArgCount.MOVE:
             priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
             to_loc = request.order_args[0]          # Check if it's in the known locations dictionary
@@ -69,7 +70,7 @@ def order_service_cb(request):
                 order_response.error_report = ""
                 order_list.append([request.keyword, JobPriority(priority), to_loc])
             else:
-                # Error occured, set status to ERROR and supply erorr report.
+                # Error occured, set status to ERROR and supply error report.
                 order_response.error_status = OrderResponseStatus.ERROR.name
                 order_response.error_report = "[MOVE] Invalid priority (" + \
                     str(not (priority >= 1 and priority <= 4)) + \
@@ -80,6 +81,46 @@ def order_service_cb(request):
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[MOVE] Invalid number of arguments, expected " + \
                 str(OrderTypeArgCount.MOVE) + \
+                ", received " + str(len(request.order_args))
+
+    elif request.keyword == OrderKeyword.LOAD.name:     # Keyword: LOAD
+        # Expecting: load, priority, []
+        if len(request.order_args) == OrderTypeArgCount.LOAD:
+            priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
+            if (priority >= 1 and priority <= 4):
+                # Succesful check on keyword and arguments, add order to order_list.
+                order_response.error_status = OrderResponseStatus.SUCCES.name
+                order_response.error_report = ""
+                order_list.append([request.keyword, JobPriority(priority)])
+            else:
+                # Error occured, set status to ERROR and supply error report.
+                order_response.error_status = OrderResponseStatus.ERROR.name
+                order_response.error_report = "[LOAD] Invalid priority."
+        else:
+            # Error occured, set status to ERROR and supply error report.
+            order_response.error_status = OrderResponseStatus.ERROR.name
+            order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
+                str(OrderTypeArgCount.LOAD) + \
+                ", received " + str(len(request.order_args))
+
+    elif request.keyword == OrderKeyword.UNLOAD.name:     # Keyword: UNLOAD
+        # Expecting: load, priority, []
+        if len(request.order_args) == OrderTypeArgCount.UNLOAD:
+            priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
+            if (priority >= 1 and priority <= 4):
+                # Succesful check on keyword and arguments, add order to order_list.
+                order_response.error_status = OrderResponseStatus.SUCCES.name
+                order_response.error_report = ""
+                order_list.append([request.keyword, JobPriority(priority)])
+            else:
+                # Error occured, set status to ERROR and supply error report.
+                order_response.error_status = OrderResponseStatus.ERROR.name
+                order_response.error_report = "[LOAD] Invalid priority."
+        else:
+            # Error occured, set status to ERROR and supply error report.
+            order_response.error_status = OrderResponseStatus.ERROR.name
+            order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
+                str(OrderTypeArgCount.UNLOAD) + \
                 ", received " + str(len(request.order_args))
     else:
         # Error occured, set status to ERROR and supply erorr report.
@@ -118,6 +159,7 @@ def get_active_jobs_service_cb(request):
         active_jobs_response.jobs.append(active_job)
     return active_jobs_response
 
+# - GetJobInfo service callback -
 def get_job_info_service_cb(request):
     job_id_to_find = request.job_id
     print("A service request for the Get Job Info has been received for " + job_id_to_find + ".")
@@ -159,7 +201,7 @@ def get_job_info_service_cb(request):
 
 # - Order list timer callback -
 def order_list_timer_cb(event):
-    # print("Order list timer callback, processing order_list and building rough jobs.")
+    #print("Order list timer callback, processing order_list and building rough jobs.")
     process_order_list()
 
 # - Job allocator timer callback -
@@ -169,11 +211,31 @@ def job_allocator_timer_cb(event):
 
 #endregion
 
+#region Job completion callback definition
+def job_completion_cb(job_id, mex_id):
+    print("Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
+    # Free up MEx from local mex_list. TODO Actually update the MEx Sentinel instead here.
+    for mex in mex_list:
+        if mex.id == mex_id and mex.job_id == job_id:
+            mex.status = MExStatus.STANDBY
+    # Remove completed Job from the active_job_list. 
+    index_to_pop = None
+    for index, job in enumerate(active_job_list):
+        if job.id == job_id:
+            index_to_pop = index
+            break
+    else:
+        # Couldn't find job_id in active_job_list... Handle this?
+        pass
+    if not index_to_pop == None:
+        active_job_list.pop(index_to_pop)
+#endregion
+
 def process_order_list():
     # Build jobs from all orders in the order_list, then clear the order_list.
     global job_index
     for order in order_list:
-        job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict)
+        job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)
     del order_list[:]
 
 
@@ -191,8 +253,7 @@ if __name__ == '__main__':
         job_index = 1
 
         # Testing the adding of multiple Location class instances, storing them in a dictionary.
-        # TODO Replace this with a dynamic(?) dictionary which is constructed from the sentinel? 
-        #       Or which is loaded from a config file but can be adjusted on-line?
+        # TODO Replace this with a dynamic(?) dictionary which is constructed from the MEx Sentinel.
         location_dict = {
             "loc01" : Location("loc01", "Storage #1", -0.5, -2.5, 1.57),
             "loc02" : Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0),
