@@ -11,18 +11,14 @@ from std_msgs.msg import String
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
 
 
-#--------------------MEX initialization--------------------------
-rdg01 = MobileExecutor('rdg01')
-#rdg01.mex_info()
-
-rdg02 = MobileExecutor('rdg02')
-#rdg02.mex_info()
-
-rdg03 = MobileExecutor('rdg03')
-#rdg03.mex_info()
-
-mex_list = [rdg01, rdg02, rdg03]
-#---------------------------------------------------------------
+#function to init mobile executors based on ROS parameter server
+mex_list = [] #make mex_list global
+def mobile_executor_initialization():
+    robot_namespaces = rospy.get_param("/robot_list") #read robot list from ROS parameter server. Robotnames are strings
+    for i in robot_namespaces: #go through the robot list, extract each name and create MobileExecutor object with that name, then append to the list
+        robot_name = i 
+        robot_instance = MobileExecutor(robot_name)
+        mex_list.append(robot_instance)
 
 #service to provide all mex with status
 def get_mex_list(request):
@@ -108,12 +104,14 @@ def mex_list_info():
         mexlistinfo.stamp = rospy.Time.now()
         mexlistinfo.total_mex_number = len(mex_list)
         for i in mex_list:
-            mexlistinfo.mex_list_info_array.append(i.mex_info())        
+            mexlistinfo.mex_list_info_array.append(i.mex_info())
         #hello_str = "hello world %s" % rospy.get_time()
         #rospy.loginfo(hello_str)
         pub.publish(mexlistinfo)
         rate.sleep()
 
+
+mobile_executor_initialization() #initialize mobile executors
 
 rospy.init_node('mex_sentinel')
 
