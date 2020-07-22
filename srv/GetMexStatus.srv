@@ -2,3 +2,4 @@ string mex_id
 ---
 string mex_status
 string job_id
+bool success

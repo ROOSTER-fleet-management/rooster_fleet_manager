@@ -5,7 +5,7 @@ from enum import Enum
 from JobManager.Job import Job
 from std_srvs.srv import Empty, EmptyResponse # you import the service message python classes generated from Empty.srv.
 import time
-from simple_sim.srv import AssignJobToMex, AssignJobToMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse
+from simple_sim.srv import AssignJobToMex, AssignJobToMexResponse, UnassignJobFromMex, UnassignJobFromMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse, GetMexList, GetMexListResponse
 from simple_sim.msg import MexInfo, MexListInfo
 from std_msgs.msg import String
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
@@ -23,29 +23,29 @@ rdg03 = MobileExecutor('rdg03')
 
 mex_list = [rdg01, rdg02, rdg03]
 #---------------------------------------------------------------
-#def count_status(mex_stMExStatus(request.mex_new_status)atus_value):
 
-print(MExStatus.STANDBY)
-
-
-def get_mex_list(request):
-    #all_mex_with_status = []
-    for i in mex_list:
-        #all_mex_with_status.append(i.mex_info())
-        i.mex_info()
-    #print(all_mex_with_status)
-    return EmptyResponse()
 #service to provide all mex with status
+def get_mex_list(request):
+    response = GetMexListResponse() #initialize mex list and bool success to return
+    for i in mex_list: #making new list of MexInfo objects by copying each mex from original mex_info list
+        mex = MexInfo()
+        mex.id = i.id
+        mex.status = str(i.status.name) #decide between name and value
+        mex.job_id = str(i.job_id)
+        response.mex_list.append(mex) #add current object to the response list
+    if len(response.mex_list) == len(mex_list):
+        response.success = True
+    else:
+        response.success = False
+    return response
 
 def assign_job(request):
-    assignment = False
+    assignment = False #flag
     for i in mex_list:
         if i.id == request.mex_id:
             i.job_id = request.job_id
             i.status = MExStatus.ASSIGNED
             assignment = True
-        #else:
-        #    break
     if assignment == True:
         response = AssignJobToMexResponse()
         response.success = True
@@ -55,29 +55,34 @@ def assign_job(request):
     return response
 
 def unassign_job(request):
-    unassignment = False
+    unassignment = False #flag
     for i in mex_list:
         if i.id == request.mex_id:
             i.job_id = None
             i.status = MExStatus.STANDBY
             unassignment = True
     if unassignment == True:
-        response = AssignJobToMexResponse()
+        response = UnassignJobFromMexResponse()
         response.success = True
     else:
-        response = AssignJobToMexResponse()
+        response = UnassignJobFromMexResponse()
         response.success = False
     return response
 
+#callback function for service that return status of a certain MEx
 def get_mex_status(request):
-    flag = False
-    response = GetMexStatusResponse()
-    for i in mex_list:
+    flag = False #flag that is used for indicating successful search of MEx in MEx list
+    response = GetMexStatusResponse() #create response object 
+    for i in mex_list: #search for MEx in MEx list
         if i.id == request.mex_id:
-            response.mex_status = i.status.name
+            response.mex_status = i.status.name #MEx status query 'name' method from enum object returns text
             response.job_id = str(i.job_id)
             flag = True
-    if flag == True:
+    if flag == True: #if we found requested Mex in the list, together with status and job id we return bool success 
+        response.success = True
+        return response
+    else:
+        response.success = False
         return response
 
 def change_mex_status(request):
@@ -112,69 +117,16 @@ def mex_list_info():
 
 rospy.init_node('mex_sentinel')
 
-#get_mex_list_service = rospy.Service('/mex/get_mex_list', Empty , get_mex_list) # create the Service called my_service with the defined callback
+get_mex_list_service = rospy.Service('~get_mex_list', GetMexList, get_mex_list) # create the Service called my_service with the defined callback
 
 assign_job_to_mex_service = rospy.Service('~assign_job_to_mex', AssignJobToMex, assign_job)
 
-unassign_job_from_mex_service = rospy.Service('~unassign_job_from_mex', AssignJobToMex, unassign_job)
+unassign_job_from_mex_service = rospy.Service('~unassign_job_from_mex', UnassignJobFromMex, unassign_job)
 
 get_mex_status_service = rospy.Service('~get_mex_status', GetMexStatus, get_mex_status)
 
 change_mex_status_service = rospy.Service('~change_mex_status', ChangeMexStatus, change_mex_status)
 
 mex_list_info()
-#rdg01.mex_info()
 
 rospy.spin() # maintain the service open.
-
-
-
-"""
-class MexType(Enum):
-    
-    AGV_TRANSPORT = 0
-    AGV_MOBILE_MANIPULATOR = 1
-    AGV_MACHINERY = 2
-    FORKLIFT = 3
-
-class MexServiceStatus(Enum):
-    
-    OUT_OF_SERVICE = 0
-    IN_SERVICE = 1
-
-class MexInServiceStatus(Enum):
-    
-    BUSY = 0
-    AVALIABLE = 1
-    NONE = 2
-
-class Mex:
-    def __init__(self, id, m_type):
-        self.mex_id = id
-        self.mex_type = m_type
-        self.service_status = MexServiceStatus.OUT_OF_SERVICE
-        self.in_service_status = MexInServiceStatus.NONE
-        self.current_job = None
-    def mex_info(self):
-        print('Mobile executor #' + str(self.mex_id) + ' info:\nType: ' + str(self.mex_type.name) + '\nService status: ' + str(self.service_status.name) + '\nIn service status: ' + str(self.in_service_status.name) + '\nCurrent job: ' + str(self.current_job) + '\n')
-
-robot1 = Mex('rdg01', MexType.AGV_TRANSPORT)
-#robot1.mex_info()
-robot2 = Mex('rdg02', MexType.AGV_TRANSPORT)
-robot2.service_status = robot2.service_status.IN_SERVICE
-robot2.in_service_status = robot2.in_service_status.BUSY
-robot2.current_job = '003'
-#robot2.mex_info()
-
-mex_list = [robot1.mex_id, robot2.mex_id]
-
-def my_callback_1(request):
-   print(mex_list)
-   return EmptyResponse() # the service Response class, in this case EmptyResponse
-
-rospy.init_node('get_mex_list_service_server', anonymous=True)
-
-my_service = rospy.Service('/get_mex_list', Empty , my_callback_1) # create the Service called my_service with the defined callback
-pub = rospy.Publisher('avaliable_mex_list', list, )
-
-rospy.spin() # maintain the service open."""

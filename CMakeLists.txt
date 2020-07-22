@@ -61,8 +61,10 @@ add_message_files(
 add_service_files(
   FILES
   AssignJobToMex.srv
+  UnassignJobFromMex.srv
   ChangeMexStatus.srv
   GetMexStatus.srv
+  GetMexList.srv
   PlaceOrder.srv
   GetPendingJobs.srv
   GetActiveJobs.srv
