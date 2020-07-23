@@ -6,8 +6,6 @@ from Tasks import TaskStatus
 from MobileExecutor import MExStatus, MobileExecutor
 from enum import Enum
 
- # TODO: Send updates to MEx Sentinel to update MEx status.
-
 #region Enumerators
 class JobStatus(Enum):
     """ Class that acts as Enumerator for Job status. """

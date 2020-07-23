@@ -185,6 +185,7 @@ class AwaitingUnloadCompletion(AwaitingLoadCompletion):
     """
     def __init__(self):
         super(AwaitingUnloadCompletion, self).__init__()
+        self.type = TaskType.AWAITINGUNLOADCOMPLETION
     
     def child_start(self):
         """ Start the task's specific action, subscribing to the /UnloadInput topic on the MEx's namespace. """

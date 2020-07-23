@@ -12,11 +12,14 @@ from JobManager.JobBuilder import job_builder
 from JobManager.JobActivation import job_allocator, job_refiner
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
 from JobManager.Order import *
+from JobManager.JobServiceMethods import call_get_mex_list, call_unassign_job
 
-from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse, GetMexList, GetMexListResponse, GetMexListRequest
+from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, \
+    GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse, \
+    GetMexList, GetMexListResponse, GetMexListRequest, AssignJobToMex, AssignJobToMexRequest
 from simple_sim.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
 
-# - Retrieve all robot ids (e.g. their namespace names) from the rosparameter server -
+# - Retrieve all robot ids (e.g. their namespace names) froms the rosparameter server -
 # - Note: This parameter only exsists if the robots were launched using the multi_robot_sim GUI! -
 # - Note: Launching robots using the multi_robot_sim GUI is the preferred method! -
 # robot_namespaces = rospy.get_param("/robot_list")
@@ -214,10 +217,11 @@ def job_allocator_timer_cb(event):
 #region Job completion callback definition
 def job_completion_cb(job_id, mex_id):
     print("Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
-    # Free up MEx from local mex_list. TODO Actually update the MEx Sentinel instead here.
-    for mex in mex_list:
-        if mex.id == mex_id and mex.job_id == job_id:
-            mex.status = MExStatus.STANDBY
+    # First send update to MEx Sentinel to unassign job.
+    call_unassign_job(mex_id=mex_id)
+    # Then call MEx Sentinel to provide latest MEx List.
+    mex_list = call_get_mex_list()
+
     # Remove completed Job from the active_job_list. 
     index_to_pop = None
     for index, job in enumerate(active_job_list):
@@ -238,22 +242,22 @@ def process_order_list():
         job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)
     del order_list[:]
 
-def call_get_mex_list():
-    """ Function to get most recent list of all MEx from service provided by mex_sentinel node."""
-    rospy.wait_for_service('/mex_sentinel/get_mex_list')
-    try:
-        get_mex_list_service = rospy.ServiceProxy('/mex_sentinel/get_mex_list', GetMexList)
-        req = GetMexListRequest()
-        result = get_mex_list_service(req)
-        mex_list = []
-        for mex in result.mex_list:
-            mex_id = mex.id
-            mex_status = MExStatus[mex.status]
-            mex_job_id = mex.job_id 
-            mex_list.append(MobileExecutor(mex_id, mex_status, mex_job_id))
-        return mex_list
-    except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
+# def call_get_mex_list():
+#     """ Function to get most recent list of all MEx from service provided by mex_sentinel node."""
+#     rospy.wait_for_service('/mex_sentinel/get_mex_list')
+#     try:
+#         get_mex_list_service = rospy.ServiceProxy('/mex_sentinel/get_mex_list', GetMexList)
+#         req = GetMexListRequest()
+#         result = get_mex_list_service(req)
+#         mex_list = []
+#         for mex in result.mex_list:
+#             mex_id = mex.id
+#             mex_status = MExStatus[mex.status]
+#             mex_job_id = mex.job_id 
+#             mex_list.append(MobileExecutor(mex_id, mex_status, mex_job_id))
+#         return mex_list
+#     except rospy.ServiceException as e:
+#         print("Service call failed: %s"%e)
 
 if __name__ == '__main__':
     try:
