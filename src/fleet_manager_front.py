@@ -15,15 +15,19 @@ def add_orders_from_dict(order_dict):
     """ Add multile orders to the order_list from a dictionary. """
     # The order of the orders matter, so don't just loop over the dictionary, but check size and loop over order id's
     order_dict_length = len(order_dict)
-    place_order = rospy.ServiceProxy('/job_manager/place_order', PlaceOrder)
-    req = PlaceOrderRequest()
-    for order_id in range(order_dict_length):
-        order_info_dict = order_dict[str(order_id)]
-        req.keyword = order_info_dict["keyword"]
-        req.priority = order_info_dict["priority"]
-        req.order_args = order_info_dict["order_args"]
-        resp = place_order(req)
-        print("Response: ", resp)
+    rospy.wait_for_service('/job_manager/place_order')
+    try:
+        place_order = rospy.ServiceProxy('/job_manager/place_order', PlaceOrder)
+        req = PlaceOrderRequest()
+        for order_id in range(order_dict_length):
+            order_info_dict = order_dict[str(order_id)]
+            req.keyword = order_info_dict["keyword"]
+            req.priority = order_info_dict["priority"]
+            req.order_args = order_info_dict["order_args"]
+            resp = place_order(req)
+            print("Response: ", resp)
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
 
 def load_orders_from_JSON(filepath):
     """ Add one or multiple orders from a JSON file. """
