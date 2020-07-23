@@ -1,13 +1,8 @@
 #! /usr/bin/env python
 
 import rospy
-from enum import Enum
-from JobManager.Job import Job
-from std_srvs.srv import Empty, EmptyResponse # you import the service message python classes generated from Empty.srv.
-import time
 from simple_sim.srv import AssignJobToMex, AssignJobToMexResponse, UnassignJobFromMex, UnassignJobFromMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse, GetMexList, GetMexListResponse
 from simple_sim.msg import MexInfo, MexListInfo
-from std_msgs.msg import String
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
 
 
@@ -111,20 +106,26 @@ def mex_list_info():
         rate.sleep()
 
 
-mobile_executor_initialization() #initialize mobile executors
+if __name__ == '__main__':
+    try:
+        # Initialize mobile executors
+        mobile_executor_initialization()
 
-rospy.init_node('mex_sentinel')
+        # Initialize node.
+        rospy.init_node('mex_sentinel')
 
-get_mex_list_service = rospy.Service('~get_mex_list', GetMexList, get_mex_list) # create the Service called my_service with the defined callback
+        # Initialize services.
+        get_mex_list_service = rospy.Service('~get_mex_list', GetMexList, get_mex_list)
+        assign_job_to_mex_service = rospy.Service('~assign_job_to_mex', AssignJobToMex, assign_job)
+        unassign_job_from_mex_service = rospy.Service('~unassign_job_from_mex', UnassignJobFromMex, unassign_job)
+        get_mex_status_service = rospy.Service('~get_mex_status', GetMexStatus, get_mex_status)
+        change_mex_status_service = rospy.Service('~change_mex_status', ChangeMexStatus, change_mex_status)
 
-assign_job_to_mex_service = rospy.Service('~assign_job_to_mex', AssignJobToMex, assign_job)
+        # Initialise mex list publisher 
+        mex_list_info()
 
-unassign_job_from_mex_service = rospy.Service('~unassign_job_from_mex', UnassignJobFromMex, unassign_job)
-
-get_mex_status_service = rospy.Service('~get_mex_status', GetMexStatus, get_mex_status)
-
-change_mex_status_service = rospy.Service('~change_mex_status', ChangeMexStatus, change_mex_status)
-
-mex_list_info()
-
-rospy.spin() # maintain the service open.
+        # maintain the service open.
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        # Handle InterruptExceptions without crashing.
+        pass

@@ -13,16 +13,16 @@ from JobManager.JobActivation import job_allocator, job_refiner
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
 from JobManager.Order import *
 
-from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse
+from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse, GetMexList, GetMexListResponse, GetMexListRequest
 from simple_sim.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
 
 # - Retrieve all robot ids (e.g. their namespace names) from the rosparameter server -
 # - Note: This parameter only exsists if the robots were launched using the multi_robot_sim GUI! -
 # - Note: Launching robots using the multi_robot_sim GUI is the preferred method! -
-robot_namespaces = rospy.get_param("/robot_list")
-print("Robot list: ")
-for robot in robot_namespaces:
-    print(robot)
+# robot_namespaces = rospy.get_param("/robot_list")
+# print("Robot list: ")
+# for robot in robot_namespaces:
+#     print(robot)
 
 #region Service callback definitions
 
@@ -232,19 +232,37 @@ def job_completion_cb(job_id, mex_id):
 #endregion
 
 def process_order_list():
-    # Build jobs from all orders in the order_list, then clear the order_list.
+    """ Build jobs from all orders in the order_list, then clear the order_list. """
     global job_index
     for order in order_list:
         job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)
     del order_list[:]
 
+def call_get_mex_list():
+    """ Function to get most recent list of all MEx from service provided by mex_sentinel node."""
+    rospy.wait_for_service('/mex_sentinel/get_mex_list')
+    try:
+        get_mex_list_service = rospy.ServiceProxy('/mex_sentinel/get_mex_list', GetMexList)
+        req = GetMexListRequest()
+        result = get_mex_list_service(req)
+        mex_list = []
+        for mex in result.mex_list:
+            mex_id = mex.id
+            mex_status = MExStatus[mex.status]
+            mex_job_id = mex.job_id 
+            mex_list.append(MobileExecutor(mex_id, mex_status, mex_job_id))
+        return mex_list
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
 
 if __name__ == '__main__':
     try:
         # Retrieve robots and set up a list of available MobileExecutor (MEx) instances
-        mex_list = []
-        for robot in robot_namespaces:
-            mex_list.append(MobileExecutor(robot))
+        mex_list = call_get_mex_list()
+        # for robot in robot_namespaces:
+        #     mex_list.append(MobileExecutor(robot))
+        for mex in mex_list:
+            print(mex.id, mex.status, mex.job_id)
         
         # Lists for Orders, PendingJobs, ActiveJobs:
         order_list = []
@@ -272,7 +290,7 @@ if __name__ == '__main__':
 
         # Initialize timers for the JobBuilder, and JobAllocator.
         rospy.Timer(rospy.Duration(1), order_list_timer_cb)     # Every second check order list to try build rough jobs.
-        rospy.Timer(rospy.Duration(10), job_allocator_timer_cb)  # Call the job_allocator in 10 seconds to try allocating jobs. 
+        rospy.Timer(rospy.Duration(5), job_allocator_timer_cb)  # Call the job_allocator in 10 seconds to try allocating jobs. 
         # The above job_allocator timer should be replaced with something more elegant...
 
         # Keep node running.
