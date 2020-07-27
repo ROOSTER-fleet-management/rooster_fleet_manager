@@ -1,0 +1,30 @@
+[
+    {
+        "id": "loc01",
+        "name": "Storage #1",
+        "x_coordinate": -0.5,
+        "y_coordinate": -2.5,
+        "orientation": 1.57
+    },
+    {
+        "id": "loc02",
+        "name": "Assembly station #1",
+        "x_coordinate": 4.5,
+        "y_coordinate": 2.5,
+        "orientation": 1.5708
+    },
+    {
+        "id": "loc03",
+        "name": "Storage #2",
+        "x_coordinate": -2.0,
+        "y_coordinate": 0.0,
+        "orientation": 3.1415
+    },
+    {
+        "id": "loc04",
+        "name": "Assembly station #2",
+        "x_coordinate": -5.0,
+        "y_coordinate": 4.5,
+        "orientation": 6.283
+    }
+]
