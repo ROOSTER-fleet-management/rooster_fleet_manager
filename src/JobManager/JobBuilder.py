@@ -14,7 +14,7 @@ def job_builder(pending_jobs_list, order, job_index, location_dict, completion_c
     index = "00" + str(job_index) if job_index < 10 else ( "0" + str(job_index) if job_index < 100 else str(job_index) )
     keyword = order[0]
     priority = order[1]
-    rough_job = Job("job"+index, completion_cb=completion_cb, priority=priority)
+    rough_job = Job("job"+index, completion_cb=completion_cb, priority=priority, keyword=keyword)
 
     if keyword == OrderKeyword.TRANSPORT.name:
         # Transport order, consists of moving somewhere, getting loaded, moving somewhere, getting unloaded.

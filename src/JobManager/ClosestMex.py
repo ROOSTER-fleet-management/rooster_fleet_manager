@@ -2,10 +2,10 @@
 
 import rospy
 from simple_sim.srv import GetMexList, GetMexListRequest
-from JobManager.MobileExecutor import MExStatus
+from MobileExecutor import MExStatus
 from nav_msgs.srv import GetPlan, GetPlanResponse
 from geometry_msgs.msg import PoseStamped, PointStamped, PoseWithCovarianceStamped
-from JobManager.Location import Location
+from Location import Location
 import numpy as np
 
 #get coordinates of each mex. 3 ways: (1) by odometry and (2) by tf from /map to /base_link and (3) by amcl_pose topic
@@ -91,7 +91,7 @@ def choose_closest_mex(location):
         res = calculate_euclidian_distance(plan.plan) #calculate euclidian distance based on the path
         distances.append(Distance(str(i), res)) #add distance and mex id to the list
     the_closest_id = None
-    the_closest_dist = 9999 #number which is bigger than possible distance
+    the_closest_dist = np.inf #number which is bigger than possible distance
     for i in distances: #choosing closest distance 
         if i.dist < the_closest_dist:
             the_closest_dist = i.dist

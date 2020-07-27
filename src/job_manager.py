@@ -12,17 +12,20 @@ from JobManager.JobBuilder import job_builder
 from JobManager.JobActivation import job_allocator, job_refiner
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
 from JobManager.Order import *
+from JobManager.JobServiceMethods import call_get_mex_list, call_unassign_job
 
-from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse
+from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, \
+    GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse, \
+    GetMexList, GetMexListResponse, GetMexListRequest, AssignJobToMex, AssignJobToMexRequest
 from simple_sim.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
 
-# - Retrieve all robot ids (e.g. their namespace names) from the rosparameter server -
+# - Retrieve all robot ids (e.g. their namespace names) froms the rosparameter server -
 # - Note: This parameter only exsists if the robots were launched using the multi_robot_sim GUI! -
 # - Note: Launching robots using the multi_robot_sim GUI is the preferred method! -
-robot_namespaces = rospy.get_param("/robot_list")
-print("Robot list: ")
-for robot in robot_namespaces:
-    print(robot)
+# robot_namespaces = rospy.get_param("/robot_list")
+# print("Robot list: ")
+# for robot in robot_namespaces:
+#     print(robot)
 
 #region Service callback definitions
 
@@ -35,7 +38,7 @@ def order_service_cb(request):
     # NOTE RUDIMENTARY ORDER PROCESSING, RIGID IN NATURE. 
     if request.keyword == OrderKeyword.TRANSPORT.name: # Keyword: TRANSPORT.
         # Expecting: transport, priority, [from_location, to_location]
-        if len(request.order_args) == OrderTypeArgCount.TRANSPORT:
+        if len(request.order_args) == OrderTypeArgCount.TRANSPORT.value:
             priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
             from_loc = request.order_args[0]        # Check if it's in the known locations dictionary
             to_loc = request.order_args[1]          # Check if it's in the known locations dictionary
@@ -56,12 +59,12 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply erorr report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[TRANSPORT] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.TRANSPORT) + \
+                str(OrderTypeArgCount.TRANSPORT.value) + \
                 ", received " + str(len(request.order_args))
         
     elif request.keyword == OrderKeyword.MOVE.name:    # Keyword: MOVE.
         # Expecting: move, priority, [to_location]
-        if len(request.order_args) == OrderTypeArgCount.MOVE:
+        if len(request.order_args) == OrderTypeArgCount.MOVE.value:
             priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
             to_loc = request.order_args[0]          # Check if it's in the known locations dictionary
             if (priority >= 1 and priority <= 4) and (to_loc in location_dict):
@@ -80,12 +83,12 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply erorr report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[MOVE] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.MOVE) + \
+                str(OrderTypeArgCount.MOVE.value) + \
                 ", received " + str(len(request.order_args))
 
     elif request.keyword == OrderKeyword.LOAD.name:     # Keyword: LOAD
         # Expecting: load, priority, []
-        if len(request.order_args) == OrderTypeArgCount.LOAD:
+        if len(request.order_args) == OrderTypeArgCount.LOAD.value:
             priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
             if (priority >= 1 and priority <= 4):
                 # Succesful check on keyword and arguments, add order to order_list.
@@ -100,12 +103,12 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply error report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.LOAD) + \
+                str(OrderTypeArgCount.LOAD.value) + \
                 ", received " + str(len(request.order_args))
 
     elif request.keyword == OrderKeyword.UNLOAD.name:     # Keyword: UNLOAD
         # Expecting: load, priority, []
-        if len(request.order_args) == OrderTypeArgCount.UNLOAD:
+        if len(request.order_args) == OrderTypeArgCount.UNLOAD.value:
             priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
             if (priority >= 1 and priority <= 4):
                 # Succesful check on keyword and arguments, add order to order_list.
@@ -120,7 +123,7 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply error report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.UNLOAD) + \
+                str(OrderTypeArgCount.UNLOAD.value) + \
                 ", received " + str(len(request.order_args))
     else:
         # Error occured, set status to ERROR and supply erorr report.
@@ -132,7 +135,7 @@ def order_service_cb(request):
 
 # - GetPendingJobs service callback -
 def get_pending_jobs_service_cb(request):
-    print("A service request for the Pending Jobs List has been received.")
+    # print("A service request for the Pending Jobs List has been received.")
     pending_jobs_response = GetPendingJobsResponse()
     pending_jobs_response.jobs_count = len(pending_job_list)
     for job in pending_job_list:
@@ -140,12 +143,13 @@ def get_pending_jobs_service_cb(request):
         pending_job.priority = job.priority.name
         pending_job.job_id = job.id
         pending_job.task_count = job.task_count
+        pending_job.keyword = job.keyword
         pending_jobs_response.jobs.append(pending_job)
     return pending_jobs_response
 
 # - GetActiveJobs service callback -
 def get_active_jobs_service_cb(request):
-    print("A service request for the Active Jobs List has been received.")
+    # print("A service request for the Active Jobs List has been received.")
     active_jobs_response = GetActiveJobsResponse()
     active_jobs_response.jobs_count = len(active_job_list)
     for job in active_job_list:
@@ -156,6 +160,7 @@ def get_active_jobs_service_cb(request):
         active_job.mex_id = job.mex_id
         active_job.task_count = job.task_count
         active_job.current_task = job.task_current
+        active_job.keyword = job.keyword
         active_jobs_response.jobs.append(active_job)
     return active_jobs_response
 
@@ -186,6 +191,7 @@ def get_job_info_service_cb(request):
         job_information.mex_id = found_job.mex_id if not found_job.mex_id == None else ""
         job_information.task_count = found_job.task_count 
         job_information.current_task = found_job.task_current if not found_job.task_current == None else 0
+        job_information.keyword = found_job.keyword
         for task in found_job.task_list:
             task_info = TaskInfo()
             task_info.status = task.status.name
@@ -207,17 +213,19 @@ def order_list_timer_cb(event):
 # - Job allocator timer callback -
 def job_allocator_timer_cb(event):
     if job_allocator(pending_jobs_list=pending_job_list, active_jobs_list=active_job_list, mexs_list=mex_list) != 0:
-        rospy.loginfo("Failed to allocate job.")
+        # rospy.loginfo("Failed to allocate job.")
+        pass
 
 #endregion
 
 #region Job completion callback definition
 def job_completion_cb(job_id, mex_id):
     print("Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
-    # Free up MEx from local mex_list. TODO Actually update the MEx Sentinel instead here.
-    for mex in mex_list:
-        if mex.id == mex_id and mex.job_id == job_id:
-            mex.status = MExStatus.STANDBY
+    # First send update to MEx Sentinel to unassign job.
+    call_unassign_job(mex_id=mex_id)
+    # Then call MEx Sentinel to provide latest MEx List.
+    mex_list = call_get_mex_list()
+
     # Remove completed Job from the active_job_list. 
     index_to_pop = None
     for index, job in enumerate(active_job_list):
@@ -232,19 +240,20 @@ def job_completion_cb(job_id, mex_id):
 #endregion
 
 def process_order_list():
-    # Build jobs from all orders in the order_list, then clear the order_list.
+    """ Build jobs from all orders in the order_list, then clear the order_list. """
     global job_index
     for order in order_list:
         job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)
     del order_list[:]
 
-
 if __name__ == '__main__':
     try:
         # Retrieve robots and set up a list of available MobileExecutor (MEx) instances
-        mex_list = []
-        for robot in robot_namespaces:
-            mex_list.append(MobileExecutor(robot))
+        mex_list = call_get_mex_list()
+        # for robot in robot_namespaces:
+        #     mex_list.append(MobileExecutor(robot))
+        for mex in mex_list:
+            print(mex.id, mex.status, mex.job_id)
         
         # Lists for Orders, PendingJobs, ActiveJobs:
         order_list = []
@@ -272,7 +281,7 @@ if __name__ == '__main__':
 
         # Initialize timers for the JobBuilder, and JobAllocator.
         rospy.Timer(rospy.Duration(1), order_list_timer_cb)     # Every second check order list to try build rough jobs.
-        rospy.Timer(rospy.Duration(10), job_allocator_timer_cb)  # Call the job_allocator in 10 seconds to try allocating jobs. 
+        rospy.Timer(rospy.Duration(5), job_allocator_timer_cb)  # Call the job_allocator in 10 seconds to try allocating jobs. 
         # The above job_allocator timer should be replaced with something more elegant...
 
         # Keep node running.
