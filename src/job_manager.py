@@ -38,7 +38,7 @@ def order_service_cb(request):
     # NOTE RUDIMENTARY ORDER PROCESSING, RIGID IN NATURE. 
     if request.keyword == OrderKeyword.TRANSPORT.name: # Keyword: TRANSPORT.
         # Expecting: transport, priority, [from_location, to_location]
-        if len(request.order_args) == OrderTypeArgCount.TRANSPORT:
+        if len(request.order_args) == OrderTypeArgCount.TRANSPORT.value:
             priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
             from_loc = request.order_args[0]        # Check if it's in the known locations dictionary
             to_loc = request.order_args[1]          # Check if it's in the known locations dictionary
@@ -59,12 +59,12 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply erorr report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[TRANSPORT] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.TRANSPORT) + \
+                str(OrderTypeArgCount.TRANSPORT.value) + \
                 ", received " + str(len(request.order_args))
         
     elif request.keyword == OrderKeyword.MOVE.name:    # Keyword: MOVE.
         # Expecting: move, priority, [to_location]
-        if len(request.order_args) == OrderTypeArgCount.MOVE:
+        if len(request.order_args) == OrderTypeArgCount.MOVE.value:
             priority = JobPriority[request.priority].value   # Check if it's >= 1 and <= 4.
             to_loc = request.order_args[0]          # Check if it's in the known locations dictionary
             if (priority >= 1 and priority <= 4) and (to_loc in location_dict):
@@ -83,12 +83,12 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply erorr report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[MOVE] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.MOVE) + \
+                str(OrderTypeArgCount.MOVE.value) + \
                 ", received " + str(len(request.order_args))
 
     elif request.keyword == OrderKeyword.LOAD.name:     # Keyword: LOAD
         # Expecting: load, priority, []
-        if len(request.order_args) == OrderTypeArgCount.LOAD:
+        if len(request.order_args) == OrderTypeArgCount.LOAD.value:
             priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
             if (priority >= 1 and priority <= 4):
                 # Succesful check on keyword and arguments, add order to order_list.
@@ -103,12 +103,12 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply error report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.LOAD) + \
+                str(OrderTypeArgCount.LOAD.value) + \
                 ", received " + str(len(request.order_args))
 
     elif request.keyword == OrderKeyword.UNLOAD.name:     # Keyword: UNLOAD
         # Expecting: load, priority, []
-        if len(request.order_args) == OrderTypeArgCount.UNLOAD:
+        if len(request.order_args) == OrderTypeArgCount.UNLOAD.value:
             priority = JobPriority[request.priority].value  # Check if it's >= 1 and <= 4.
             if (priority >= 1 and priority <= 4):
                 # Succesful check on keyword and arguments, add order to order_list.
@@ -123,7 +123,7 @@ def order_service_cb(request):
             # Error occured, set status to ERROR and supply error report.
             order_response.error_status = OrderResponseStatus.ERROR.name
             order_response.error_report = "[LOAD] Invalid number of arguments, expected " + \
-                str(OrderTypeArgCount.UNLOAD) + \
+                str(OrderTypeArgCount.UNLOAD.value) + \
                 ", received " + str(len(request.order_args))
     else:
         # Error occured, set status to ERROR and supply erorr report.

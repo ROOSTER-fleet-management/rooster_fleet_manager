@@ -15,7 +15,7 @@ class OrderKeyword(Enum):
     LOAD = 3
     UNLOAD = 4
 
-class OrderTypeArgCount:
+class OrderTypeArgCount(Enum):
     """ Class that acts as Constants for Order types and the number of arguments associated with them. """
     # Example incoming order: TRANSPORT, priority, [from_location, to_location]
     # Example incoming order: MOVE, priority, [to_location]
