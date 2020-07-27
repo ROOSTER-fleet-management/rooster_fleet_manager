@@ -4,6 +4,7 @@ import rospy
 
 from Tasks import TaskStatus
 from MobileExecutor import MExStatus, MobileExecutor
+from Order import OrderKeyword
 from enum import Enum
 
 #region Enumerators
@@ -25,7 +26,7 @@ class JobPriority(Enum):
 
 class Job:
     """ Class which contains overall job details and a list of job-tasks for individual jobs. """
-    def __init__(self, job_id, completion_cb, mex_id=None, priority=JobPriority.LOW, ):
+    def __init__(self, job_id, completion_cb, keyword, mex_id=None, priority=JobPriority.LOW):
         self.id = job_id                                # Unique identifier for this job, e.g. "job001"
         self.mex_id = mex_id                            # Unique identifier for an existing Mobile Executor (MEx), e.g. "rdg01"
         self.status = JobStatus.PENDING                 # PENDING, ASSIGNED, ACTIVE, SUCCEEDED, ABORTED
@@ -34,6 +35,7 @@ class Job:
         self.task_list = []                             # List of tasks for this Job.
         self.priority = priority                        # Priority of the job, default LOW. Levels: LOW, MEDIUM, HIGH, CRITICAL
         self.completion_callback = completion_cb        # Callback function to call when Job has finished.
+        self.keyword = keyword                          # Keyword from the order used to create this Job from.
 
     def add_task(self, task):
         """ Add a single task to the job's task list and update task count. """

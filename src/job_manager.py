@@ -135,7 +135,7 @@ def order_service_cb(request):
 
 # - GetPendingJobs service callback -
 def get_pending_jobs_service_cb(request):
-    print("A service request for the Pending Jobs List has been received.")
+    # print("A service request for the Pending Jobs List has been received.")
     pending_jobs_response = GetPendingJobsResponse()
     pending_jobs_response.jobs_count = len(pending_job_list)
     for job in pending_job_list:
@@ -143,12 +143,13 @@ def get_pending_jobs_service_cb(request):
         pending_job.priority = job.priority.name
         pending_job.job_id = job.id
         pending_job.task_count = job.task_count
+        pending_job.keyword = job.keyword
         pending_jobs_response.jobs.append(pending_job)
     return pending_jobs_response
 
 # - GetActiveJobs service callback -
 def get_active_jobs_service_cb(request):
-    print("A service request for the Active Jobs List has been received.")
+    # print("A service request for the Active Jobs List has been received.")
     active_jobs_response = GetActiveJobsResponse()
     active_jobs_response.jobs_count = len(active_job_list)
     for job in active_job_list:
@@ -159,6 +160,7 @@ def get_active_jobs_service_cb(request):
         active_job.mex_id = job.mex_id
         active_job.task_count = job.task_count
         active_job.current_task = job.task_current
+        active_job.keyword = job.keyword
         active_jobs_response.jobs.append(active_job)
     return active_jobs_response
 
@@ -189,6 +191,7 @@ def get_job_info_service_cb(request):
         job_information.mex_id = found_job.mex_id if not found_job.mex_id == None else ""
         job_information.task_count = found_job.task_count 
         job_information.current_task = found_job.task_current if not found_job.task_current == None else 0
+        job_information.keyword = found_job.keyword
         for task in found_job.task_list:
             task_info = TaskInfo()
             task_info.status = task.status.name
@@ -210,7 +213,8 @@ def order_list_timer_cb(event):
 # - Job allocator timer callback -
 def job_allocator_timer_cb(event):
     if job_allocator(pending_jobs_list=pending_job_list, active_jobs_list=active_job_list, mexs_list=mex_list) != 0:
-        rospy.loginfo("Failed to allocate job.")
+        # rospy.loginfo("Failed to allocate job.")
+        pass
 
 #endregion
 
@@ -241,23 +245,6 @@ def process_order_list():
     for order in order_list:
         job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)
     del order_list[:]
-
-# def call_get_mex_list():
-#     """ Function to get most recent list of all MEx from service provided by mex_sentinel node."""
-#     rospy.wait_for_service('/mex_sentinel/get_mex_list')
-#     try:
-#         get_mex_list_service = rospy.ServiceProxy('/mex_sentinel/get_mex_list', GetMexList)
-#         req = GetMexListRequest()
-#         result = get_mex_list_service(req)
-#         mex_list = []
-#         for mex in result.mex_list:
-#             mex_id = mex.id
-#             mex_status = MExStatus[mex.status]
-#             mex_job_id = mex.job_id 
-#             mex_list.append(MobileExecutor(mex_id, mex_status, mex_job_id))
-#         return mex_list
-#     except rospy.ServiceException as e:
-#         print("Service call failed: %s"%e)
 
 if __name__ == '__main__':
     try:

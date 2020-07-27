@@ -29,7 +29,7 @@ def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
             print("Allocated index: " + str(allocated_job_index))
             break
         elif job.status == JobStatus.PENDING:
-            print("Trying for index: " + str(index))
+            # print("Trying for index: " + str(index))
             # Found a job which is still pending, now find available MEx.
             for mex in mexs_list:
                 if mex.status == MExStatus.STANDBY:

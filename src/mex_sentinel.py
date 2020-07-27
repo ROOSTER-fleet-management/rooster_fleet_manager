@@ -93,7 +93,7 @@ def change_mex_status(request):
 
 def mex_list_info():
     pub = rospy.Publisher('~mex_list_info', MexListInfo, queue_size=10)
-    rate = rospy.Rate(1) # 30hz
+    rate = rospy.Rate(1) # 1hz
     while not rospy.is_shutdown():
         mexlistinfo = MexListInfo()
         mexlistinfo.stamp = rospy.Time.now()

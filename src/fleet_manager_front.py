@@ -6,9 +6,11 @@ import sys
 import rospy
 from PyQt4 import QtGui, QtCore
 
-from simple_sim.srv import PlaceOrder, PlaceOrderRequest
+from simple_sim.srv import PlaceOrder, PlaceOrderRequest, GetPendingJobs, GetPendingJobsRequest, GetActiveJobs, GetActiveJobsRequest
+from simple_sim.msg import MexListInfo
 from ui import fleet_manager_ui
 from JobManager.Order import *
+from JobManager.Job import JobStatus, Job, JobPriority
 
 #region ################################### TO DO LIST #####################################
 # DONE 1.  Perform simple call /job_manager/place_order service.
@@ -20,10 +22,12 @@ from JobManager.Order import *
 # DONE 7.  Check if the order is viable before adding to order list, notify user if not.
 # DONE 8.  Remove orders from Order list if they were placed succesfully.
 # DONE 9.  Put in Placeholder text in the arguments field based on the order keyword.
-# TODO 10. Connect Job Manager to the Jobs treeWidget view.
+# DONE 10. Connect Job Manager to the Jobs treeWidget view.
 # DONE 11. Add the deletion of individual orders from the order list.
 # TODO 12. Replace placeholders in the FILE ACTION MENU.
 # TODO 13. Add logo in same style as GUI launcher.
+# DONE 14. Automatically sort the Jobs list when new jobs have been added.
+# DONE 15. Add KEYWORD to Job.
 # TODO 
 #endregion #################################################################################
 
@@ -230,15 +234,114 @@ def load_orders_from_JSON(filepath):
         order_item = QtGui.QTreeWidgetItem([item_keyword, item_priority, item_arguments])
         appGui.treeWidgetOrders.addTopLevelItem(order_item)
 
+def job_list_cb(event):
+    """
+    Timer callback, attempts to call Job Manager 'get_pending_jobs' & 
+    'get_active_jobs' services for updating the Jobs treeWidget list.
+    """
+    combined_jobs_list = []     # Empty list for the jobs to be appened to.
 
+    # Retrieve pending jobs.
+    try:
+        rospy.wait_for_service('/job_manager/get_pending_jobs', rospy.Duration(1))
+        try:
+            get_pending_jobs = rospy.ServiceProxy('/job_manager/get_pending_jobs', GetPendingJobs)
+            req = GetPendingJobsRequest()
+            resp = get_pending_jobs(req)
+            if resp.jobs_count > 0:
+                # Add jobs to combined_jobs_list
+                for job in resp.jobs:
+                    # [0 ID, 1 Priority, 2 Keyword, 3 Status, 4 MEx ID, 5 Task Count, 6 Current Task, 7 processed]
+                    combined_jobs_list.append([job.job_id, job.priority, job.keyword, JobStatus.PENDING.name, None, job.task_count, 0, False])
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+    except rospy.ROSException:
+        pass
 
+    # Retrieve active jobs.
+    try:
+        rospy.wait_for_service('/job_manager/get_active_jobs', rospy.Duration(1))
+        try:
+            get_active_jobs = rospy.ServiceProxy('/job_manager/get_active_jobs', GetActiveJobs)
+            req = GetActiveJobsRequest()
+            resp = get_active_jobs(req)
+            if resp.jobs_count > 0:
+                # Add jobs to combined_jobs_list
+                for job in resp.jobs:
+                    # [0 ID, 1 Priority, 2 Keyword, 3 Status, 4 MEx ID, 5 Task Count, 6 Current Task, 7 processed]
+                    combined_jobs_list.append([job.job_id, job.priority, job.keyword, job.status, job.mex_id, job.task_count, job.current_task+1, False])
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+    except rospy.ROSException:
+        pass
 
+    if len(combined_jobs_list) > 0:
+        update_jobs_list(combined_jobs_list)
+
+def update_jobs_list(combined_jobs_list):
+    """
+    Add new/update existing items in the Jobs treeWidget with response information:
+    1. Take in pending jobs and active jobs info into a single list.
+    2. Loop over exisiting Job items in the treeWidget.
+    3. If the job is in the list, update information.
+    4. If it's not in the list, mark index for removal.
+    5. If not all list items have been processed, this means it's new. Add new job items to the treeWidget.
+    6. Loop over indices_for_removal list in descending order and remove all job items no longer in existing.
+    """
+    # [2, 3, 4] First check if current Job items in the treeWidget require updating or removing.
+    root = appGui.treeWidgetJobs.invisibleRootItem()
+    child_count = root.childCount()
+    indices_for_removal = []        # Empty list to which indices can be appended which can be removed after updating others.
+    for i in range(child_count):    # Iterate over all the existing (top level) items (a.k.a. jobs) in the treeWidgetJobs.
+        item = root.child(i)
+        job_id = str(item.text(0))
+
+        # Loop over all job information lists in the the combined_jobs_list, checking if the 'job_id' is in there.
+        for job_info_list in combined_jobs_list:
+            if job_id in job_info_list:
+                # It's in there, so update the information and mark processed as True.
+                # print("Found " + job_id + "! Updating.")
+                item.setText(0, job_info_list[0])
+                item.setText(1, job_info_list[1])
+                item.setText(2, job_info_list[2])
+                item.setText(3, job_info_list[3])
+                item.setText(4, "" if job_info_list[4] == None else str(job_info_list[4]) )
+                item.setText(5, str(job_info_list[6])+"/"+str(job_info_list[5]) )
+                job_info_list[7] = True
+                break
+        else:
+            # The job item with it's job id is no longer in the Job Managers jobs lists, thus mark for removal.
+            indices_for_removal.append(i)
+    
+    # [5] Check for unprocessed list items, adding them as new items to the jobs treeWidget
+    for job_info_list in combined_jobs_list:
+        if job_info_list[7] == False:
+            job_item = QtGui.QTreeWidgetItem([str(job_info_list[0]), str(job_info_list[1]), str(job_info_list[2]), str(job_info_list[3]), str(job_info_list[4]), str(job_info_list[5])])
+            appGui.treeWidgetJobs.addTopLevelItem(job_item)
+
+    # [6] Remove items which were marked for removal
+    if len(indices_for_removal) != 0:
+        # Sort the indices list in descending order (from highest index to lowest index).
+        indices_for_removal.sort(reverse=True)
+        # Iterate over the sorted list, removing items from the treeWidgetJobs
+        for index in indices_for_removal:
+            appGui.treeWidgetJobs.takeTopLevelItem(index)
+        
+    
+def mex_list_info_cb(data):
+    """ Subscription callback for the MEx Sentinel mex_list_info topic. """
+    # print("Mex List Info CB.")
+    pass
 
 if __name__ == '__main__':
     try:     
         # Initialize the node.
         rospy.init_node('fleet_manager_front')
 
+        # Set up information update connections.
+        rospy.Subscriber('/mex_sentinel/mex_list_info', MexListInfo, mex_list_info_cb)      # Subscription to MEx Sentinel for updating Mobile Executors list.
+        rospy.Timer(rospy.Duration(1), job_list_cb)                                         # Timer for updating Jobs list.
+        
         #region --- GUI ---
         app = QtGui.QApplication(sys.argv)
         appGui = GuiMainWindow()
@@ -290,8 +393,5 @@ if __name__ == '__main__':
         appGui.show()
         app.exec_()
         #endregion
-
-        # Keep node running.
-        # rospy.spin()
     except rospy.ROSInterruptException:
         pass
