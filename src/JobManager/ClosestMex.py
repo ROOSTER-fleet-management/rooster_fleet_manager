@@ -13,10 +13,10 @@ import numpy as np
 #(2)https://answers.ros.org/question/341062/how-to-get-a-robot-position-xy-in-a-map-instead-of-odometry-in-python/
 
 #init locations
-loc01 = Location("loc01", "Storage #1", -0.5, -2.5, 1.57)
-loc02 = Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0)
-loc03 = Location("loc03", "Storage #2", -2.0, 0.0, 3.1415)
-loc04 = Location("loc04", "Assembly station #2", -5.0, 4.5, 6.283)
+# loc01 = Location("loc01", "Storage #1", -0.5, -2.5, 1.57)
+# loc02 = Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0)
+# loc03 = Location("loc03", "Storage #2", -2.0, 0.0, 3.1415)
+# loc04 = Location("loc04", "Assembly station #2", -5.0, 4.5, 6.283)
 
 #objects from this class are added to the list where we choose the closest mex to a location
 class Distance:
@@ -26,14 +26,17 @@ class Distance:
 
 #function to get list of all mex from service provided by mex_sentinel
 def call_get_mex_list():
-    rospy.wait_for_service('/mex_sentinel/get_mex_list')
     try:
-        call_service = rospy.ServiceProxy('/mex_sentinel/get_mex_list', GetMexList)
-        call = GetMexListRequest()
-        result = call_service(call)
-        return result
-    except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
+        rospy.wait_for_service('/mex_sentinel/get_mex_list', rospy.Duration(1))     # Wait for service but with 1 sec timeout
+        try:
+            call_service = rospy.ServiceProxy('/mex_sentinel/get_mex_list', GetMexList)
+            call = GetMexListRequest()
+            result = call_service(call)
+            return result
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+    except rospy.ROSException:
+        pass
 
 #function to calculate path to a location using (!) /move_base/make_plan on a certain mex
 def get_plan(x_start, y_start, x_finish, y_finish, mex_id):
@@ -96,16 +99,17 @@ def choose_closest_mex(location):
         if i.dist < the_closest_dist:
             the_closest_dist = i.dist
             the_closest_id = i.id
-    result = ('The closest mex to ' + str(location.name) + ' is ' + the_closest_id + ' with distance:')
+    # result = ('The closest mex to ' + str(location.name) + ' is ' + the_closest_id + ' with distance:')
+    result = (the_closest_id, the_closest_dist)
     print(result)
-    print(the_closest_dist)
+    # print(the_closest_dist)
     
-    return result
+    return result       # A tuple of closest MEx ID and it's distance.
 
 
-rospy.init_node('shortest_path_calculator')
+# rospy.init_node('shortest_path_calculator')
 
-choose_closest_mex(loc01)
-choose_closest_mex(loc02)
-choose_closest_mex(loc03)
-choose_closest_mex(loc04)
+# choose_closest_mex(loc01)
+# choose_closest_mex(loc02)
+# choose_closest_mex(loc03)
+# choose_closest_mex(loc04)

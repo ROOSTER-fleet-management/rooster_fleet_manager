@@ -99,7 +99,11 @@ def mex_list_info():
         mexlistinfo.stamp = rospy.Time.now()
         mexlistinfo.total_mex_number = len(mex_list)
         for i in mex_list:
-            mexlistinfo.mex_list_info_array.append(i.mex_info())
+            mex_info = MexInfo()
+            mex_info.status = i.status.name
+            mex_info.id = i.id
+            mex_info.job_id = str(i.job_id)
+            mexlistinfo.mex_list_info_array.append(mex_info)
         #hello_str = "hello world %s" % rospy.get_time()
         #rospy.loginfo(hello_str)
         pub.publish(mexlistinfo)
