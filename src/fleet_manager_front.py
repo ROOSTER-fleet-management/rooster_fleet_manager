@@ -286,7 +286,7 @@ def update_jobs_list(combined_jobs_list):
     3. If the job is in the list, update information.
     4. If it's not in the list, mark index for removal.
     5. If not all list items have been processed, this means it's new. Add new job items to the treeWidget.
-    6. Loop over indices_for_removal list in descending order and remove all job items no longer in existing.
+    6. Loop over indices_for_removal list in descending order and remove all job items no longer existing.
     """
     # [2, 3, 4] First check if current Job items in the treeWidget require updating or removing.
     root = appGui.treeWidgetJobs.invisibleRootItem()
@@ -300,13 +300,12 @@ def update_jobs_list(combined_jobs_list):
         for job_info_list in combined_jobs_list:
             if job_id in job_info_list:
                 # It's in there, so update the information and mark processed as True.
-                # print("Found " + job_id + "! Updating.")
                 item.setText(0, job_info_list[0])
-                item.setText(1, job_info_list[1])
+                item.setText(1, str(JobPriority[str(job_info_list[1])].value)+" / "+job_info_list[1])
                 item.setText(2, job_info_list[2])
                 item.setText(3, job_info_list[3])
-                item.setText(4, "" if job_info_list[4] == None else str(job_info_list[4]) )
-                item.setText(5, str(job_info_list[6])+"/"+str(job_info_list[5]) )
+                item.setText(4, "\xA0" if job_info_list[4] == None else ""+str(job_info_list[4]) )
+                item.setText(5, str(job_info_list[6])+" / "+str(job_info_list[5]) )
                 job_info_list[7] = True
                 break
         else:
@@ -316,7 +315,13 @@ def update_jobs_list(combined_jobs_list):
     # [5] Check for unprocessed list items, adding them as new items to the jobs treeWidget
     for job_info_list in combined_jobs_list:
         if job_info_list[7] == False:
-            job_item = QtGui.QTreeWidgetItem([str(job_info_list[0]), str(job_info_list[1]), str(job_info_list[2]), str(job_info_list[3]), str(job_info_list[4]), str(job_info_list[5])])
+            job_item = QtGui.QTreeWidgetItem( [ 
+                str(job_info_list[0]), 
+                str(JobPriority[str(job_info_list[1])].value)+" / "+job_info_list[1], 
+                str(job_info_list[2]), 
+                str(job_info_list[3]), 
+                "\xA0" if job_info_list[4] == None else ""+str(job_info_list[4]), 
+                str(job_info_list[6])+"/"+str(job_info_list[5]) ] )
             appGui.treeWidgetJobs.addTopLevelItem(job_item)
 
     # [6] Remove items which were marked for removal
@@ -329,9 +334,64 @@ def update_jobs_list(combined_jobs_list):
         
     
 def mex_list_info_cb(data):
-    """ Subscription callback for the MEx Sentinel mex_list_info topic. """
-    # print("Mex List Info CB.")
-    pass
+    """
+    Subscription callback for the MEx Sentinel mex_list_info topic. 
+    1. Take in MEx info.
+    2. Loop over exisiting MEx items in the treeWidget.
+    3. If the MEx is in the list, update information.
+    4. If it's not in the list, mark index for removal.
+    5. If not all list items have been processed, this means it's new. Add new MEx items to the treeWidget.
+    6. Loop over indices_for_removal list in descending order and remove all MEx items no longer existing.
+    """
+    if data.total_mex_number > 0:
+        # [1] Take in MEx info, add all MExs in list to a temporary dictionary.
+        temp_dict = {}                  # Empty dictionary in which items will be marked as processed (True) or not (False).
+        for mex_info in data.mex_list_info_array:
+            temp_dict[str(mex_info.id)] = {
+                "id" : mex_info.id,
+                "job_id" : mex_info.job_id,
+                "status" : mex_info.status,
+                "processed" : False
+            }   # Add incoming MEx info to temp_dict as dict and mark as not yet processed.
+
+        # [2, 3, 4] First check if current MEx items in the treeWidget require updating or removing.
+        root = appGui.treeWidgetMEx.invisibleRootItem()
+        child_count = root.childCount()
+        indices_for_removal = []        # Empty list to which indices can be appended which can be removed after updating others.
+
+        for i in range(child_count):    # Iterate over all the existing (top level) items (a.k.a. MExs) in the treeWidgetMEx.
+            item = root.child(i)
+            mex_id = str(item.text(0))
+
+            # Loop over all MEx information lists in the the mex_list_info_array, checking if the 'mex_id' is in there.
+            for mex_info in data.mex_list_info_array:
+                if mex_id == mex_info.id:
+                    # It's in there, so update the information and mark processed as True.
+                    item.setText(0, str(mex_info.id) )
+                    item.setText(1, str(mex_info.status) )
+                    item.setText(2, str(mex_info.job_id) )
+                    temp_dict[str(mex_info.id)]["processed"] = True      # Mark MEx as processed.
+                    break
+            else:
+                # The job item with it's job id is no longer in the Job Managers jobs lists, thus mark for removal.
+                indices_for_removal.append(i)
+
+        # [5] Check for unprocessed list items, adding them as new items to the jobs treeWidget
+        for mex_key in temp_dict:
+            if temp_dict[mex_key]["processed"] == False:
+                mex_item = QtGui.QTreeWidgetItem( [ 
+                    str(temp_dict[mex_key]["id"]), 
+                    str(temp_dict[mex_key]["status"]),
+                    str(temp_dict[mex_key]["job_id"]) ] )
+                appGui.treeWidgetMEx.addTopLevelItem(mex_item)
+        
+        #  [6] Remove items which were marked for removal
+        if len(indices_for_removal) != 0:
+            # Sort the indices list in descending order (from highest index to lowest index).
+            indices_for_removal.sort(reverse=True)
+            # Iterate over the sorted list, removing items from the treeWidgetJobs
+            for index in indices_for_removal:
+                appGui.treeWidgetMEx.takeTopLevelItem(index)
 
 if __name__ == '__main__':
     try:     
