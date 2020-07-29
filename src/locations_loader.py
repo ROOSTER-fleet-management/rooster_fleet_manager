@@ -2,39 +2,33 @@
 import json         # Used for reading JSON files (loading jobs to JobQueue)
 import os           # Used to get base filename and file and directory handling
 from JobManager.Location import Location
+import rospy
 
-#--------------- for locations as a list (locations.JSON file)-------------------
-#locations = []
-#with open('locations.JSON') as json_file:
-#    data = json.load(json_file)
-    #for loc in data:
-    #    location = Location(loc['id'],loc['name'], loc['x_coordinate'], loc['y_coordinate'], loc['orientation'])
-    #    locations.append(location)
-#for i in locations:
-#    i.info()
+#function to read locations from JSON file (that is list of dictionaries) and upload to ROS parameter server as dictionaries
+def set_up_locations():
+    with open('locations.JSON') as json_file:
+        data = json.load(json_file)
+    for loc in data: #for each item (dictionary) in JSON file (list) 
+        loc_params = [loc["id"], loc["name"], loc["x_coordinate"], loc["y_coordinate"], loc["orientation"]] #prepare list of a location parameters
+        rospy.set_param('locations/'+str(loc["id"]), loc_params) #set a location parameters
 
-
-#--------------- for locations as a dictionary (locations2.JSON file)-------------------
-class my_dictionary(dict): 
+#function to read locations info from ROS parameter server and turn them into the dictionary
+def make_location_dict():
+    class my_dictionary(dict): #class for location_dict to inherit add function to append locations
   
-    # __init__ function 
-    def __init__(self): 
-        self = dict() 
+        # __init__ function 
+        def __init__(self): 
+            self = dict() 
           
-    # Function to add key:value 
-    def add(self, key, value): 
-        self[key] = value 
+        # Function to add key:value 
+        def add(self, key, value): 
+            self[key] = value 
 
-location_dict = my_dictionary()
-with open('locations2.JSON') as json_file:
-    data = json.load(json_file) #data is dictionary
-    for loc in data: #loc is unicode
-        location_dict.add(str(loc), Location(data[loc]["id"], data[loc]["name"], data[loc]["x_coordinate"], data[loc]["y_coordinate"], data[loc]["orientation"]))
-#print(location_dict)
-#print(location_dict.items())
-for i in location_dict.items():
-    print('location: ' + i[0])
-    i[1].info()
-    #print(i[1].theta)
+    location_dict = my_dictionary() #create location object
+    temp_dictionary = rospy.get_param("/locations") #read parameters from ROS parameter server
+    for loc in temp_dictionary: #turning parameters to a dictionary items
+        location_dict.add(loc, Location(temp_dictionary[loc][0], temp_dictionary[loc][1], float(temp_dictionary[loc][2]), float(temp_dictionary[loc][3]), float(temp_dictionary[loc][4])))
+    temp_dictionary.clear()
+    return location_dict
 
-#location_dict["loc04"].info()
+set_up_locations()
