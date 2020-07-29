@@ -7,7 +7,7 @@ import rospy
 
 #from JobManager.Tasks import TaskStatus, TaskType, RobotMoveBase, AwaitingLoadCompletion
 from JobManager.Job import JobStatus, Job, JobPriority
-from JobManager.Location import Location
+from JobManager.Location import Location, make_location_dict
 from JobManager.JobBuilder import job_builder
 from JobManager.JobActivation import job_allocator, job_refiner
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
@@ -268,12 +268,7 @@ if __name__ == '__main__':
 
         # Testing the adding of multiple Location class instances, storing them in a dictionary.
         # TODO Replace this with a dynamic(?) dictionary which is constructed from the MEx Sentinel.
-        location_dict = {
-            "loc01" : Location("loc01", "Storage #1", -0.5, -2.5, 1.57),
-            "loc02" : Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0),
-            "loc03" : Location("loc03", "Storage #2", -2.0, 0.0, 3.1415),
-            "loc04" : Location("loc04", "Assembly station #2", -5.0, 4.5, 6.283)
-        }
+        location_dict = make_location_dict()
         
         # Initialize the node.
         rospy.init_node('job_manager')

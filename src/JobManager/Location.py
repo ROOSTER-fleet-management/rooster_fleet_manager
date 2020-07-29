@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import rospy
+
 class Location:
     """ Class with location information (name, position, orientation) based on map reference frame. """
     def __init__(self, id, name, x_coordinate, y_coordinate, theta):
@@ -13,3 +15,22 @@ class Location:
         print(
             "Location info [" + self.name + "]: x, y, theta = " + str(self.x) + 
             ", " + str(self.y) + ", " + str(self.theta) )
+
+#function to read locations info from ROS parameter server and turn them into the dictionary
+def make_location_dict():
+    class my_dictionary(dict): #class for location_dict to inherit add function to append locations
+  
+        # __init__ function 
+        def __init__(self): 
+            self = dict() 
+          
+        # Function to add key:value 
+        def add(self, key, value): 
+            self[key] = value 
+
+    location_dict = my_dictionary() #create location object
+    temp_dictionary = rospy.get_param("/locations") #read parameters from ROS parameter server
+    for loc in temp_dictionary: #turning parameters to a dictionary items
+        location_dict.add(loc, Location(temp_dictionary[loc][0], temp_dictionary[loc][1], float(temp_dictionary[loc][2]), float(temp_dictionary[loc][3]), float(temp_dictionary[loc][4])))
+    temp_dictionary.clear()
+    return location_dict

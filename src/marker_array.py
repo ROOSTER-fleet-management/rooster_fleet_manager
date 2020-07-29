@@ -2,7 +2,7 @@
 
 import rospy
 from visualization_msgs.msg import Marker, MarkerArray
-from JobManager.Location import Location
+from JobManager.Location import Location, make_location_dict
 
 #launch the script and then open RViz, add "MarkerArray" view, choose the right topic.
 
@@ -66,15 +66,7 @@ def create_text_marker(name, x_coordinate, y_coordinate, id):
 marker_array = MarkerArray()
 
 
-location_dict = {
-            "loc01" : Location("loc01", "Storage #1", -0.5, -2.5, 1.57),
-
-            "loc02" : Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0),
-
-            "loc03" : Location("loc03", "Storage #2", -2.0, 0.0, 3.1415),
-
-            "loc04" : Location("loc04", "Assembly station #2", -5.0, 4.5, 6.283)
-        }
+location_dict = make_location_dict()
 
 #Go through all the locations.
 for key in location_dict:

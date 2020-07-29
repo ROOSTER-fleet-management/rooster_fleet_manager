@@ -5,7 +5,6 @@ from simple_sim.srv import GetMexList, GetMexListRequest
 from MobileExecutor import MExStatus
 from nav_msgs.srv import GetPlan, GetPlanResponse
 from geometry_msgs.msg import PoseStamped, PointStamped, PoseWithCovarianceStamped
-from Location import Location
 import numpy as np
 
 #get coordinates of each mex. 3 ways: (1) by odometry and (2) by tf from /map to /base_link and (3) by amcl_pose topic
