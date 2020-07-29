@@ -27,6 +27,11 @@ from simple_sim.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
 # for robot in robot_namespaces:
 #     print(robot)
 
+# Retrieve locations from rosparameter server.
+# temp_dict = rospy.get_param("/locations")
+# location_dict = location_dict_builder(temp_dict)
+# del temp_dict
+
 #region Service callback definitions
 
 # - PlaceOrder service callback -

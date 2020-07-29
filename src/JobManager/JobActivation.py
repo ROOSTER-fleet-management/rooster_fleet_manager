@@ -3,6 +3,8 @@
 from Job import JobStatus
 from MobileExecutor import MExStatus
 from JobServiceMethods import call_get_mex_list, call_assign_job, call_change_mex_status
+from Order import OrderKeyword
+import ClosestMex as cm
 
 # Job Allocator and Job Refiner.
 def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
@@ -30,17 +32,26 @@ def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
             break
         elif job.status == JobStatus.PENDING:
             # print("Trying for index: " + str(index))
-            # Found a job which is still pending, now find available MEx.
-            for mex in mexs_list:
-                if mex.status == MExStatus.STANDBY:
-                    # Found a MEx which is available (standby)
-                    # Check if the job has not got a MEx pre-assigned OR the pre-assigned mex_id matches the MEx's id
-                    if (not job.mex_id) or (job.mex_id == mex.id): 
-                        mex.status = MExStatus.ASSIGNED
-                        mex.job_id = job.id
-                        job.assign_mex(mex.id)
-                        allocated_job_index = index
-                        break
+            # Found a job which is still pending, now find available and/or closest MEx.
+            # First differentiate between Jobs that require a closest MEx and Jobs that do not.
+            if job.keyword == OrderKeyword.MOVE.name or job.keyword == OrderKeyword.TRANSPORT.name:
+                # Find Closest MEx
+                mex_id, mex_distance = cm.choose_closest_mex(location=job.task_list[0].location)   # First task in MOVE or TRANSPORT is RobotMoveBase which has attribute location.
+                if mex_id != None:
+                    job.assign_mex(mex_id)
+                    allocated_job_index = index
+            else:
+                # Distance does not matter, so find first available MEx in the list.
+                for mex in mexs_list:
+                    if mex.status == MExStatus.STANDBY:
+                        # Found a MEx which is available (standby)
+                        # Check if the job has not got a MEx pre-assigned OR the pre-assigned mex_id matches the MEx's id
+                        if (not job.mex_id) or (job.mex_id == mex.id): 
+                            mex.status = MExStatus.ASSIGNED
+                            mex.job_id = job.id
+                            job.assign_mex(mex.id)
+                            allocated_job_index = index
+                            break
     else:
         # Loop ended without a break
         error_code = 1      # Could not allocate Job to MEx.
