@@ -18,7 +18,7 @@ from JobManager.Job import JobStatus, Job, JobPriority
 # DONE 3.  Call /job_manager/place_order(s?) service with the list of orders.
 # DONE 4.  Add visually correct but non-functional GUI to node.
 # DONE 5.  Replace JSON order list call and instead visualize it in the Order tab.
-# TODO 6.  Connect MEx Sentinel to Mobile Executors treeWidget view.
+# DONE 6.  Connect MEx Sentinel to Mobile Executors treeWidget view.
 # DONE 7.  Check if the order is viable before adding to order list, notify user if not.
 # DONE 8.  Remove orders from Order list if they were placed succesfully.
 # DONE 9.  Put in Placeholder text in the arguments field based on the order keyword.

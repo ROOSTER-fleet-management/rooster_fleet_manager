@@ -6,9 +6,6 @@ from JobManager.Location import Location, make_location_dict
 
 #launch the script and then open RViz, add "MarkerArray" view, choose the right topic.
 
-#init node here in order to have rospy.get_rostime() later
-rospy.init_node('marker_publisher_node', anonymous=True)
-
 #Each location displays as two markers: a semi-transparent purple screen and white text label. 
 #Each marker is created by a corresponding function
 def create_sphere_marker(name, x_coordinate, y_coordinate, id):
@@ -62,29 +59,36 @@ def create_text_marker(name, x_coordinate, y_coordinate, id):
     text_name.text = name
     return text_name
 
-#creating object (array)
-marker_array = MarkerArray()
+if __name__ == '__main__':
+    try: 
+        #init node here in order to have rospy.get_rostime() later
+        rospy.init_node('marker_publisher_node', anonymous=True)
+
+        #creating object (array)
+        marker_array = MarkerArray()
 
 
-location_dict = make_location_dict()
+        location_dict = make_location_dict()
 
-#Go through all the locations.
-for key in location_dict:
-    index = key
-    marker_object = create_sphere_marker(location_dict[index].name, location_dict[index].x, location_dict[index].y, int(location_dict[index].id[3:]))
-    marker_array.markers.append(marker_object)    
-    text_object = create_text_marker(location_dict[index].name, location_dict[index].x, location_dict[index].y, int(location_dict[index].id[3:])+100)
-    marker_array.markers.append(text_object)
-#marker_object = create_sphere_marker('Storage 1', 2, 3, 1)
-#marker_array.markers.append(marker_object)
+        #Go through all the locations.
+        for key in location_dict:
+            index = key
+            marker_object = create_sphere_marker(location_dict[index].name, location_dict[index].x, location_dict[index].y, int(location_dict[index].id[3:]))
+            marker_array.markers.append(marker_object)    
+            text_object = create_text_marker(location_dict[index].name, location_dict[index].x, location_dict[index].y, int(location_dict[index].id[3:])+100)
+            marker_array.markers.append(text_object)
+        #marker_object = create_sphere_marker('Storage 1', 2, 3, 1)
+        #marker_array.markers.append(marker_object)
 
-#text_object = create_text_marker('Storage 1', 2, 3, 2)
-#marker_array.markers.append(text_object)
+        #text_object = create_text_marker('Storage 1', 2, 3, 2)
+        #marker_array.markers.append(text_object)
 
-publisher = rospy.Publisher('/visualization_marker_array', MarkerArray, queue_size=1)
+        publisher = rospy.Publisher('/visualization_marker_array', MarkerArray, queue_size=1)
 
-rate = rospy.Rate(1)
+        rate = rospy.Rate(1)
 
-while not rospy.is_shutdown():
-    publisher.publish(marker_array)
-    rate.sleep()
+        while not rospy.is_shutdown():
+            publisher.publish(marker_array)
+            rate.sleep()
+    except rospy.ROSInterruptException:
+        pass

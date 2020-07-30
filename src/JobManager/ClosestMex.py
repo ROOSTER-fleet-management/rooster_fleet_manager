@@ -100,7 +100,7 @@ def choose_closest_mex(location):
             the_closest_id = i.id
     # result = ('The closest mex to ' + str(location.name) + ' is ' + the_closest_id + ' with distance:')
     result = (the_closest_id, the_closest_dist)
-    print(result)
+    # print(result)
     # print(the_closest_dist)
     
     return result       # A tuple of closest MEx ID and it's distance.
