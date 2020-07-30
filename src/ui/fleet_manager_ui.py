@@ -195,8 +195,6 @@ class Ui_MainWindow(object):
         self.actionQuit_application.setObjectName(_fromUtf8("actionQuit_application"))
         self.actionPlaceholder2 = QtGui.QAction(MainWindow)
         self.actionPlaceholder2.setObjectName(_fromUtf8("actionPlaceholder2"))
-        self.menuFile.addAction(self.actionPlaceholder)
-        self.menuFile.addAction(self.actionPlaceholder2)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionAbout)
         self.menuFile.addSeparator()

@@ -405,9 +405,9 @@ if __name__ == '__main__':
         #region --- GUI ---
         app = QtGui.QApplication(sys.argv)
         appGui = GuiMainWindow()
-        #windowIcon = QtGui.QIcon()
-        #windowIcon.addPixmap(QtGui.QPixmap(":/icons/Launch Icon Multi.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #appGui.setWindowIcon(windowIcon)
+        windowIcon = QtGui.QIcon()
+        windowIcon.addPixmap(QtGui.QPixmap(":/icons/Fleet ManagerIcon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        appGui.setWindowIcon(windowIcon)
 
         # Add orders from example_orders.JSON
         filename = "example_orders.JSON"
