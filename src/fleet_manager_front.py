@@ -34,7 +34,8 @@ from JobManager.Job import JobStatus, Job, JobPriority
 
 VERSION = "1.0"
 APPLICATION_TITLE = "Fleet Manager"
-print(APPLICATION_TITLE + ". Version: "+VERSION)
+NODE_NAME = "[fleet_manager_front] "
+print(NODE_NAME + APPLICATION_TITLE + ". Version: "+VERSION)
 
 
 #region         ### PyQt GUI ###
@@ -126,12 +127,12 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
                     req.priority = order[1]
                     req.order_args = order[2]
                     resp = place_order(req)
-                    print("Response: ", resp)
+                    print(NODE_NAME + "Response: ", resp)
                     if resp.error_status == OrderResponseStatus.SUCCES.name:
                         # The placement of this order was succesful, remove from Order list
                         indices_to_remove.append(order[3])
             except rospy.ServiceException as e:
-                print("Service call failed: %s"%e)
+                print(NODE_NAME + "Service call failed: %s"%e)
         
         if len(indices_to_remove) != 0:
             # Sort the indices list in descending order (from highest index to lowest index).
@@ -187,7 +188,7 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
                                             QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
         
         if choice == QtGui.QMessageBox.Yes:
-            print("Closing Fleet Manager node...")
+            print(NODE_NAME + "Closing Fleet Manager node...")
             QtCore.QCoreApplication.instance().quit()
         else:
             pass
@@ -254,7 +255,7 @@ def job_list_cb(event):
                     # [0 ID, 1 Priority, 2 Keyword, 3 Status, 4 MEx ID, 5 Task Count, 6 Current Task, 7 processed]
                     combined_jobs_list.append([job.job_id, job.priority, job.keyword, JobStatus.PENDING.name, None, job.task_count, 0, False])
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NODE_NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass
 
@@ -271,7 +272,7 @@ def job_list_cb(event):
                     # [0 ID, 1 Priority, 2 Keyword, 3 Status, 4 MEx ID, 5 Task Count, 6 Current Task, 7 processed]
                     combined_jobs_list.append([job.job_id, job.priority, job.keyword, job.status, job.mex_id, job.task_count, job.current_task+1, False])
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NODE_NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass
 

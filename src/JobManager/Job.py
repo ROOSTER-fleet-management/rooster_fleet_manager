@@ -7,6 +7,8 @@ from MobileExecutor import MExStatus, MobileExecutor
 from Order import OrderKeyword
 from enum import Enum
 
+NAME = "[Job.py] "
+
 #region Enumerators
 class JobStatus(Enum):
     """ Class that acts as Enumerator for Job status. """
@@ -71,7 +73,7 @@ class Job:
 
     def task_cb(self, data):
         """ Callback method for the tasks in the job's task list to call upon completion/cancellation/abort. """
-        print(self.id + ". Task cb: " + str(data))
+        print(NAME + self.id + ". Task cb: " + str(data))
         task_id = data[0]
         task_status = data[1]
         if task_id == self.task_current:
@@ -100,7 +102,7 @@ class Job:
             rospy.logwarn("Mismatch between task callback ID and job's current task.")
 
     def info(self):
-        print(
+        print(NAME + 
             "Job info [" + str(self.id) + "]: status = " + str(self.status) + 
             ", mex_id = " + str(self.mex_id) + ", tasks = " + str(self.task_count) + 
             ", current task = " + str(self.task_current)) #+ "\nTask list = " + str(self.task_list))

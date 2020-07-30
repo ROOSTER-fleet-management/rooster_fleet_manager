@@ -2,6 +2,8 @@
 
 import rospy
 
+NAME = "[Location.py] "
+
 class Location:
     """ Class with location information (name, position, orientation) based on map reference frame. """
     def __init__(self, id, name, x_coordinate, y_coordinate, theta):
@@ -12,7 +14,7 @@ class Location:
         self.theta = theta          # Orientation (yaw angle) in map frame in radians, float
 
     def info(self):
-        print(
+        print(NAME + 
             "Location info [" + self.name + "]: x, y, theta = " + str(self.x) + 
             ", " + str(self.y) + ", " + str(self.theta) )
 

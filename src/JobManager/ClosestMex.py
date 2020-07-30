@@ -7,15 +7,11 @@ from nav_msgs.srv import GetPlan, GetPlanResponse
 from geometry_msgs.msg import PoseStamped, PointStamped, PoseWithCovarianceStamped
 import numpy as np
 
+NAME = "[ClosestMex.py] "
+
 #get coordinates of each mex. 3 ways: (1) by odometry and (2) by tf from /map to /base_link and (3) by amcl_pose topic
 #(1)https://www.theconstructsim.com/ros-qa-know-pose-robot-python/
 #(2)https://answers.ros.org/question/341062/how-to-get-a-robot-position-xy-in-a-map-instead-of-odometry-in-python/
-
-#init locations
-# loc01 = Location("loc01", "Storage #1", -0.5, -2.5, 1.57)
-# loc02 = Location("loc02", "Assembly station #1", 4.5, 2.5, 3.1415/2.0)
-# loc03 = Location("loc03", "Storage #2", -2.0, 0.0, 3.1415)
-# loc04 = Location("loc04", "Assembly station #2", -5.0, 4.5, 6.283)
 
 #objects from this class are added to the list where we choose the closest mex to a location
 class Distance:
@@ -33,7 +29,7 @@ def call_get_mex_list():
             result = call_service(call)
             return result
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass
 
@@ -98,17 +94,7 @@ def choose_closest_mex(location):
         if i.dist < the_closest_dist:
             the_closest_dist = i.dist
             the_closest_id = i.id
-    # result = ('The closest mex to ' + str(location.name) + ' is ' + the_closest_id + ' with distance:')
+
     result = (the_closest_id, the_closest_dist)
-    # print(result)
-    # print(the_closest_dist)
     
     return result       # A tuple of closest MEx ID and it's distance.
-
-
-# rospy.init_node('shortest_path_calculator')
-
-# choose_closest_mex(loc01)
-# choose_closest_mex(loc02)
-# choose_closest_mex(loc03)
-# choose_closest_mex(loc04)

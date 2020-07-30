@@ -6,6 +6,8 @@ from simple_sim.srv import GetMexListRequest, GetMexList, AssignJobToMex, Assign
     ChangeMexStatus, ChangeMexStatusRequest, UnassignJobFromMex, UnassignJobFromMexRequest
 from MobileExecutor import MExStatus, MobileExecutor
 
+NAME = "[JobServiceMethods.py] "
+
 def call_get_mex_list():
     """ Function to get most recent list of all MEx from service provided by mex_sentinel node."""
     try:
@@ -22,7 +24,7 @@ def call_get_mex_list():
                 mex_list.append(MobileExecutor(mex_id, mex_status, mex_job_id))
             return mex_list
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass
 
@@ -38,7 +40,7 @@ def call_assign_job(job_id, mex_id):
             result = assign_job(req)
             return result
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass
 
@@ -53,7 +55,7 @@ def call_unassign_job(mex_id):
             result = unassign_job(req)
             return result
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass
 
@@ -69,6 +71,6 @@ def call_change_mex_status(mex_id, status):
             result = change_mex_status(req)
             return result
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print(NAME + "Service call failed: %s"%e)
     except rospy.ROSException:
         pass

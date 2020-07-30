@@ -19,25 +19,14 @@ from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPe
     GetMexList, GetMexListResponse, GetMexListRequest, AssignJobToMex, AssignJobToMexRequest
 from simple_sim.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
 
-# - Retrieve all robot ids (e.g. their namespace names) froms the rosparameter server -
-# - Note: This parameter only exsists if the robots were launched using the multi_robot_sim GUI! -
-# - Note: Launching robots using the multi_robot_sim GUI is the preferred method! -
-# robot_namespaces = rospy.get_param("/robot_list")
-# print("Robot list: ")
-# for robot in robot_namespaces:
-#     print(robot)
-
-# Retrieve locations from rosparameter server.
-# temp_dict = rospy.get_param("/locations")
-# location_dict = location_dict_builder(temp_dict)
-# del temp_dict
+NODE_NAME = "[job_manager] "
 
 #region Service callback definitions
 
 # - PlaceOrder service callback -
 def order_service_cb(request):
-    print("Order service has been called with: " + str(request))
-    # print("Arguments: ", request.order_args, "List size: ", len(request.order_args) )
+    print(NODE_NAME + "Order service has been called with: " + str(request))
+    # print(NODE_NAME + "Arguments: ", request.order_args, "List size: ", len(request.order_args) )
     order_response = PlaceOrderResponse()
 
     # NOTE RUDIMENTARY ORDER PROCESSING, RIGID IN NATURE. 
@@ -135,12 +124,12 @@ def order_service_cb(request):
         order_response.error_status = OrderResponseStatus.ERROR.name
         order_response.error_report = "Invalid keyword."    # Could not interpret order keyword.
 
-    # print("Order service is done, current order_list: " + str(order_list))
+    # print(NODE_NAME + "Order service is done, current order_list: " + str(order_list))
     return order_response # the service Response class, in this case PlaceOrderResponse
 
 # - GetPendingJobs service callback -
 def get_pending_jobs_service_cb(request):
-    # print("A service request for the Pending Jobs List has been received.")
+    # print(NODE_NAME + "A service request for the Pending Jobs List has been received.")
     pending_jobs_response = GetPendingJobsResponse()
     pending_jobs_response.jobs_count = len(pending_job_list)
     for job in pending_job_list:
@@ -154,7 +143,7 @@ def get_pending_jobs_service_cb(request):
 
 # - GetActiveJobs service callback -
 def get_active_jobs_service_cb(request):
-    # print("A service request for the Active Jobs List has been received.")
+    # print(NODE_NAME + "A service request for the Active Jobs List has been received.")
     active_jobs_response = GetActiveJobsResponse()
     active_jobs_response.jobs_count = len(active_job_list)
     for job in active_job_list:
@@ -172,7 +161,7 @@ def get_active_jobs_service_cb(request):
 # - GetJobInfo service callback -
 def get_job_info_service_cb(request):
     job_id_to_find = request.job_id
-    print("A service request for the Get Job Info has been received for " + job_id_to_find + ".")
+    print(NODE_NAME + "A service request for the Get Job Info has been received for " + job_id_to_find + ".")
     job_info_response = GetJobInfoResponse()
     found_job = None
     for job in pending_job_list:
@@ -212,7 +201,7 @@ def get_job_info_service_cb(request):
 
 # - Order list timer callback -
 def order_list_timer_cb(event):
-    #print("Order list timer callback, processing order_list and building rough jobs.")
+    #print(NODE_NAME + "Order list timer callback, processing order_list and building rough jobs.")
     process_order_list()
 
 # - Job allocator timer callback -
@@ -225,7 +214,7 @@ def job_allocator_timer_cb(event):
 
 #region Job completion callback definition
 def job_completion_cb(job_id, mex_id):
-    print("Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
+    print(NODE_NAME + "Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
     # First send update to MEx Sentinel to unassign job.
     call_unassign_job(mex_id=mex_id)
     # Then call MEx Sentinel to provide latest MEx List.
@@ -258,7 +247,7 @@ if __name__ == '__main__':
         # for robot in robot_namespaces:
         #     mex_list.append(MobileExecutor(robot))
         for mex in mex_list:
-            print(mex.id, mex.status, mex.job_id)
+            print(NODE_NAME + str( (mex.id, mex.status, mex.job_id) ) )
         
         # Lists for Orders, PendingJobs, ActiveJobs:
         order_list = []

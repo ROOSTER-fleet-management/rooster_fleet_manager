@@ -5,6 +5,8 @@ from Tasks import *
 from Location import Location
 from Order import *
 
+NAME = "[JobBuilder.py] "
+
 def job_builder(pending_jobs_list, order, job_index, location_dict, completion_cb):
     """
     Job Builder
@@ -39,11 +41,11 @@ def job_builder(pending_jobs_list, order, job_index, location_dict, completion_c
     for index, job in enumerate(pending_jobs_list):
         priority = job.priority.value
         if priority < rough_job.priority.value:
-            print("Inserting Rough Job (" + rough_job.id + ") at position " + str(index))
+            print(NAME + "Inserting Rough Job (" + rough_job.id + ") at position " + str(index))
             pending_jobs_list.insert(index, rough_job)
             break
     else:   # Looped over all jobs in the pending_jobs_list and it wasn't inserted, so just append to the end.
-        print("Appending Rough Job (" + rough_job.id + ") to end")
+        print(NAME + "Appending Rough Job (" + rough_job.id + ") to end")
         pending_jobs_list.append(rough_job)
         
     return job_index + 1

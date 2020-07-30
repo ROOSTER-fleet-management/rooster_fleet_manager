@@ -104,8 +104,7 @@ def mex_list_info():
             mex_info.id = i.id
             mex_info.job_id = str(i.job_id)
             mexlistinfo.mex_list_info_array.append(mex_info)
-        #hello_str = "hello world %s" % rospy.get_time()
-        #rospy.loginfo(hello_str)
+
         pub.publish(mexlistinfo)
         rate.sleep()
 

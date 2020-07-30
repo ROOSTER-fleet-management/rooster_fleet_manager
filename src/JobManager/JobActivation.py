@@ -6,6 +6,8 @@ from JobServiceMethods import call_get_mex_list, call_assign_job, call_change_me
 from Order import OrderKeyword
 import ClosestMex as cm
 
+NAME = "[JobActivation.py] "
+
 # Job Allocator and Job Refiner.
 def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
     """ 
@@ -28,10 +30,10 @@ def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
     allocated_job_index = None
     for index, job in enumerate(pending_jobs_list):
         if allocated_job_index != None:
-            print("Allocated index: " + str(allocated_job_index))
+            print(NAME + "Allocated index: " + str(allocated_job_index))
             break
         elif job.status == JobStatus.PENDING:
-            # print("Trying for index: " + str(index))
+            # print(NAME + "Trying for index: " + str(index))
             # Found a job which is still pending, now find available and/or closest MEx.
             # First differentiate between Jobs that require a closest MEx and Jobs that do not.
             if job.keyword == OrderKeyword.MOVE.name or job.keyword == OrderKeyword.TRANSPORT.name:
