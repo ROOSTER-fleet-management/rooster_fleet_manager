@@ -86,3 +86,9 @@ The following items are planned to be implemented in the simple_sim package:
 [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
 [ ] Job assignment optimization.
 [ ] MEx/Task Routing 
+
+
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
