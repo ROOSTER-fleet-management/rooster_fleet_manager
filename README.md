@@ -41,13 +41,20 @@ In the **Orders tab** new orders can created, added to a pool and placed (send t
 Hovering over certain items in the Fleet Manager will provide further information in the *status bar* at the bottom of the application.<br/>
 More information on the Fleet Manager and simple_sim package, including license information, can be found in the *About screen* (File>About or *Ctrl+A*).<br/>
 **Shortcuts**<br/>
+
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
+
 Shortcut | Explanation
---- | ---
+-------- | ------------
 `Ctrl+A` | Show the **A**bout screen.
 `Ctrl+Q` | **Q**uit the application.
 `Alt+C` | **C**lear the Order list.
 `Alt+P `| **P**lace the orders in the Order list.
 `Alt+A` | **A**dd a new order to the Order list based on the provided input fields.
+
 <br/>
 <br/>
 
@@ -82,13 +89,7 @@ In order to see these markers: open RViz, add "MarkerArray" view, and choose the
 #### Planned
 The following items are planned to be implemented in the simple_sim package:
 
-[ ] Job Refinement based on Mobile Executors capabilities and attributes.
-[ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
-[ ] Job assignment optimization.
-[ ] MEx/Task Routing 
-
-
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
+- [ ] Job Refinement based on Mobile Executors capabilities and attributes.
+- [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
+- [ ] Job assignment optimization.
+- [ ] MEx/Task Routing 
