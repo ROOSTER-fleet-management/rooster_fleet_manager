@@ -44,7 +44,8 @@ Hovering over certain items in the Fleet Manager will provide further informatio
 
 More information on the Fleet Manager and simple_sim package, including license information, can be found in the *About screen* (File>About or *Ctrl+A*).
 
-**Shortcuts**<br/>
+**Shortcuts**
+
 Shortcut | Explanation
 -------- | ------------
 `Ctrl+A` | Show the **A**bout screen.
@@ -90,3 +91,4 @@ The following items are planned to be implemented in the simple_sim package:
 - [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
 - [ ] Job assignment optimization.
 - [ ] MEx/Task Routing 
+- [ ] Expansion of support Mobile Executor types (both Autonomous Mobile Robots and Human Controlled vehicles)
