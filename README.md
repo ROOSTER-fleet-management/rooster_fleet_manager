@@ -36,17 +36,15 @@ roslaunch simple_sim fleet_manager.launch
 
 #### Usage
 ***The Fleet Manager application.***<br/>
-In the **Fleet tab** gives an overview of the current *Jobs* and *Mobile Executors* in the fleet. Clicking any of the column headers will filter the lists in ascending or descending order based on that column's header.<br/>
-In the **Orders tab** new orders can created, added to a pool and placed (send to the Job Manager). Right clicking a order in the *Order lists* allows the user to delete it. Depending upon the provided *keyword*, a placeholder text is placed in the *Order arguments* input field clarifying the required and types of arguments.<br/>
-Hovering over certain items in the Fleet Manager will provide further information in the *status bar* at the bottom of the application.<br/>
-More information on the Fleet Manager and simple_sim package, including license information, can be found in the *About screen* (File>About or *Ctrl+A*).<br/>
+In the **Fleet tab** gives an overview of the current *Jobs* and *Mobile Executors* in the fleet. Clicking any of the column headers will filter the lists in ascending or descending order based on that column's header.
+
+In the **Orders tab** new orders can created, added to a pool and placed (send to the Job Manager). Right clicking a order in the *Order lists* allows the user to delete it. Depending upon the provided *keyword*, a placeholder text is placed in the *Order arguments* input field clarifying the required and types of arguments.
+
+Hovering over certain items in the Fleet Manager will provide further information in the *status bar* at the bottom of the application.
+
+More information on the Fleet Manager and simple_sim package, including license information, can be found in the *About screen* (File>About or *Ctrl+A*).
+
 **Shortcuts**<br/>
-
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
-
 Shortcut | Explanation
 -------- | ------------
 `Ctrl+A` | Show the **A**bout screen.
@@ -55,7 +53,6 @@ Shortcut | Explanation
 `Alt+P `| **P**lace the orders in the Order list.
 `Alt+A` | **A**dd a new order to the Order list based on the provided input fields.
 
-<br/>
 <br/>
 
 ***MEx Sentinel.***<br/>
