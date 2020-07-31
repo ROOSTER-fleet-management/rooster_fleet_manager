@@ -102,6 +102,7 @@ class Job:
             rospy.logwarn("Mismatch between task callback ID and job's current task.")
 
     def info(self):
+        """ Prints general Job information to the console. """
         print(NAME + 
             "Job info [" + str(self.id) + "]: status = " + str(self.status) + 
             ", mex_id = " + str(self.mex_id) + ", tasks = " + str(self.task_count) + 

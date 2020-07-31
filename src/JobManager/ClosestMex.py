@@ -13,14 +13,17 @@ NAME = "[ClosestMex.py] "
 #(1)https://www.theconstructsim.com/ros-qa-know-pose-robot-python/
 #(2)https://answers.ros.org/question/341062/how-to-get-a-robot-position-xy-in-a-map-instead-of-odometry-in-python/
 
-#objects from this class are added to the list where we choose the closest mex to a location
 class Distance:
+    """
+    Distance class, containing Mobile Executor (MEx) ID and distance attributes.
+    Instances from this class are added to the list where we choose the closest MEx to a location.
+    """
     def __init__(self, mex_id, distance):
         self.id = mex_id
         self.dist = distance
 
-#function to get list of all mex from service provided by mex_sentinel
 def call_get_mex_list():
+    """ Function for retrieving the list of all MExs from the service provided by mex_sentinel node. """
     try:
         rospy.wait_for_service('/mex_sentinel/get_mex_list', rospy.Duration(1))     # Wait for service but with 1 sec timeout
         try:
@@ -33,8 +36,12 @@ def call_get_mex_list():
     except rospy.ROSException:
         pass
 
-#function to calculate path to a location using (!) /move_base/make_plan on a certain mex
 def get_plan(x_start, y_start, x_finish, y_finish, mex_id):
+    """
+    Function to calculate path to a location using (!) /move_base/make_plan on a certain MEx.
+    For this function to function, the specific MEx must have the move_base package running. 
+    Returns a moove_base/make_plan plan.
+    """
     start = PoseStamped() #current mex pose (will be defined by amcl)
     start.header.seq = 0
     start.header.frame_id = "map"
@@ -62,8 +69,12 @@ def get_plan(x_start, y_start, x_finish, y_finish, mex_id):
     resp = get_plan(req.start, req.goal, req.tolerance)
     return resp
 
-#function to calculate euclidian destance for each pair of poses from the mex path
 def calculate_euclidian_distance(plan):
+    """ 
+    Method to calculate Euclidian destance for each pair of poses from the MEx path.
+    Loops over each pair and sums up the calculated Euclidian distances for a total path length.
+    Returns path length.
+    """
     global path_length
     path_length = 0
     for i in range(len(plan.poses) - 1):
@@ -77,6 +88,14 @@ def calculate_euclidian_distance(plan):
 
 #main function which call all other functions
 def choose_closest_mex(location):
+    """
+    The main menthod which call all other method in this module.
+    1. Retrieve up-to-date MEx list and filter on their status (STANDBY is required).
+    2. For each suitable MEx, Waits for the amcl_pose message (location) of that MEx,
+        plans the route and calculates path length. Adding the result as a Distance instance.
+    3. Loops over all Distance class instances in the list and finds the closest MEx.
+    Returns a tuple of closest MEx ID and distance.
+    """
     mex_list_from_service = call_get_mex_list().mex_list #make list with all mex
     mex_list_for_calculating_distance = [] #empty list for mex filtered by STANDBY status
     for i in mex_list_from_service: #filtering mex by STANDBY status

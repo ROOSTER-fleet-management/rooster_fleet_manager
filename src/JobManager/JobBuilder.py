@@ -10,8 +10,9 @@ NAME = "[JobBuilder.py] "
 def job_builder(pending_jobs_list, order, job_index, location_dict, completion_cb):
     """
     Job Builder
-    Takes in order and creates a Job class instance containing Task 
-    class instances. Then adds the Job to the Pending Jobs list.
+    Takes in order consisting of: keyword, priority and arguments; and creates a Job class instance
+    containing Task class instances depening on the keyword and arguments.
+    Then inserts/appends the Job to the Pending Jobs list depening on the priority.
     """
     index = "00" + str(job_index) if job_index < 10 else ( "0" + str(job_index) if job_index < 100 else str(job_index) )
     keyword = order[0]

@@ -14,25 +14,27 @@ class Location:
         self.theta = theta          # Orientation (yaw angle) in map frame in radians, float
 
     def info(self):
+        """ Method which prints out general Location information to the console. """
         print(NAME + 
             "Location info [" + self.name + "]: x, y, theta = " + str(self.x) + 
             ", " + str(self.y) + ", " + str(self.theta) )
 
-#function to read locations info from ROS parameter server and turn them into the dictionary
+
 def make_location_dict():
-    class my_dictionary(dict): #class for location_dict to inherit add function to append locations
-  
-        # __init__ function 
+    """ Function to read locations info from ROS parameter server and turn them into a dictionary. """
+
+    class my_dictionary(dict):
+        """ Class for location_dict to inherit the 'add' method from in order to append locations. """
         def __init__(self): 
             self = dict() 
           
-        # Function to add key:value 
-        def add(self, key, value): 
+        def add(self, key, value):
+            """ Method to add key:value to instance dictionary. """
             self[key] = value 
 
-    location_dict = my_dictionary() #create location object
-    temp_dictionary = rospy.get_param("/locations") #read parameters from ROS parameter server
-    for loc in temp_dictionary: #turning parameters to a dictionary items
+    location_dict = my_dictionary() # Create location object
+    temp_dictionary = rospy.get_param("/locations") # Read parameters from ROS parameter server, stores in temporary dictionary to later remove.
+    for loc in temp_dictionary: # Turning parameters to a dictionary items
         location_dict.add(loc, Location(temp_dictionary[loc][0], temp_dictionary[loc][1], float(temp_dictionary[loc][2]), float(temp_dictionary[loc][3]), float(temp_dictionary[loc][4])))
     temp_dictionary.clear()
     return location_dict

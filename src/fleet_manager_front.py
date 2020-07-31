@@ -24,11 +24,10 @@ from JobManager.Job import JobStatus, Job, JobPriority
 # DONE 9.  Put in Placeholder text in the arguments field based on the order keyword.
 # DONE 10. Connect Job Manager to the Jobs treeWidget view.
 # DONE 11. Add the deletion of individual orders from the order list.
-# TODO 12. Replace placeholders in the FILE ACTION MENU.
-# TODO 13. Add logo in same style as GUI launcher.
+# DONE 12. Replace placeholders in the FILE ACTION MENU.
+# DONE 13. Add logo in same style as GUI launcher.
 # DONE 14. Automatically sort the Jobs list when new jobs have been added.
-# DONE 15. Add KEYWORD to Job.
-# TODO 
+# DONE 15. Add KEYWORD to Job. 
 #endregion #################################################################################
 
 
@@ -43,7 +42,7 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
     def __init__(self):
         """
         Initialise the ui widgets, items and varibles.
-        Connect up all UI interactions to their methods. Define status tips.
+        Connect up all UI interactions to their methods.
         """
         super(GuiMainWindow, self).__init__()
         self.setWindowTitle(APPLICATION_TITLE)  #self.filename + " - " + 
@@ -79,11 +78,11 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
         #endregion
 
     def open_context_menu(self):
-        """Opens the Right-Mouse-Button context menu, showing an option to delete the order tree item."""
+        """ Opens the Right-Mouse-Button context menu, showing an option to delete the order tree item. """
         self.treeMenu.exec_(QtGui.QCursor.pos())
 
     def delete_orders_tree_item(self, item):
-        """Deletes the currently selected item from the orders treeWidget."""
+        """ Deletes the currently selected item from the orders treeWidget. """
         index = self.treeWidgetOrders.currentIndex()
         self.treeWidgetOrders.takeTopLevelItem(index.row())
 
@@ -117,6 +116,7 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
             order = [order_keyword, order_priority, order_arguments, i]
             self.order_list.append(order)
         
+        # If there are orders to be placed, call the job_manager's place_order service.
         if len(self.order_list) != 0:
             rospy.wait_for_service('/job_manager/place_order')
             try:
@@ -217,7 +217,7 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
 
 
 def load_orders_from_JSON(filepath):
-    """ Add one or multiple orders from a JSON file. """
+    """ Function; Add one or multiple orders from a JSON file. """
     # Load JSON file into dictionary
     loaddata_dict = None
     with open(filepath) as json_loadfile:
@@ -237,7 +237,7 @@ def load_orders_from_JSON(filepath):
 
 def job_list_cb(event):
     """
-    Timer callback, attempts to call Job Manager 'get_pending_jobs' & 
+    Timer callback function, attempts to call Job Manager 'get_pending_jobs' & 
     'get_active_jobs' services for updating the Jobs treeWidget list.
     """
     combined_jobs_list = []     # Empty list for the jobs to be appened to.

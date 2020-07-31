@@ -25,6 +25,12 @@ NODE_NAME = "[job_manager] "
 
 # - PlaceOrder service callback -
 def order_service_cb(request):
+    """
+    PlaceOrder service callback function.
+    Takes in a PlaceOrderRequest request with a order keyword, priority and arguments.
+    Processes these and adds the processed order in list form to the order_list.
+    Returns a PlaceOrderResponse response with information on if the call failed and why.
+    """
     print(NODE_NAME + "Order service has been called with: " + str(request))
     # print(NODE_NAME + "Arguments: ", request.order_args, "List size: ", len(request.order_args) )
     order_response = PlaceOrderResponse()
@@ -129,6 +135,11 @@ def order_service_cb(request):
 
 # - GetPendingJobs service callback -
 def get_pending_jobs_service_cb(request):
+    """
+    GetPendingJobs service callback function.
+    Takes in a empty request.
+    Returns a response with a list of all Pending Jobs and some basic information.
+    """
     # print(NODE_NAME + "A service request for the Pending Jobs List has been received.")
     pending_jobs_response = GetPendingJobsResponse()
     pending_jobs_response.jobs_count = len(pending_job_list)
@@ -143,6 +154,11 @@ def get_pending_jobs_service_cb(request):
 
 # - GetActiveJobs service callback -
 def get_active_jobs_service_cb(request):
+    """
+    GetActiveJobs service callback function.
+    Takes in a empty request.
+    Returns a response with a list of all Active Jobs and all basic information.
+    """
     # print(NODE_NAME + "A service request for the Active Jobs List has been received.")
     active_jobs_response = GetActiveJobsResponse()
     active_jobs_response.jobs_count = len(active_job_list)
@@ -160,6 +176,12 @@ def get_active_jobs_service_cb(request):
 
 # - GetJobInfo service callback -
 def get_job_info_service_cb(request):
+    """
+    GetJobInfo service callback function.
+    Takes in a request with a Job ID.
+    Returns a response with all information on the Job 
+    matching the call ID, including a list of the Job's Tasks. 
+    """
     job_id_to_find = request.job_id
     print(NODE_NAME + "A service request for the Get Job Info has been received for " + job_id_to_find + ".")
     job_info_response = GetJobInfoResponse()
@@ -201,11 +223,13 @@ def get_job_info_service_cb(request):
 
 # - Order list timer callback -
 def order_list_timer_cb(event):
+    """ Order list timer callback function. Calls process_order_list function. """
     #print(NODE_NAME + "Order list timer callback, processing order_list and building rough jobs.")
     process_order_list()
 
 # - Job allocator timer callback -
 def job_allocator_timer_cb(event):
+    """ Job allocator timer callback function. Calls job allocator function. """
     if job_allocator(pending_jobs_list=pending_job_list, active_jobs_list=active_job_list, mexs_list=mex_list) != 0:
         # rospy.loginfo("Failed to allocate job.")
         pass
@@ -214,6 +238,11 @@ def job_allocator_timer_cb(event):
 
 #region Job completion callback definition
 def job_completion_cb(job_id, mex_id):
+    """
+    Job completion callback function, gets called when a 
+    Jobs is finished (succesful, cancel, error or abort).
+    It is attached to a Job in the job_builder function.
+    """
     print(NODE_NAME + "Job called the job_completion_cb function: " + str(job_id) + ", " + str(mex_id))
     # First send update to MEx Sentinel to unassign job.
     call_unassign_job(mex_id=mex_id)
@@ -234,7 +263,10 @@ def job_completion_cb(job_id, mex_id):
 #endregion
 
 def process_order_list():
-    """ Build jobs from all orders in the order_list, then clear the order_list. """
+    """
+    Build jobs from all orders in the order_list by calling 
+    the job_builder function, then clear the order_list.
+    """
     global job_index
     for order in order_list:
         job_index = job_builder(pending_jobs_list=pending_job_list, order=order, job_index=job_index, location_dict=location_dict, completion_cb=job_completion_cb)

@@ -11,7 +11,7 @@ NAME = "[JobActivation.py] "
 # Job Allocator and Job Refiner.
 def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
     """ 
-    Job Allocator method. Check Pending Jobs list and MExs list to assign a Job to a MEx.
+    Job Allocator function. Check Pending Jobs list and MExs list to assign a Job to a MEx.
 
     Loops through the Pending Jobs list,
     finds the first pending Job and matches it with an available MEx (Up to date mex_list retrieved from MEx Sentinel service).
@@ -69,13 +69,13 @@ def job_allocator(pending_jobs_list, active_jobs_list, mexs_list):
 
 def job_refiner(active_jobs_list, mexs_list, rough_job):
     """
-    Job Refiner method.
-    Takes in a rough job and based on the allocated MEx refines the Jobs Tasks to match.
+    Job Refiner function.
+    Takes in a rough job and based on the allocated MEx refines the Jobs Tasks to match MEx attributes.
     Starts the Job, sends update to the MEx Sentinel to update the MEx state and 
     then adds the refined Job to the Active Jobs list.
     """
     refined_job = rough_job
-    # TODO Refine the Job's tasks based on the rough job's tasks and the assigned MEx.
+    # TODO Refine the Job's tasks based on the rough job's tasks and the assigned MEx attributes.
 
     refined_job.start_job()
     # Update local copy of MEx Sentinel mex_list (TODO Check: Does this change job_manager mex_list?)
