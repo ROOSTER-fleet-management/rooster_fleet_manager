@@ -25,7 +25,7 @@ Once all dependencies have been succesfully installed you can continue with the 
 1. Clone the repository into your workspace src folder. 
 2. Run catkin_make in the toplevel directory of your workspace.
 3. Launch the multi_robot_sim according to it's README.
-4. Use the following rosluanch command to run the simple_sim package, starting the MEx Sentinel (MobileExecutor), Markey Array Publisher, Job Manager and finally the Fleet Manager Front End GUI.
+4. Use the following rosluanch command to launch the simple_sim package's nodes, starting the MEx Sentinel (MobileExecutor), Marker Array Publisher, Job Manager and finally the Fleet Manager Front End (GUI).
 
 ```console
 roslaunch simple_sim fleet_manager.launch
@@ -36,9 +36,9 @@ roslaunch simple_sim fleet_manager.launch
 
 #### Usage
 ***The Fleet Manager application.***<br/>
-In the **Fleet tab** gives an overview of the current *Jobs* and *Mobile Executors* in the fleet. Clicking any of the column headers will filter the lists in ascending or descending order based on that column's header.
+In the **Fleet tab** an overview is given of the current *Jobs* and *Mobile Executors* in the fleet. Clicking any of the column headers will filter the lists in ascending or descending order based on that column's header.
 
-In the **Orders tab** new orders can created, added to a pool and placed (send to the Job Manager). Right clicking a order in the *Order lists* allows the user to delete it. Depending upon the provided *keyword*, a placeholder text is placed in the *Order arguments* input field clarifying the required and types of arguments.
+In the **Orders tab** new orders can created, added to a pool and placed (send to the Job Manager). Right clicking an order in the *Order lists* allows the user to delete it. Depending upon the provided *keyword*, a placeholder text is placed in the *Order arguments* input field clarifying the required and types of arguments.
 
 Hovering over certain items in the Fleet Manager will provide further information in the *status bar* at the bottom of the application.
 
@@ -59,7 +59,7 @@ Shortcut | Explanation
 ***MEx Sentinel.***<br/>
 The MEx Sentinel runs in the background and keeps track of the Mobile Executor's MEx ID, status and assigned Job ID.
 
-It provides *callable services locally* for the MEx List (`/get_mex_list`), retrieving and changing a MEx's status (`/get_mex_status` and `/change_mex_status`), assigning and unassigning Jobs (`/assign_job_to_mex` and `/unassign_job_from_mex`).
+It provides *callable services locally* for retrieving the MEx List (`/get_mex_list`), retrieving and changing a MEx's status (`/get_mex_status` and `/change_mex_status`) and for assigning and unassigning Jobs (`/assign_job_to_mex` and `/unassign_job_from_mex`).
 
 It also publishes the *MEx List* to it's local `/mex_list_info` topic.<br/>
 <br/>
@@ -91,4 +91,4 @@ The following items are planned to be implemented in the simple_sim package:
 - [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
 - [ ] Job assignment optimization.
 - [ ] MEx/Task Routing 
-- [ ] Expansion of support Mobile Executor types (both Autonomous Mobile Robots and Human Controlled vehicles)
+- [ ] Expansion of the supported Mobile Executor types; both Autonomous Mobile Robots (AMRs) and Human Controlled vehicles.
