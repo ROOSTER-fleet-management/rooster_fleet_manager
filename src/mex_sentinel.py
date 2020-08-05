@@ -143,12 +143,28 @@ def mex_list_info():
         mexlistinfo = MexListInfo()
         mexlistinfo.stamp = rospy.Time.now()
         mexlistinfo.total_mex_number = len(mex_list)
+        mexlistinfo.standby = 0
+        mexlistinfo.charging = 0
+        mexlistinfo.assigned = 0
+        mexlistinfo.executing_task = 0
+        mexlistinfo.error = 0
+
         for i in mex_list:
             mex_info = MexInfo()
             mex_info.status = i.status.name
             mex_info.id = i.id
             mex_info.job_id = str(i.job_id)
             mexlistinfo.mex_list_info_array.append(mex_info)
+            if i.status.name == MExStatus.STANDBY.name:
+                mexlistinfo.standby += 1
+            elif i.status.name == MExStatus.CHARGING.name:
+                mexlistinfo.charging += 1
+            elif i.status.name == MExStatus.ASSIGNED.name:
+                mexlistinfo.assigned += 1
+            elif i.status.name == MExStatus.EXECUTING_TASK.name:
+                mexlistinfo.executing_task += 1
+            elif i.status.name == MExStatus.ERROR.name:
+                mexlistinfo.error += 1
 
         pub.publish(mexlistinfo)
         rate.sleep()
