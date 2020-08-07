@@ -28,7 +28,7 @@ from JobManager.Job import JobStatus, Job, JobPriority
 # DONE 13. Add logo in same style as GUI launcher.
 # DONE 14. Automatically sort the Jobs list when new jobs have been added.
 # DONE 15. Add KEYWORD to Job. 
-# TODO 16. Fix issue where Job list does not update when <= 1 Jobs after Job completions.
+# DONE 16. Fix issue where Job list does not update when <= 1 Jobs after Job completions.
 #endregion #################################################################################
 
 
