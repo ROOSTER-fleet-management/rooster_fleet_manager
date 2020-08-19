@@ -27,7 +27,7 @@ catkin_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 catkin_package = catkin_pkg.package.parse_package(os.path.join(catkin_dir, catkin_pkg.package.PACKAGE_MANIFEST_FILENAME))
 
 # setting html_logo to ros logo
-html_logo = 'ros.png'
+html_logo = '_static/ros.png'
 
 # Adding catkin-sphinx themes to html_theme_path
 import catkin_sphinx
@@ -105,8 +105,8 @@ todo_include_todos = True
 # a list of builtin themes.
 #
 #html_theme = 'alabaster'
-#html_theme = 'sphinx_rtd_theme'
-html_theme = 'ros-theme'
+html_theme = 'sphinx_rtd_theme'
+#html_theme = 'ros-theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
