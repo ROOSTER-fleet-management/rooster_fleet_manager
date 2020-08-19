@@ -1,2 +1,4 @@
 .vscode/
 *.pyc
+doc/html/
+doc/_build/
