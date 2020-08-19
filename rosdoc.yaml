@@ -1,0 +1,25 @@
+ - builder: sphinx
+   sphinx_root_dir: doc
+   output_dir: python
+ - builder: doxygen
+   name: C++ API
+   output_dir: cpp
+   file_patterns: '*.c *.cpp *.h *.cc *.hh *.dox'
+
+## Additional parameters for doxygen configuration
+# file_patterns: (optional) override the Doxygen FILE_PATTERNS property
+# excludes: (optional) override the Doxygen EXCLUDE property
+# homepage: (optional) link to project home page
+# exclude_patterns: ROS C-Turtle (optional) override Doxygen EXCLUDE_PATTERNS property.
+# javadoc_autobrief: (optional) override Doxygen JAVADOC_AUTOBRIEF property. Default NO.
+# multiline_cpp_is_brief: (optional) override Doxygen property MULTILINE_CPP_IS_BRIEF. Default NO.
+# tab_size: (optional) override Doxygen property TAB_SIZE. Default 8.
+# aliases: (optional) override Doxygen property ALIASES. Default ""
+# example_patterns: (optional) override Doxygen property EXAMPLE_PATTERNS. Default ""
+# image_path: (optional) override Doxygen property IMAGE_PATH.
+# exclude_symbols: (optional) override Doxygen property EXCLUDE_SYMBOLS. Default ""
+# predefined: (optional) override Doxygen property PREDEFINED. Default ""
+# use_mdfile_as_mainpage: (optional) override Doxygen property USE_MDFILE_AS_MAINPAGE. Default "" 
+
+##additional parameters for sphinx configuration
+# config: conf.py
