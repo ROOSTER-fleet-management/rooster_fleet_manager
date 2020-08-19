@@ -1,0 +1,34 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- catkin
+- message_runtime
+- std_msgs
+- python-catkin-pkg
+- rospy
+- message_generation
+description: The simple_sim package
+license: TODO
+maintainers: denis <denis@todo.todo>
+msgs:
+- TaskInfo
+- MexInfo
+- PendingJob
+- JobInfo
+- MexListInfo
+- ActiveJob
+package_type: package
+repo_url: ''
+srvs:
+- UnassignJobFromMex
+- GetPendingJobs
+- PlaceOrder
+- ChangeMexStatus
+- GetActiveJobs
+- GetMexList
+- GetMexStatus
+- AssignJobToMex
+- GetJobInfo
+url: ''
