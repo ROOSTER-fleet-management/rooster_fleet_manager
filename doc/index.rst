@@ -12,6 +12,10 @@ Welcome to simple_sim's documentation!
 
    _source/modules
 
+This is a paragraph that contains a link to `cpp API`_.
+
+.. _a link: ../cpp/index.html
+
 
 
 Indices and tables
