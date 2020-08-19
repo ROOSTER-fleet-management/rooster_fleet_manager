@@ -10,6 +10,8 @@ Welcome to simple_sim's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   _source/modules
+
 
 
 Indices and tables
