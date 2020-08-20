@@ -12,6 +12,7 @@ Welcome to simple_sim's documentation!
    :caption: Contents:
 
    _source/modules
+   _source/msg/MsgLandingPage
 
 This is a paragraph that contains a link to `cpp API`_.
 
