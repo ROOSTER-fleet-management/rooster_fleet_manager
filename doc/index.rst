@@ -13,8 +13,8 @@ Welcome to simple_sim's documentation!
    :name: mastertoc
 
    _source/modules
-   _source/msg/MsgLandingPage
-   _source/srv/SrvLandingPage
+   _source/MsgLandingPage
+   _source/SrvLandingPage
 
 
 
