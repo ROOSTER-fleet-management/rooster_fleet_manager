@@ -3,25 +3,23 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-######################################
 Welcome to simple_sim's documentation!
-######################################
+======================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Stuff to know:
+   :caption: Contents:
 
    _source/modules
-   _source/msg/MsgLandingPage
 
 This is a paragraph that contains a link to `cpp API`_.
 
-.. _cpp API: ../cpp/index.html
+.. _a link: ../cpp/index.html
 
 
-******************
+
 Indices and tables
-******************
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`
