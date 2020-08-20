@@ -12,8 +12,8 @@ Welcome to simple_sim's documentation!
    :caption: Stuff to know:
    :name: mastertoc
 
-   _source/installInstructions
-   _source/modules
+   _source/InstallInstructions
+   _source/SrcLandingPage
    _source/MsgLandingPage
    _source/SrvLandingPage
 
