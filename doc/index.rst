@@ -15,9 +15,6 @@ Welcome to simple_sim's documentation!
    _source/modules
    _source/msg/MsgLandingPage
 
-This is a paragraph that contains a link to `cpp API`_.
-
-.. _a link: ../cpp/index.html
 
 
 
