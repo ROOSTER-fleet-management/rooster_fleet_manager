@@ -9,7 +9,8 @@ Welcome to simple_sim's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Stuff to know:
+   :name: mastertoc
 
    _source/modules
    _source/msg/MsgLandingPage
