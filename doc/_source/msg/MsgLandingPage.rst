@@ -13,16 +13,16 @@ MsgLandingPage
 ..    PendingJob
 ..    TaskInfo
 
-.. include:: ActiveJob.rst   
+.. include:: ActiveJobRst.rst   
 
-.. include:: JobInfo.rst  
+.. include:: JobInfoRst.rst  
 
-.. include:: MexInfo.rst 
+.. include:: MexInfoRst.rst 
 
-.. include:: MexListInfo.rst
+.. include:: MexListInfoRst.rst
 
-.. include:: PendingJob.rst
+.. include:: PendingJobRst.rst
 
-.. include:: TaskInfo.rst
+.. include:: TaskInfoRst.rst
 
 
