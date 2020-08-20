@@ -14,6 +14,7 @@ Welcome to simple_sim's documentation!
 
    _source/modules
    _source/msg/MsgLandingPage
+   _source/srv/SrvLandingPage
 
 
 
