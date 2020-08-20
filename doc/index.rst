@@ -8,7 +8,7 @@ Welcome to simple_sim's documentation!
 ######################################
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Stuff to know:
    :name: mastertoc
 
