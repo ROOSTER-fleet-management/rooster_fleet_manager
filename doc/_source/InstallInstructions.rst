@@ -32,7 +32,12 @@ Installation Instructions
           :widths: 50 50 50
           :header-rows: 0
 
-  * clone multi_ridgeback_nav in the src directory of your catkin_ws.
+          * - |rviz_toolp1|        
+            - |rviz_toolp2|
+            - |rviz_toolp3|
+          * - Right click on 2D Nav and clock on tool properties
+            - choose the 2D Nav Goal topic
+            - Set the correct robot ID in the 2D Nav Goal topic base namespace 
           
 * Install SFM MPDM package including dependencies
 
