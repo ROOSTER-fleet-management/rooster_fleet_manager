@@ -16,7 +16,21 @@ Installation Instructions
 
   * Install rospackage for teleoperation from terminal.
 
-  * clone multi_ridgeback_gazebo in the src directory of your catkin_ws
+       .. |rviz_toolp1| image:: ../_static/images/set_rviz_tool_properties_1.png
+          :alt: alternate text
+          :width: 150
+
+       .. |rviz_toolp2| image:: ../_static/images/set_rviz_tool_properties_2.png
+          :alt: alternate text
+          :width: 150
+
+       .. |rviz_toolp3| image:: ../_static/images/set_rviz_tool_properties_3.png
+          :alt: alternate text
+          :width: 150      
+
+       .. list-table:: setting 2D Nav Goal topic
+          :widths: 50 50 50
+          :header-rows: 0
 
   * clone multi_ridgeback_nav in the src directory of your catkin_ws.
           
