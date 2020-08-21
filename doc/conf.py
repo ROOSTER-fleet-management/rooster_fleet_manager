@@ -27,7 +27,7 @@ catkin_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 catkin_package = catkin_pkg.package.parse_package(os.path.join(catkin_dir, catkin_pkg.package.PACKAGE_MANIFEST_FILENAME))
 
 # setting html_logo to ros logo
-html_logo = '_static/ros.png'
+html_logo = '_static/images/ros.png'
 
 # Adding catkin-sphinx themes to html_theme_path
 import catkin_sphinx
