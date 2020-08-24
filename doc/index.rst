@@ -13,6 +13,7 @@ Welcome to simple_sim's documentation!
    :name: mastertoc
 
    _source/InstallInstructions
+   _source/GettingStarted
    _source/SrcLandingPage
    _source/LaunchFilesLandingPage
    _source/MsgLandingPage
