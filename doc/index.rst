@@ -14,6 +14,7 @@ Welcome to simple_sim's documentation!
 
    _source/InstallInstructions
    _source/SrcLandingPage
+   _source/LaunchFilesLandingPage
    _source/MsgLandingPage
    _source/SrvLandingPage
 
