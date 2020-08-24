@@ -1,5 +1,5 @@
 **************
-MsgLandingPage
+ROS messages
 **************
 
 .. .. toctree::
