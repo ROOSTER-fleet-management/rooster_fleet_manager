@@ -1,5 +1,5 @@
 **************
-SrvLandingPage
+ROS Services
 **************
 
 .. .. toctree::
