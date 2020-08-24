@@ -1,5 +1,5 @@
-src
-===
+ROS nodes and source code API
+=============================
 
 .. toctree::
    :maxdepth: 4
