@@ -126,11 +126,7 @@ Installation Instructions
 
        sudo apt-get install ros-melodic-rosdoc-lite
 
-  * Install sphinx, a tool for generating documentation for Python code using ReStructured Text language. 
-  
-    .. code-block:: console
-       
-       sudo apt-get install python-sphinx     
+    This automatically installs doxygen, sphinx and epydoc.  
 
   * Install sphinx-rtd-theme, a sphinx extension that provides a beautiful theme for documentation.
   
@@ -144,8 +140,7 @@ Installation Instructions
        
        python2 -m pip install --user catkin-sphinx
 
-  * .. note::
-       Look into doxygen installation
+
 
 
 
