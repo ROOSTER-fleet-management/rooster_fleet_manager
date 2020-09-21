@@ -14,21 +14,21 @@ license: TODO
 maintainers: denis <denis@todo.todo>
 msgs:
 - TaskInfo
-- MexInfo
-- PendingJob
-- JobInfo
-- MexListInfo
 - ActiveJob
+- JobInfo
+- PendingJob
+- MexListInfo
+- MexInfo
 package_type: package
 repo_url: ''
 srvs:
-- UnassignJobFromMex
-- GetPendingJobs
+- GetActiveJobs
+- GetJobInfo
 - PlaceOrder
 - ChangeMexStatus
-- GetActiveJobs
+- UnassignJobFromMex
 - GetMexList
 - GetMexStatus
+- GetPendingJobs
 - AssignJobToMex
-- GetJobInfo
 url: ''

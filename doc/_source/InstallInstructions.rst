@@ -82,18 +82,24 @@ Installation Instructions
           * - Right click on 2D Nav Goal tool and click on tool properties
             - Click the 2D Nav Goal topic
             - Set the correct robot ID in the 2D Nav Goal topic base namespace 
-          
-* Install sfm_pmdm package including dependencies
 
+* Install sfm_pmdm package including dependencies see `SFM-MPDM`_.
+
+ .. _SFM-MPDM: https://git.tu-delft.ne-kloud.de/patrick.keesmaat/sfm_mpdm.
+ 
   * Installing dependency libraries
   
     .. code-block:: console
 
        sudo apt-get install libopenblas-dev liblapack-dev libarpack2-dev libsuperlu-dev
     
-  * Installing Armadillo C++ library
+  * Installing `Armadillo C++`_ library
 
-  * Clone obstacle_detector package into catkin workspace and catkin_make.
+    .. _Armadillo C++: http://arma.sourceforge.net/
+
+  * Clone `obstacle_detector`_ package into catkin workspace and catkin_make.
+
+    .. _obstacle_detector: https://github.com/tysik/obstacle_detector
 
   * Install pygame
 
