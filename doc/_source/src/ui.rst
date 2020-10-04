@@ -1,30 +1,32 @@
 ui package
 ==========
 
-Submodules
-----------
+TO DO: ADD DESCRIPTION OF THIS PACKAGE HERE( IN THE doc/_source/src/ui.rst FILE)
 
-ui\.fleet\_manager\_ui module
------------------------------
+.. Submodules
+.. ----------
 
-.. automodule:: ui.fleet_manager_ui
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. ui\.fleet\_manager\_ui module
+.. -----------------------------
 
-ui\.images\_rc module
----------------------
+.. .. automodule:: ui.fleet_manager_ui
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
 
-.. automodule:: ui.images_rc
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. ui\.images\_rc module
+.. ---------------------
+
+.. .. automodule:: ui.images_rc
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
 
 
-Module contents
----------------
+.. Module contents
+.. ---------------
 
-.. automodule:: ui
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. .. automodule:: ui
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
