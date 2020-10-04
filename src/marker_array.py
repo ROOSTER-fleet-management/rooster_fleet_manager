@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!
+"""
+
 import rospy
 from visualization_msgs.msg import Marker, MarkerArray
 from JobManager.Location import Location, make_location_dict

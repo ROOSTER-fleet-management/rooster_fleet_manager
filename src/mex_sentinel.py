@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!
+"""
+
 import rospy
 from simple_sim.srv import AssignJobToMex, AssignJobToMexResponse, UnassignJobFromMex, UnassignJobFromMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse, GetMexList, GetMexListResponse
 from simple_sim.msg import MexInfo, MexListInfo

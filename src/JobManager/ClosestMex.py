@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+"""
+
 import rospy
 from simple_sim.srv import GetMexList, GetMexListRequest
 from MobileExecutor import MExStatus
