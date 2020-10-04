@@ -93,11 +93,12 @@ def calculate_euclidian_distance(plan):
 #main function which call all other functions
 def choose_closest_mex(location):
     """
-    The main menthod which call all other method in this module.
+    The main method which call all other method in this module.
+    
     1. Retrieve up-to-date MEx list and filter on their status (STANDBY is required).
-    2. For each suitable MEx, Waits for the amcl_pose message (location) of that MEx,
-        plans the route and calculates path length. Adding the result as a Distance instance.
+    2. For each suitable MEx, Waits for the amcl_pose message (location) of that MEx, plans the route and calculates path length. Adding the result as a Distance instance.
     3. Loops over all Distance class instances in the list and finds the closest MEx.
+    
     Returns a tuple of closest MEx ID and distance.
     """
     mex_list_from_service = call_get_mex_list().mex_list #make list with all mex
