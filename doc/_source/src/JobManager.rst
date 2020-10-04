@@ -1,8 +1,10 @@
 JobManager package
 ==================
 
-Submodules
-----------
+TO DO: ADD DESCRIPTION OF THIS PACKAGE HERE( IN THE doc/_source/src/JobManager.rst FILE)
+
+.. Submodules
+.. ----------
 
 JobManager\.ClosestMex module
 -----------------------------
@@ -77,10 +79,10 @@ JobManager\.Tasks module
     :show-inheritance:
 
 
-Module contents
----------------
+.. Module contents
+.. ---------------
 
-.. automodule:: JobManager
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. .. automodule:: JobManager
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
