@@ -12,6 +12,7 @@ Welcome to simple_sim's documentation!
    :caption: Stuff to know:
    :name: mastertoc
 
+   _source/Overview
    _source/InstallInstructions
    _source/GettingStarted
    _source/LaunchFilesLandingPage
