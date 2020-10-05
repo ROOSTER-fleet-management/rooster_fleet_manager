@@ -1,0 +1,686 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fleet_manager_front &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_source/Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>fleet_manager_front</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fleet_manager_front</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>         <span class="c1"># Used for reading JSON files (loading jobs to JobQueue)</span>
+<span class="kn">import</span> <span class="nn">os</span>           <span class="c1"># Used to get base filename and file and directory handling</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+
+<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="k">import</span> <span class="n">PlaceOrder</span><span class="p">,</span> <span class="n">PlaceOrderRequest</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">GetPendingJobsRequest</span><span class="p">,</span> <span class="n">GetActiveJobs</span><span class="p">,</span> <span class="n">GetActiveJobsRequest</span>
+<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="k">import</span> <span class="n">MexListInfo</span>
+<span class="kn">from</span> <span class="nn">ui</span> <span class="k">import</span> <span class="n">fleet_manager_ui</span>
+<span class="kn">from</span> <span class="nn">JobManager.Order</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">JobManager.Job</span> <span class="k">import</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">JobPriority</span>
+
+<span class="c1">#region ################################### TO DO LIST #####################################</span>
+<span class="c1"># DONE 1.  Perform simple call /job_manager/place_order service.</span>
+<span class="c1"># DONE 2.  Load list of orders from JSON.</span>
+<span class="c1"># DONE 3.  Call /job_manager/place_order(s?) service with the list of orders.</span>
+<span class="c1"># DONE 4.  Add visually correct but non-functional GUI to node.</span>
+<span class="c1"># DONE 5.  Replace JSON order list call and instead visualize it in the Order tab.</span>
+<span class="c1"># DONE 6.  Connect MEx Sentinel to Mobile Executors treeWidget view.</span>
+<span class="c1"># DONE 7.  Check if the order is viable before adding to order list, notify user if not.</span>
+<span class="c1"># DONE 8.  Remove orders from Order list if they were placed succesfully.</span>
+<span class="c1"># DONE 9.  Put in Placeholder text in the arguments field based on the order keyword.</span>
+<span class="c1"># DONE 10. Connect Job Manager to the Jobs treeWidget view.</span>
+<span class="c1"># DONE 11. Add the deletion of individual orders from the order list.</span>
+<span class="c1"># DONE 12. Replace placeholders in the FILE ACTION MENU.</span>
+<span class="c1"># DONE 13. Add logo in same style as GUI launcher.</span>
+<span class="c1"># DONE 14. Automatically sort the Jobs list when new jobs have been added.</span>
+<span class="c1"># DONE 15. Add KEYWORD to Job. </span>
+<span class="c1"># DONE 16. Fix issue where Job list does not update when &lt;= 1 Jobs after Job completions.</span>
+<span class="c1">#endregion #################################################################################</span>
+
+
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.0&quot;</span>
+<span class="n">APPLICATION_TITLE</span> <span class="o">=</span> <span class="s2">&quot;Fleet Manager&quot;</span>
+<span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s2">&quot;[fleet_manager_front] &quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="n">APPLICATION_TITLE</span> <span class="o">+</span> <span class="s2">&quot;. Version: &quot;</span><span class="o">+</span><span class="n">VERSION</span><span class="p">)</span>
+
+
+<span class="c1">#region         ### PyQt GUI ###</span>
+<div class="viewcode-block" id="GuiMainWindow"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow">[docs]</a><span class="k">class</span> <span class="nc">GuiMainWindow</span><span class="p">(</span><span class="n">fleet_manager_ui</span><span class="o">.</span><span class="n">Ui_MainWindow</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise the ui widgets, items and varibles.</span>
+<span class="sd">        Connect up all UI interactions to their methods.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GuiMainWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">APPLICATION_TITLE</span><span class="p">)</span>  <span class="c1">#self.filename + &quot; - &quot; + </span>
+
+        <span class="c1"># Set up gui</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1">#region FILE ACTION MENU</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionAbout</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">about</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionQuit_application</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_application</span><span class="p">)</span>
+        <span class="c1">#endregion</span>
+
+        <span class="c1">#region ORDERS TAB</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pushButtonAddOrder</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_order</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pushButtonClearList</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clear_order_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pushButtonPlaceOrder</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">place_order_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comboBoxKeyword</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_order_arguments_placeholder_text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lineEditArguments</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
+
+        <span class="c1"># TreeWidget context menu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">setContextMenuPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">CustomContextMenu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">customContextMenuRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">open_context_menu</span><span class="p">)</span>  
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeMenu</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMenu</span><span class="p">(</span><span class="s1">&#39;Menu&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">deleteItem</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;&amp;Delete&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">deleteItem</span><span class="o">.</span><span class="n">setStatusTip</span><span class="p">(</span><span class="s2">&quot;Delete item from Order list&quot;</span><span class="p">)</span>
+        <span class="n">deleteItem</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_orders_tree_item</span><span class="p">)</span>
+        <span class="n">deleteIcon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="p">()</span>
+        <span class="n">deleteIcon</span><span class="o">.</span><span class="n">addPixmap</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="p">(</span><span class="s2">&quot;:/icons/Close.png&quot;</span><span class="p">))</span>
+        <span class="n">deleteItem</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">deleteIcon</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">deleteItem</span><span class="p">)</span>
+
+        <span class="c1">#endregion</span>
+
+<div class="viewcode-block" id="GuiMainWindow.open_context_menu"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.open_context_menu">[docs]</a>    <span class="k">def</span> <span class="nf">open_context_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Opens the Right-Mouse-Button context menu, showing an option to delete the order tree item. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeMenu</span><span class="o">.</span><span class="n">exec_</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QCursor</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="GuiMainWindow.delete_orders_tree_item"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.delete_orders_tree_item">[docs]</a>    <span class="k">def</span> <span class="nf">delete_orders_tree_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Deletes the currently selected item from the orders treeWidget. &quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">takeTopLevelItem</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="GuiMainWindow.update_order_arguments_placeholder_text"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.update_order_arguments_placeholder_text">[docs]</a>    <span class="k">def</span> <span class="nf">update_order_arguments_placeholder_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the light gray placeholder text of the Order arguments lineEdit</span>
+<span class="sd">        input field to match with the new keyword.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keyword</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comboBoxKeyword</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">LOAD</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">UNLOAD</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lineEditArguments</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;No Arguments!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">MOVE</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lineEditArguments</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">TRANSPORT</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lineEditArguments</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;location1 location2&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="GuiMainWindow.place_order_list"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.place_order_list">[docs]</a>    <span class="k">def</span> <span class="nf">place_order_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Place multiple orders from the Order tab Order list to the Job Manager. &quot;&quot;&quot;</span>
+        <span class="c1"># The order of the orders matter, so don&#39;t just loop over the dictionary, but check size and loop over order id&#39;s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order_list</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># Empty order list</span>
+        <span class="n">indices_to_remove</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c1"># Empty list for treeWidgetOrders indices.</span>
+
+        <span class="c1"># Iterate over all the existing (top level) items (a.k.a. orders) in the treeWidgetOrders and add as order.</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">invisibleRootItem</span><span class="p">()</span>
+        <span class="n">child_count</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">childCount</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">child_count</span><span class="p">):</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">order_keyword</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">order_priority</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">order_arguments</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="n">order_keyword</span><span class="p">,</span> <span class="n">order_priority</span><span class="p">,</span> <span class="n">order_arguments</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+        
+        <span class="c1"># If there are orders to be placed, call the job_manager&#39;s place_order service.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">wait_for_service</span><span class="p">(</span><span class="s1">&#39;/job_manager/place_order&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">place_order</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;/job_manager/place_order&#39;</span><span class="p">,</span> <span class="n">PlaceOrder</span><span class="p">)</span>
+                <span class="n">req</span> <span class="o">=</span> <span class="n">PlaceOrderRequest</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="p">:</span>
+                    <span class="n">req</span><span class="o">.</span><span class="n">keyword</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">req</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">req</span><span class="o">.</span><span class="n">order_args</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">resp</span> <span class="o">=</span> <span class="n">place_order</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Response: &quot;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">error_status</span> <span class="o">==</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">SUCCES</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="c1"># The placement of this order was succesful, remove from Order list</span>
+                        <span class="n">indices_to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Service call failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_to_remove</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Sort the indices list in descending order (from highest index to lowest index).</span>
+            <span class="n">indices_to_remove</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Iterate over the sorted list, removing items from the treeWidgetOrders</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices_to_remove</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">takeTopLevelItem</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_to_remove</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="p">):</span>
+            <span class="c1"># Show a notification box alerting the user not all orders were placed succesfully.</span>
+            <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Not all orders could be placed succefully!&quot;</span><span class="p">,</span> <span class="s2">&quot;Out of the &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; orders, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_to_remove</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; could not be placed succesfully. These orders have been kept in the order list, succesful orders have been removed.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Show a notification informing the user that all orders were placed succesfully.</span>
+            <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;All orders placed succesfully!&quot;</span><span class="p">,</span> <span class="s2">&quot;All &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_list</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; order(s) have been placed succesfully and have been removed from the order list.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GuiMainWindow.clear_order_list"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.clear_order_list">[docs]</a>    <span class="k">def</span> <span class="nf">clear_order_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clears the Order tab order list.&quot;&quot;&quot;</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">invisibleRootItem</span><span class="p">()</span>
+        <span class="n">child_count</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">childCount</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">child_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GuiMainWindow.add_order"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.add_order">[docs]</a>    <span class="k">def</span> <span class="nf">add_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a order to the Order List based on the Order tab input field values.</span>
+<span class="sd">        Before adding, a check is performaned to make sure the supplied fields are set correctly.</span>
+<span class="sd">        If this is not the case the user is notified with a MessageBox.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">order_keyword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comboBoxKeyword</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">order_priority</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comboBoxPriority</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">order_arguments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lineEditArguments</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        
+        <span class="c1"># Check if the number of supplied arguments </span>
+        <span class="n">supplied_args</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">order_arguments</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">expected_args</span> <span class="o">=</span> <span class="n">OrderTypeArgCount</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">order_keyword</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">supplied_args</span> <span class="o">==</span> <span class="n">expected_args</span><span class="p">:</span>
+            <span class="c1"># Add the order to the order list.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lineEditArguments</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">order_item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTreeWidgetItem</span><span class="p">([</span><span class="n">order_keyword</span><span class="p">,</span> <span class="n">order_priority</span><span class="p">,</span> <span class="n">order_arguments</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">addTopLevelItem</span><span class="p">(</span><span class="n">order_item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Show a notification informing the user that the order is incorrect.</span>
+            <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Incorrect number of order arguments!&quot;</span><span class="p">,</span> <span class="s2">&quot;Incorrect number of arguments. Supplied &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">supplied_args</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; argument(s) (&quot;</span> <span class="o">+</span> <span class="n">order_arguments</span> <span class="o">+</span> <span class="s2">&quot;). Expected &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">expected_args</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; argument(s).&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GuiMainWindow.close_application"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.close_application">[docs]</a>    <span class="k">def</span> <span class="nf">close_application</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prompts the user if they are sure they which to quit the application before quitting.&quot;&quot;&quot;</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                                            <span class="s1">&#39;Quit application?&#39;</span><span class="p">,</span>
+                                            <span class="s2">&quot;Are you sure you want to quit? Any unsaved changed will be lost!&quot;</span><span class="p">,</span> 
+                                            <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Closing Fleet Manager node...&quot;</span><span class="p">)</span>
+            <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="GuiMainWindow.closeEvent"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes control of the close event, making sure the user cannot close the application before prompting them.&quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">ignore</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_application</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="GuiMainWindow.about"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow.about">[docs]</a>    <span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display a MessageBox with the application title, version number and general information.&quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&lt;center&gt;&quot;</span> \
+            <span class="s2">&quot;&lt;h2&gt;&quot;</span><span class="o">+</span><span class="n">APPLICATION_TITLE</span><span class="o">+</span><span class="s2">&quot;&lt;/h2&gt;&quot;</span> \
+            <span class="s2">&quot;&lt;/center&gt;&quot;</span> \
+            <span class="s2">&quot;The ROS package simple_sim is created by the Human &quot;</span> \
+            <span class="s2">&quot;Robot Co-production research group at the Industrial Design &quot;</span> \
+            <span class="s2">&quot;Engineering faculty of the Delft University of Technology.&quot;</span> \
+            <span class="s2">&quot;&lt;p&gt;Version: &quot;</span><span class="o">+</span><span class="n">VERSION</span><span class="o">+</span><span class="s2">&quot;&lt;br/&gt;&quot;</span> \
+            <span class="s2">&quot;License: Apache License version 2.0&lt;/p&gt;&quot;</span>
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">about</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;About - &quot;</span> <span class="o">+</span> <span class="n">APPLICATION_TITLE</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div></div>
+
+<span class="c1">#endregion      ### PyQt GUI ###</span>
+
+
+
+
+
+<div class="viewcode-block" id="load_orders_from_JSON"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.load_orders_from_JSON">[docs]</a><span class="k">def</span> <span class="nf">load_orders_from_JSON</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Function; Add one or multiple orders from a JSON file. &quot;&quot;&quot;</span>
+    <span class="c1"># Load JSON file into dictionary</span>
+    <span class="n">loaddata_dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_loadfile</span><span class="p">:</span>
+        <span class="n">loaddata_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_loadfile</span><span class="p">)</span>
+    
+    <span class="c1"># Add orders from loaded JSON dictionary to the Order tab Order list.</span>
+    <span class="k">for</span> <span class="n">order_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">loaddata_dict</span><span class="p">)):</span>
+        <span class="n">order_info_dict</span> <span class="o">=</span> <span class="n">loaddata_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">order_id</span><span class="p">)]</span>
+        <span class="n">item_keyword</span> <span class="o">=</span> <span class="n">order_info_dict</span><span class="p">[</span><span class="s2">&quot;keyword&quot;</span><span class="p">]</span>
+        <span class="n">item_priority</span> <span class="o">=</span> <span class="n">order_info_dict</span><span class="p">[</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span>
+        <span class="n">item_order_args</span> <span class="o">=</span> <span class="n">order_info_dict</span><span class="p">[</span><span class="s2">&quot;order_args&quot;</span><span class="p">]</span>
+        <span class="n">item_arguments</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">item_order_args</span><span class="p">:</span>
+            <span class="n">item_arguments</span> <span class="o">=</span> <span class="n">item_arguments</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">arg</span>
+        <span class="n">order_item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTreeWidgetItem</span><span class="p">([</span><span class="n">item_keyword</span><span class="p">,</span> <span class="n">item_priority</span><span class="p">,</span> <span class="n">item_arguments</span><span class="p">])</span>
+        <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetOrders</span><span class="o">.</span><span class="n">addTopLevelItem</span><span class="p">(</span><span class="n">order_item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="job_list_cb"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.job_list_cb">[docs]</a><span class="k">def</span> <span class="nf">job_list_cb</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Timer callback function, attempts to call Job Manager &#39;get_pending_jobs&#39; &amp; </span>
+<span class="sd">    &#39;get_active_jobs&#39; services for updating the Jobs treeWidget list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">combined_jobs_list</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># Empty list for the jobs to be appened to.</span>
+
+    <span class="c1"># Retrieve pending jobs.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">wait_for_service</span><span class="p">(</span><span class="s1">&#39;/job_manager/get_pending_jobs&#39;</span><span class="p">,</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">get_pending_jobs</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;/job_manager/get_pending_jobs&#39;</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">)</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">GetPendingJobsRequest</span><span class="p">()</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">get_pending_jobs</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">jobs_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Add jobs to combined_jobs_list</span>
+                <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">jobs</span><span class="p">:</span>
+                    <span class="c1"># [0 ID, 1 Priority, 2 Keyword, 3 Status, 4 MEx ID, 5 Task Count, 6 Current Task, 7 processed]</span>
+                    <span class="n">combined_jobs_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">job</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">keyword</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">PENDING</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">task_count</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Service call failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSException</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># Retrieve active jobs.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">wait_for_service</span><span class="p">(</span><span class="s1">&#39;/job_manager/get_active_jobs&#39;</span><span class="p">,</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">get_active_jobs</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;/job_manager/get_active_jobs&#39;</span><span class="p">,</span> <span class="n">GetActiveJobs</span><span class="p">)</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">GetActiveJobsRequest</span><span class="p">()</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">get_active_jobs</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">jobs_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Add jobs to combined_jobs_list</span>
+                <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">jobs</span><span class="p">:</span>
+                    <span class="c1"># [0 ID, 1 Priority, 2 Keyword, 3 Status, 4 MEx ID, 5 Task Count, 6 Current Task, 7 processed]</span>
+                    <span class="n">combined_jobs_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">job</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">keyword</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">mex_id</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">task_count</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">current_task</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Service call failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSException</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># if len(combined_jobs_list) &gt; 0:</span>
+    <span class="n">update_jobs_list</span><span class="p">(</span><span class="n">combined_jobs_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="update_jobs_list"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.update_jobs_list">[docs]</a><span class="k">def</span> <span class="nf">update_jobs_list</span><span class="p">(</span><span class="n">combined_jobs_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add new/update existing items in the Jobs treeWidget with response information:</span>
+<span class="sd">    1. Take in pending jobs and active jobs info into a single list.</span>
+<span class="sd">    2. Loop over exisiting Job items in the treeWidget.</span>
+<span class="sd">    3. If the job is in the list, update information.</span>
+<span class="sd">    4. If it&#39;s not in the list, mark index for removal.</span>
+<span class="sd">    5. If not all list items have been processed, this means it&#39;s new. Add new job items to the treeWidget.</span>
+<span class="sd">    6. Loop over indices_for_removal list in descending order and remove all job items no longer existing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># [2, 3, 4] First check if current Job items in the treeWidget require updating or removing.</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetJobs</span><span class="o">.</span><span class="n">invisibleRootItem</span><span class="p">()</span>
+    <span class="n">child_count</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">childCount</span><span class="p">()</span>
+    <span class="n">indices_for_removal</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># Empty list to which indices can be appended which can be removed after updating others.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">child_count</span><span class="p">):</span>    <span class="c1"># Iterate over all the existing (top level) items (a.k.a. jobs) in the treeWidgetJobs.</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">job_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+        <span class="c1"># Loop over all job information lists in the the combined_jobs_list, checking if the &#39;job_id&#39; is in there.</span>
+        <span class="k">for</span> <span class="n">job_info_list</span> <span class="ow">in</span> <span class="n">combined_jobs_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="n">job_info_list</span><span class="p">:</span>
+                <span class="c1"># It&#39;s in there, so update the information and mark processed as True.</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">job_info_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">JobPriority</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; / &quot;</span><span class="o">+</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">job_info_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">job_info_list</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xA0</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">job_info_list</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="p">)</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; / &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="p">)</span>
+                <span class="n">job_info_list</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># The job item with it&#39;s job id is no longer in the Job Managers jobs lists, thus mark for removal.</span>
+            <span class="n">indices_for_removal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    
+    <span class="c1"># [5] Check for unprocessed list items, adding them as new items to the jobs treeWidget</span>
+    <span class="k">for</span> <span class="n">job_info_list</span> <span class="ow">in</span> <span class="n">combined_jobs_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">job_info_list</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">job_item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTreeWidgetItem</span><span class="p">(</span> <span class="p">[</span> 
+                <span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+                <span class="nb">str</span><span class="p">(</span><span class="n">JobPriority</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; / &quot;</span><span class="o">+</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+                <span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> 
+                <span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> 
+                <span class="s2">&quot;</span><span class="se">\xA0</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">job_info_list</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> 
+                <span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">job_info_list</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="p">]</span> <span class="p">)</span>
+            <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetJobs</span><span class="o">.</span><span class="n">addTopLevelItem</span><span class="p">(</span><span class="n">job_item</span><span class="p">)</span>
+
+    <span class="c1"># [6] Remove items which were marked for removal</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_for_removal</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Sort the indices list in descending order (from highest index to lowest index).</span>
+        <span class="n">indices_for_removal</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Iterate over the sorted list, removing items from the treeWidgetJobs</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices_for_removal</span><span class="p">:</span>
+            <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetJobs</span><span class="o">.</span><span class="n">takeTopLevelItem</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+        
+    
+<div class="viewcode-block" id="mex_list_info_cb"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.mex_list_info_cb">[docs]</a><span class="k">def</span> <span class="nf">mex_list_info_cb</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subscription callback for the MEx Sentinel mex_list_info topic. </span>
+<span class="sd">    1. Take in MEx info.</span>
+<span class="sd">    2. Loop over exisiting MEx items in the treeWidget.</span>
+<span class="sd">    3. If the MEx is in the list, update information.</span>
+<span class="sd">    4. If it&#39;s not in the list, mark index for removal.</span>
+<span class="sd">    5. If not all list items have been processed, this means it&#39;s new. Add new MEx items to the treeWidget.</span>
+<span class="sd">    6. Loop over indices_for_removal list in descending order and remove all MEx items no longer existing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">total_mex_number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># [1] Take in MEx info, add all MExs in list to a temporary dictionary.</span>
+        <span class="n">temp_dict</span> <span class="o">=</span> <span class="p">{}</span>                  <span class="c1"># Empty dictionary in which items will be marked as processed (True) or not (False).</span>
+        <span class="k">for</span> <span class="n">mex_info</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">mex_list_info_array</span><span class="p">:</span>
+            <span class="n">temp_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">mex_info</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span> <span class="p">:</span> <span class="n">mex_info</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s2">&quot;job_id&quot;</span> <span class="p">:</span> <span class="n">mex_info</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span>
+                <span class="s2">&quot;status&quot;</span> <span class="p">:</span> <span class="n">mex_info</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+                <span class="s2">&quot;processed&quot;</span> <span class="p">:</span> <span class="kc">False</span>
+            <span class="p">}</span>   <span class="c1"># Add incoming MEx info to temp_dict as dict and mark as not yet processed.</span>
+
+        <span class="c1"># [2, 3, 4] First check if current MEx items in the treeWidget require updating or removing.</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetMEx</span><span class="o">.</span><span class="n">invisibleRootItem</span><span class="p">()</span>
+        <span class="n">child_count</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">childCount</span><span class="p">()</span>
+        <span class="n">indices_for_removal</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># Empty list to which indices can be appended which can be removed after updating others.</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">child_count</span><span class="p">):</span>    <span class="c1"># Iterate over all the existing (top level) items (a.k.a. MExs) in the treeWidgetMEx.</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">mex_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+            <span class="c1"># Loop over all MEx information lists in the the mex_list_info_array, checking if the &#39;mex_id&#39; is in there.</span>
+            <span class="k">for</span> <span class="n">mex_info</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">mex_list_info_array</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mex_id</span> <span class="o">==</span> <span class="n">mex_info</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                    <span class="c1"># It&#39;s in there, so update the information and mark processed as True.</span>
+                    <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">mex_info</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">mex_info</span><span class="o">.</span><span class="n">status</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="n">item</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">mex_info</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="n">temp_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">mex_info</span><span class="o">.</span><span class="n">id</span><span class="p">)][</span><span class="s2">&quot;processed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>      <span class="c1"># Mark MEx as processed.</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># The job item with it&#39;s job id is no longer in the Job Managers jobs lists, thus mark for removal.</span>
+                <span class="n">indices_for_removal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># [5] Check for unprocessed list items, adding them as new items to the jobs treeWidget</span>
+        <span class="k">for</span> <span class="n">mex_key</span> <span class="ow">in</span> <span class="n">temp_dict</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">temp_dict</span><span class="p">[</span><span class="n">mex_key</span><span class="p">][</span><span class="s2">&quot;processed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">mex_item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTreeWidgetItem</span><span class="p">(</span> <span class="p">[</span> 
+                    <span class="nb">str</span><span class="p">(</span><span class="n">temp_dict</span><span class="p">[</span><span class="n">mex_key</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]),</span> 
+                    <span class="nb">str</span><span class="p">(</span><span class="n">temp_dict</span><span class="p">[</span><span class="n">mex_key</span><span class="p">][</span><span class="s2">&quot;status&quot;</span><span class="p">]),</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">temp_dict</span><span class="p">[</span><span class="n">mex_key</span><span class="p">][</span><span class="s2">&quot;job_id&quot;</span><span class="p">])</span> <span class="p">]</span> <span class="p">)</span>
+                <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetMEx</span><span class="o">.</span><span class="n">addTopLevelItem</span><span class="p">(</span><span class="n">mex_item</span><span class="p">)</span>
+        
+        <span class="c1">#  [6] Remove items which were marked for removal</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_for_removal</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Sort the indices list in descending order (from highest index to lowest index).</span>
+            <span class="n">indices_for_removal</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Iterate over the sorted list, removing items from the treeWidgetJobs</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices_for_removal</span><span class="p">:</span>
+                <span class="n">appGui</span><span class="o">.</span><span class="n">treeWidgetMEx</span><span class="o">.</span><span class="n">takeTopLevelItem</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>     
+        <span class="c1"># Initialize the node.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;fleet_manager_front&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Set up information update connections.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s1">&#39;/mex_sentinel/mex_list_info&#39;</span><span class="p">,</span> <span class="n">MexListInfo</span><span class="p">,</span> <span class="n">mex_list_info_cb</span><span class="p">)</span>      <span class="c1"># Subscription to MEx Sentinel for updating Mobile Executors list.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">job_list_cb</span><span class="p">)</span>                                         <span class="c1"># Timer for updating Jobs list.</span>
+        
+        <span class="c1">#region --- GUI ---</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">appGui</span> <span class="o">=</span> <span class="n">GuiMainWindow</span><span class="p">()</span>
+        <span class="n">windowIcon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="p">()</span>
+        <span class="n">windowIcon</span><span class="o">.</span><span class="n">addPixmap</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="p">(</span><span class="s2">&quot;:/icons/Fleet ManagerIcon.png&quot;</span><span class="p">),</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">Off</span><span class="p">)</span>
+        <span class="n">appGui</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">windowIcon</span><span class="p">)</span>
+
+        <span class="c1"># Add orders from example_orders.JSON</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;example_orders.JSON&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="c1"># File does not exist yet (first time usage). Create it first from dictionary.</span>
+            <span class="n">order_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;0&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;keyword&quot;</span> <span class="p">:</span> <span class="s2">&quot;MOVE&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span> <span class="p">:</span> <span class="s2">&quot;LOW&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;order_args&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;loc03&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;1&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;keyword&quot;</span> <span class="p">:</span> <span class="s2">&quot;MOVE&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span> <span class="p">:</span> <span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;order_args&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;loc02&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;2&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;keyword&quot;</span> <span class="p">:</span> <span class="s2">&quot;TRANSPORT&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span> <span class="p">:</span> <span class="s2">&quot;LOW&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;order_args&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;loc01&quot;</span><span class="p">,</span> <span class="s2">&quot;loc02&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;3&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;keyword&quot;</span> <span class="p">:</span> <span class="s2">&quot;LOAD&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span> <span class="p">:</span> <span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;order_args&quot;</span> <span class="p">:</span> <span class="p">[]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;4&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;keyword&quot;</span> <span class="p">:</span> <span class="s2">&quot;UNLOAD&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span> <span class="p">:</span> <span class="s2">&quot;HIGH&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;order_args&quot;</span> <span class="p">:</span> <span class="p">[]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;5&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;keyword&quot;</span> <span class="p">:</span> <span class="s2">&quot;TRANSPORT&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span> <span class="p">:</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;order_args&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;loc04&quot;</span><span class="p">,</span> <span class="s2">&quot;loc01&quot;</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">order_data</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="k">pass</span>
+        <span class="n">load_orders_from_JSON</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="n">appGui</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+        <span class="c1">#endregion</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSInterruptException</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation Instructions &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Getting Started" href="GettingStarted.html" />
+    <link rel="prev" title="Fleet Manager Overview" href="Overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installation Instructions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/InstallInstructions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-instructions">
+<h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">Install ridgeback and multi-ridgeback packages:</p>
+<ul>
+<li><p class="first">Install the ridgeback simulation and navigation packages by clearpath robotics using the bash commands in the terminal.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
+</pre></div>
+</div>
+<p>To learn about using these packages check out the <a class="reference external" href="&lt;http://www.clearpathrobotics.com/assets/guides/kinetic/ridgeback/simulation.html&gt;">tutorials</a> by Clearpath Robotics.</p>
+</li>
+<li><p class="first">Install rospackage for teleoperation from terminal.</p>
+</li>
+<li><p class="first">Clone the multi_ridgeback_gazebo ROS package into the src directory of your catkin_ws and run catkin_make from the root of your catkin_ws.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">mkdir -p ~/catkin_ws/src</span>
+<span class="go">cd ~/catkin_ws/src</span>
+<span class="go">git clone https://contact/n.n.nagda@tudelft.nl/for/access.git</span>
+<span class="go">cd ..</span>
+<span class="go">catkin_make</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first admonition note">
+<p class="first admonition-title">Note</p>
+<p>To confirm the installation uptil this point, run the following roslaunch command in a terminal.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_gazebo multi_ridgeback_world.launch</span>
+</pre></div>
+</div>
+<p class="last">This should launch a gazebo simulation with 2 ridgebacks that can be teleoperated using the teleop nodes running in the launched terminals.
+Also, an instance of Rviz is launched, wherein you can visualize their laserscans and the TF tree.</p>
+</div>
+</li>
+<li><p class="first">Clone the multi_ridgeback_nav ROS package into the src directory of your catkin_ws and run catkin_make from the root of your catkin_ws.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws/src</span>
+<span class="go">git clone https://contact/n.n.nagda@tudelft.nl/for/access.git</span>
+<span class="go">cd ..</span>
+<span class="go">catkin_make</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first admonition note">
+<p class="first admonition-title">Note</p>
+<p>To confirm the installation uptil this point, run the following roslaunch command in a terminal.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_nav multi_ridgeback_nav.launch</span>
+</pre></div>
+</div>
+<p>This should launch a gazebo simulation with 3 ridgebacks and an instance of Rviz to issue navigation goals.
+Additionally terminals are also launched to manually operate the robot if it is stuck.
+The 3 ridgebacks have IDs as rdg01 rdg02 and rdg03 respectively and their nodes and topics are live under those namespaces respectively.
+The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals to the respective robot by setting the current topic name for it in the tool properties.</p>
+<table border="1" class="colwidths-given last docutils" id="id1">
+<caption><span class="caption-text">setting 2D Nav Goal topic</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../_images/set_rviz_tool_properties_1.png"><img alt="alternate text" src="../_images/set_rviz_tool_properties_1.png" style="width: 150px;" /></a></td>
+<td><a class="reference internal" href="../_images/set_rviz_tool_properties_2.png"><img alt="alternate text" src="../_images/set_rviz_tool_properties_2.png" style="width: 150px;" /></a></td>
+<td><a class="reference internal" href="../_images/set_rviz_tool_properties_3.png"><img alt="alternate text" src="../_images/set_rviz_tool_properties_3.png" style="width: 150px;" /></a></td>
+</tr>
+<tr class="row-even"><td>Right click on 2D Nav Goal tool and click on tool properties</td>
+<td>Click the 2D Nav Goal topic</td>
+<td>Set the correct robot ID in the 2D Nav Goal topic base namespace</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Install sfm_pmdm package including dependencies see <a class="reference external" href="https://git.tu-delft.ne-kloud.de/patrick.keesmaat/sfm_mpdm.">SFM-MPDM</a>.</p>
+</li>
+</ul>
+<blockquote>
+<div><blockquote>
+<div><ul>
+<li><p class="first">Installing dependency libraries</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install libopenblas-dev liblapack-dev libarpack2-dev libsuperlu-dev</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Installing <a class="reference external" href="http://arma.sourceforge.net/">Armadillo C++</a> library</p>
+</li>
+<li><p class="first">Clone <a class="reference external" href="https://github.com/tysik/obstacle_detector">obstacle_detector</a> package into catkin workspace and catkin_make.</p>
+</li>
+<li><p class="first">Install pygame</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install python-pygame</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Clone sfm_mpdm ROS package in the src directory of your workspace.</p>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<ul>
+<li><p class="first">Build the multi_robot_sim ROS package.</p>
+<ul>
+<li><p class="first">Clone the repository into the src folder of your catkin_ws.</p>
+</li>
+<li><p class="first">Install PyQt4 (Python bindings for Qt) by running the following bash command in a terminal.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install pyqt4-dev-tools pyqt4.qsci-dev libqt4-dev python-qt4</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Install the documentation generation tools</p>
+<ul>
+<li><p class="first">Install <a class="reference external" href="http://wiki.ros.org/rosdoc_lite">rosdoc_lite</a> ROS package using the following bash command in a terminal.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-rosdoc-lite</span>
+</pre></div>
+</div>
+<p>This automatically installs doxygen, sphinx and epydoc.</p>
+</li>
+<li><p class="first">Install sphinx-rtd-theme, a sphinx extension that provides a beautiful theme for documentation.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user sphinx-rtd-theme</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Install catkin-sphinx, a sphinx extension that provides a ROS theme for documentation.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user catkin-sphinx</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="GettingStarted.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Overview.html" class="btn btn-neutral float-left" title="Fleet Manager Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

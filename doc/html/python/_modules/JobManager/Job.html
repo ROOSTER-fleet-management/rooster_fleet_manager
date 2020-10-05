@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>JobManager.Job &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>JobManager.Job</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for JobManager.Job</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+
+<span class="kn">from</span> <span class="nn">Tasks</span> <span class="k">import</span> <span class="n">TaskStatus</span>
+<span class="kn">from</span> <span class="nn">MobileExecutor</span> <span class="k">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
+<span class="kn">from</span> <span class="nn">Order</span> <span class="k">import</span> <span class="n">OrderKeyword</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
+
+<span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;[Job.py] &quot;</span>
+
+<span class="c1">#region Enumerators</span>
+<div class="viewcode-block" id="JobStatus"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.JobStatus">[docs]</a><span class="k">class</span> <span class="nc">JobStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class that acts as Enumerator for Job status. &quot;&quot;&quot;</span>
+    <span class="n">PENDING</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ASSIGNED</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ACTIVE</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">SUCCEEDED</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">ABORTED</span> <span class="o">=</span> <span class="mi">4</span></div>
+
+<div class="viewcode-block" id="JobPriority"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.JobPriority">[docs]</a><span class="k">class</span> <span class="nc">JobPriority</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class that acts as Enumerator for Job Priority levels. &quot;&quot;&quot;</span>
+    <span class="n">LOW</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="mi">4</span></div>
+<span class="c1">#endregion</span>
+
+<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Class which contains overall job details and a list of job-tasks for individual jobs. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">completion_cb</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">mex_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">JobPriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">job_id</span>                                <span class="c1"># Unique identifier for this job, e.g. &quot;job001&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">=</span> <span class="n">mex_id</span>                            <span class="c1"># Unique identifier for an existing Mobile Executor (MEx), e.g. &quot;rdg01&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">PENDING</span>                 <span class="c1"># PENDING, ASSIGNED, ACTIVE, SUCCEEDED, ABORTED</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="mi">0</span>                             <span class="c1"># Current number of tasks for this job in the Job&#39;s task_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span> <span class="o">=</span> <span class="kc">None</span>                        <span class="c1"># The task currently active.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_list</span> <span class="o">=</span> <span class="p">[]</span>                             <span class="c1"># List of tasks for this Job.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>                        <span class="c1"># Priority of the job, default LOW. Levels: LOW, MEDIUM, HIGH, CRITICAL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">completion_callback</span> <span class="o">=</span> <span class="n">completion_cb</span>        <span class="c1"># Callback function to call when Job has finished.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyword</span> <span class="o">=</span> <span class="n">keyword</span>                          <span class="c1"># Keyword from the order used to create this Job from.</span>
+
+<div class="viewcode-block" id="Job.add_task"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.add_task">[docs]</a>    <span class="k">def</span> <span class="nf">add_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Add a single task to the job&#39;s task list and update task count. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Job.add_tasks"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.add_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">add_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_of_tasks</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Add a multiple tasks from a list to the job&#39;s task list and update task count. &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">list_of_tasks</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Job.assign_mex"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.assign_mex">[docs]</a>    <span class="k">def</span> <span class="nf">assign_mex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mex_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Assign a mex_id to this job, if status is either pending or assigned. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">PENDING</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ASSIGNED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">=</span> <span class="n">mex_id</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ASSIGNED</span></div>
+
+<div class="viewcode-block" id="Job.start_job"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.start_job">[docs]</a>    <span class="k">def</span> <span class="nf">start_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start executing the first task in the job&#39;s task_list if the status is ASSIGNED. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ASSIGNED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ACTIVE</span>        <span class="c1"># Set status to active</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Set the current task to the 1st task in the list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">task_current</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_cb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot; Job status is not equal to assigned; cannot start the job.&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Job.next_task"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.next_task">[docs]</a>    <span class="k">def</span> <span class="nf">next_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start executing the next task in the job&#39;s task_list, if the status is still ACTIVE. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ACTIVE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">task_current</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_cb</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Job.task_cb"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.task_cb">[docs]</a>    <span class="k">def</span> <span class="nf">task_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Callback method for the tasks in the job&#39;s task list to call upon completion/cancellation/abort. &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">NAME</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Task cb: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">task_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">task_status</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">task_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span><span class="p">:</span>
+            <span class="c1"># task_status can be:    PENDING, ACTIVE, CANCELLED, SUCCEEDED, ABORTED</span>
+
+            <span class="k">if</span> <span class="n">task_status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+                <span class="c1"># Succesful completion of the task.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_current</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_list</span><span class="p">):</span>
+                    <span class="c1"># Continue with next.</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">next_task</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># End of the job&#39;s task_list reached. Job is complete.</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">completion_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">task_status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">CANCELLED</span> <span class="ow">or</span> <span class="n">task_status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ABORTED</span><span class="p">:</span>
+                <span class="c1"># The task was cancelled/aborted, update job status</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ABORTED</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">completion_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">task_status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ACTIVE</span><span class="p">:</span>
+                <span class="c1"># The task is still active, don&#39;t do anything.</span>
+                <span class="k">pass</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">logwarn</span><span class="p">(</span><span class="s2">&quot;Mismatch between task callback ID and job&#39;s current task.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Job.info"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Prints general Job information to the console. &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">NAME</span> <span class="o">+</span> 
+            <span class="s2">&quot;Job info [&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]: status = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span> <span class="o">+</span> 
+            <span class="s2">&quot;, mex_id = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, tasks = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_count</span><span class="p">)</span> <span class="o">+</span> 
+            <span class="s2">&quot;, current task = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_current</span><span class="p">))</span> <span class="c1">#+ &quot;\nTask list = &quot; + str(self.task_list))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

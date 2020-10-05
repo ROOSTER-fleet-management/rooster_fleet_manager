@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>JobManager package &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fleet_manager_front module" href="fleet_manager_front.html" />
+    <link rel="prev" title="src" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">JobManager package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jobmanager-closestmex-module">JobManager.ClosestMex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager.Job">JobManager.Job module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jobmanager-jobactivation-module">JobManager.JobActivation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager.JobBuilder">JobManager.JobBuilder module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jobmanager-jobservicemethods-module">JobManager.JobServiceMethods module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager.Location">JobManager.Location module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager.MobileExecutor">JobManager.MobileExecutor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager.Order">JobManager.Order module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager.Tasks">JobManager.Tasks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-JobManager">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fleet_manager_front.html">fleet_manager_front module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="job_manager.html">job_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marker_array.html">marker_array module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mex_sentinel.html">mex_sentinel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui.html">ui package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MsgLandingPage.html">MsgLandingPage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SrvLandingPage.html">SrvLandingPage</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+      <li>JobManager package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_source/JobManager.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="jobmanager-package">
+<h1>JobManager package<a class="headerlink" href="#jobmanager-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="jobmanager-closestmex-module">
+<h2>JobManager.ClosestMex module<a class="headerlink" href="#jobmanager-closestmex-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-JobManager.Job">
+<span id="jobmanager-job-module"></span><h2>JobManager.Job module<a class="headerlink" href="#module-JobManager.Job" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="JobManager.Job.Job">
+<em class="property">class </em><code class="descclassname">JobManager.Job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>job_id</em>, <em>completion_cb</em>, <em>keyword</em>, <em>mex_id=None</em>, <em>priority=&lt;JobPriority.LOW: 1&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class which contains overall job details and a list of job-tasks for individual jobs.</p>
+<dl class="method">
+<dt id="JobManager.Job.Job.add_task">
+<code class="descname">add_task</code><span class="sig-paren">(</span><em>task</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.add_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.add_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single task to the job’s task list and update task count.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Job.Job.add_tasks">
+<code class="descname">add_tasks</code><span class="sig-paren">(</span><em>list_of_tasks</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.add_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.add_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a multiple tasks from a list to the job’s task list and update task count.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Job.Job.assign_mex">
+<code class="descname">assign_mex</code><span class="sig-paren">(</span><em>mex_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.assign_mex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.assign_mex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a mex_id to this job, if status is either pending or assigned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Job.Job.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints general Job information to the console.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Job.Job.next_task">
+<code class="descname">next_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.next_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.next_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start executing the next task in the job’s task_list, if the status is still ACTIVE.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Job.Job.start_job">
+<code class="descname">start_job</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.start_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.start_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start executing the first task in the job’s task_list if the status is ASSIGNED.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Job.Job.task_cb">
+<code class="descname">task_cb</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Job.html#Job.task_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.Job.task_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback method for the tasks in the job’s task list to call upon completion/cancellation/abort.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Job.JobPriority">
+<em class="property">class </em><code class="descclassname">JobManager.Job.</code><code class="descname">JobPriority</code><a class="reference internal" href="../_modules/JobManager/Job.html#JobPriority"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.JobPriority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Enumerator for Job Priority levels.</p>
+<dl class="attribute">
+<dt id="JobManager.Job.JobPriority.CRITICAL">
+<code class="descname">CRITICAL</code><em class="property"> = 4</em><a class="headerlink" href="#JobManager.Job.JobPriority.CRITICAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobPriority.HIGH">
+<code class="descname">HIGH</code><em class="property"> = 3</em><a class="headerlink" href="#JobManager.Job.JobPriority.HIGH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobPriority.LOW">
+<code class="descname">LOW</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Job.JobPriority.LOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobPriority.MEDIUM">
+<code class="descname">MEDIUM</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.Job.JobPriority.MEDIUM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Job.JobStatus">
+<em class="property">class </em><code class="descclassname">JobManager.Job.</code><code class="descname">JobStatus</code><a class="reference internal" href="../_modules/JobManager/Job.html#JobStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.JobStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Enumerator for Job status.</p>
+<dl class="attribute">
+<dt id="JobManager.Job.JobStatus.ABORTED">
+<code class="descname">ABORTED</code><em class="property"> = 4</em><a class="headerlink" href="#JobManager.Job.JobStatus.ABORTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobStatus.ACTIVE">
+<code class="descname">ACTIVE</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.Job.JobStatus.ACTIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobStatus.ASSIGNED">
+<code class="descname">ASSIGNED</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Job.JobStatus.ASSIGNED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobStatus.PENDING">
+<code class="descname">PENDING</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Job.JobStatus.PENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Job.JobStatus.SUCCEEDED">
+<code class="descname">SUCCEEDED</code><em class="property"> = 3</em><a class="headerlink" href="#JobManager.Job.JobStatus.SUCCEEDED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="jobmanager-jobactivation-module">
+<h2>JobManager.JobActivation module<a class="headerlink" href="#jobmanager-jobactivation-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-JobManager.JobBuilder">
+<span id="jobmanager-jobbuilder-module"></span><h2>JobManager.JobBuilder module<a class="headerlink" href="#module-JobManager.JobBuilder" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="JobManager.JobBuilder.job_builder">
+<code class="descclassname">JobManager.JobBuilder.</code><code class="descname">job_builder</code><span class="sig-paren">(</span><em>pending_jobs_list</em>, <em>order</em>, <em>job_index</em>, <em>location_dict</em>, <em>completion_cb</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/JobBuilder.html#job_builder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.JobBuilder.job_builder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Job Builder
+Takes in order consisting of: keyword, priority and arguments; and creates a Job class instance
+containing Task class instances depening on the keyword and arguments.
+Then inserts/appends the Job to the Pending Jobs list depening on the priority.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="jobmanager-jobservicemethods-module">
+<h2>JobManager.JobServiceMethods module<a class="headerlink" href="#jobmanager-jobservicemethods-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-JobManager.Location">
+<span id="jobmanager-location-module"></span><h2>JobManager.Location module<a class="headerlink" href="#module-JobManager.Location" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="JobManager.Location.Location">
+<em class="property">class </em><code class="descclassname">JobManager.Location.</code><code class="descname">Location</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>x_coordinate</em>, <em>y_coordinate</em>, <em>theta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Location.html#Location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Location.Location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class with location information (name, position, orientation) based on map reference frame.</p>
+<dl class="method">
+<dt id="JobManager.Location.Location.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Location.html#Location.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Location.Location.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method which prints out general Location information to the console.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="JobManager.Location.make_location_dict">
+<code class="descclassname">JobManager.Location.</code><code class="descname">make_location_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Location.html#make_location_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Location.make_location_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to read locations info from ROS parameter server and turn them into a dictionary.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-JobManager.MobileExecutor">
+<span id="jobmanager-mobileexecutor-module"></span><h2>JobManager.MobileExecutor module<a class="headerlink" href="#module-JobManager.MobileExecutor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="JobManager.MobileExecutor.MExStatus">
+<em class="property">class </em><code class="descclassname">JobManager.MobileExecutor.</code><code class="descname">MExStatus</code><a class="reference internal" href="../_modules/JobManager/MobileExecutor.html#MExStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Enumerator for Mobile Executor (MEx) status.</p>
+<dl class="attribute">
+<dt id="JobManager.MobileExecutor.MExStatus.ASSIGNED">
+<code class="descname">ASSIGNED</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus.ASSIGNED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.MobileExecutor.MExStatus.CHARGING">
+<code class="descname">CHARGING</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus.CHARGING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.MobileExecutor.MExStatus.ERROR">
+<code class="descname">ERROR</code><em class="property"> = 4</em><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.MobileExecutor.MExStatus.EXECUTING_TASK">
+<code class="descname">EXECUTING_TASK</code><em class="property"> = 3</em><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus.EXECUTING_TASK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.MobileExecutor.MExStatus.STANDBY">
+<code class="descname">STANDBY</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus.STANDBY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.MobileExecutor.MobileExecutor">
+<em class="property">class </em><code class="descclassname">JobManager.MobileExecutor.</code><code class="descname">MobileExecutor</code><span class="sig-paren">(</span><em>id</em>, <em>status=&lt;MExStatus.STANDBY: 0&gt;</em>, <em>job_id=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/MobileExecutor.html#MobileExecutor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.MobileExecutor.MobileExecutor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class with Mobile Executor (MEx) information (MEx id, status, assigned job id)</p>
+<dl class="method">
+<dt id="JobManager.MobileExecutor.MobileExecutor.mex_info">
+<code class="descname">mex_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/MobileExecutor.html#MobileExecutor.mex_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.MobileExecutor.MobileExecutor.mex_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method which returns the general information of this MEx in string format.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-JobManager.Order">
+<span id="jobmanager-order-module"></span><h2>JobManager.Order module<a class="headerlink" href="#module-JobManager.Order" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="JobManager.Order.OrderKeyword">
+<em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderKeyword</code><a class="reference internal" href="../_modules/JobManager/Order.html#OrderKeyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderKeyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Enumerator for Order keywords.</p>
+<dl class="attribute">
+<dt id="JobManager.Order.OrderKeyword.FOLLOW">
+<code class="descname">FOLLOW</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.Order.OrderKeyword.FOLLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderKeyword.LOAD">
+<code class="descname">LOAD</code><em class="property"> = 3</em><a class="headerlink" href="#JobManager.Order.OrderKeyword.LOAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderKeyword.MOVE">
+<code class="descname">MOVE</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Order.OrderKeyword.MOVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderKeyword.TRANSPORT">
+<code class="descname">TRANSPORT</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Order.OrderKeyword.TRANSPORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderKeyword.UNLOAD">
+<code class="descname">UNLOAD</code><em class="property"> = 4</em><a class="headerlink" href="#JobManager.Order.OrderKeyword.UNLOAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Order.OrderResponseStatus">
+<em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderResponseStatus</code><a class="reference internal" href="../_modules/JobManager/Order.html#OrderResponseStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderResponseStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Enumerator for Order Response status.</p>
+<dl class="attribute">
+<dt id="JobManager.Order.OrderResponseStatus.ERROR">
+<code class="descname">ERROR</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Order.OrderResponseStatus.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderResponseStatus.SUCCES">
+<code class="descname">SUCCES</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Order.OrderResponseStatus.SUCCES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Order.OrderTypeArgCount">
+<em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderTypeArgCount</code><a class="reference internal" href="../_modules/JobManager/Order.html#OrderTypeArgCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Constants for Order types and the number of arguments associated with them.</p>
+<dl class="attribute">
+<dt id="JobManager.Order.OrderTypeArgCount.FOLLOW">
+<code class="descname">FOLLOW</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount.FOLLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderTypeArgCount.LOAD">
+<code class="descname">LOAD</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount.LOAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderTypeArgCount.MOVE">
+<code class="descname">MOVE</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount.MOVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderTypeArgCount.TRANSPORT">
+<code class="descname">TRANSPORT</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount.TRANSPORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Order.OrderTypeArgCount.UNLOAD">
+<code class="descname">UNLOAD</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount.UNLOAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-JobManager.Tasks">
+<span id="jobmanager-tasks-module"></span><h2>JobManager.Tasks module<a class="headerlink" href="#module-JobManager.Tasks" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="JobManager.Tasks.AwaitingLoadCompletion">
+<em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">AwaitingLoadCompletion</code><a class="reference internal" href="../_modules/JobManager/Tasks.html#AwaitingLoadCompletion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingLoadCompletion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.Task" title="JobManager.Tasks.Task"><code class="xref py py-class docutils literal"><span class="pre">JobManager.Tasks.Task</span></code></a></p>
+<p>Task class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the MEx as succeeded, cancelled, aborted.
+Used by the higher level Job class to populate a list with its job tasks.</p>
+<dl class="method">
+<dt id="JobManager.Tasks.AwaitingLoadCompletion.child_start">
+<code class="descname">child_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#AwaitingLoadCompletion.child_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingLoadCompletion.child_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the task’s specific action, subscribing to the /LoadInput topic on the MEx’s namespace.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Tasks.AwaitingLoadCompletion.input_cb">
+<code class="descname">input_cb</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#AwaitingLoadCompletion.input_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingLoadCompletion.input_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback method for any user or system input.
+Updates the instance status and calls the higher level job_callback.
+load status option: PENDING=0 ACTIVE=1, CANCELLED=2, SUCCEEDED=3,
+ABORTED=4.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Tasks.AwaitingUnloadCompletion">
+<em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">AwaitingUnloadCompletion</code><a class="reference internal" href="../_modules/JobManager/Tasks.html#AwaitingUnloadCompletion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingUnloadCompletion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.AwaitingLoadCompletion" title="JobManager.Tasks.AwaitingLoadCompletion"><code class="xref py py-class docutils literal"><span class="pre">JobManager.Tasks.AwaitingLoadCompletion</span></code></a></p>
+<p>Task class: AwaitingUnloadCompletion, waits for input from user or system to mark unloading of the MEx as succeeded, cancelled, aborted.
+Used by the higher level Job class to populate a list with its job tasks.
+Inherets from AwaitingLoadCompletion.</p>
+<dl class="method">
+<dt id="JobManager.Tasks.AwaitingUnloadCompletion.child_start">
+<code class="descname">child_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#AwaitingUnloadCompletion.child_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingUnloadCompletion.child_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the task’s specific action, subscribing to the /UnloadInput topic on the MEx’s namespace.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Tasks.RobotMoveBase">
+<em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">RobotMoveBase</code><span class="sig-paren">(</span><em>location</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#RobotMoveBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.Task" title="JobManager.Tasks.Task"><code class="xref py py-class docutils literal"><span class="pre">JobManager.Tasks.Task</span></code></a></p>
+<p>Task class: RobotMoveBase, implements move_base action calls to robot navigation stack.
+Used by the higher level Job class to populate a list with its job tasks.</p>
+<dl class="method">
+<dt id="JobManager.Tasks.RobotMoveBase.active_cb">
+<code class="descname">active_cb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#RobotMoveBase.active_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase.active_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback for starting move_base action.
+Connected to actionlib send_goal call.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Tasks.RobotMoveBase.done_cb">
+<code class="descname">done_cb</code><span class="sig-paren">(</span><em>status</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#RobotMoveBase.done_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase.done_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback for stopping of goal.
+Connected to actionlib send_goal call.
+move_base callback status options: PENDING=0, ACTIVE=1, PREEMPTED=2, SUCCEEDED=3,
+ABORTED=4, REJECTED=5, PREEMPTING=6, RECALLING=7, RECALLED=8, LOST=9.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Tasks.RobotMoveBase.feedback_cb">
+<code class="descname">feedback_cb</code><span class="sig-paren">(</span><em>feedback</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#RobotMoveBase.feedback_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase.feedback_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback for continuous feedback of move_base position.
+Connected to actionlib send_goal call.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Tasks.RobotMoveBase.get_status">
+<code class="descname">get_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#RobotMoveBase.get_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrites base class get_status, but inherits using super().
+Retrieve the status of the move_base action.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Tasks.RobotMoveBase.move_robot">
+<code class="descname">move_robot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#RobotMoveBase.move_robot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase.move_robot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a move_base action using actionlib.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Tasks.Task">
+<em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>tasktype</em>, <em>child_start</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.Task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Base class from which specific child task classes inherit.</p>
+<dl class="method">
+<dt id="JobManager.Tasks.Task.get_status">
+<code class="descname">get_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#Task.get_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.Task.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the status of the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="JobManager.Tasks.Task.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>mex_id</em>, <em>task_id</em>, <em>job_callback</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/JobManager/Tasks.html#Task.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.Task.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the task’s specific action.
+All job tasks should have this method (through inheritance): ‘start’, with these
+arguments: ‘self’, ‘mex_id’, ‘task_id’, ‘job_callback’.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Tasks.TaskStatus">
+<em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">TaskStatus</code><a class="reference internal" href="../_modules/JobManager/Tasks.html#TaskStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.TaskStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as Enumerator for Task status.</p>
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskStatus.ABORTED">
+<code class="descname">ABORTED</code><em class="property"> = 4</em><a class="headerlink" href="#JobManager.Tasks.TaskStatus.ABORTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskStatus.ACTIVE">
+<code class="descname">ACTIVE</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Tasks.TaskStatus.ACTIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskStatus.CANCELLED">
+<code class="descname">CANCELLED</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.Tasks.TaskStatus.CANCELLED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskStatus.PENDING">
+<code class="descname">PENDING</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Tasks.TaskStatus.PENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskStatus.SUCCEEDED">
+<code class="descname">SUCCEEDED</code><em class="property"> = 3</em><a class="headerlink" href="#JobManager.Tasks.TaskStatus.SUCCEEDED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="JobManager.Tasks.TaskType">
+<em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">TaskType</code><a class="reference internal" href="../_modules/JobManager/Tasks.html#TaskType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.TaskType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Class that acts as an enum for the different kinds of tasks.</p>
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskType.AWAITINGLOADCOMPLETION">
+<code class="descname">AWAITINGLOADCOMPLETION</code><em class="property"> = 1</em><a class="headerlink" href="#JobManager.Tasks.TaskType.AWAITINGLOADCOMPLETION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskType.AWAITINGUNLOADCOMPLETION">
+<code class="descname">AWAITINGUNLOADCOMPLETION</code><em class="property"> = 2</em><a class="headerlink" href="#JobManager.Tasks.TaskType.AWAITINGUNLOADCOMPLETION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="JobManager.Tasks.TaskType.ROBOTMOVEBASE">
+<code class="descname">ROBOTMOVEBASE</code><em class="property"> = 0</em><a class="headerlink" href="#JobManager.Tasks.TaskType.ROBOTMOVEBASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-JobManager">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-JobManager" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="fleet_manager_front.html" class="btn btn-neutral float-right" title="fleet_manager_front module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="src" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
