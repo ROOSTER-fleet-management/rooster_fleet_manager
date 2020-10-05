@@ -2,11 +2,11 @@ ROS nodes and source code API
 =============================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   src/JobManager
-   src/fleet_manager_front
    src/job_manager
-   src/marker_array
    src/mex_sentinel
+   src/fleet_manager_front
+   src/marker_array
+   src/JobManager
    src/ui
