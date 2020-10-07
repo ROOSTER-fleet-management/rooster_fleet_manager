@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -191,8 +181,8 @@
 <h1>job_manager ROS node<a class="headerlink" href="#job-manager-ros-node" title="Permalink to this headline">¶</a></h1>
 <p>The Job Manager takes in orders from the Fleet Manager Front and appends them to a order list.</p>
 <p>Every second the Job Manager then checks this Order List and builds Jobs with Tasks from the orders, sorting them based on priority and placing them in the Pending Job list.</p>
-<p>Every few seconds the Job Manager will check this Pending Job list and pick the first Pending Job(highest priority first, thn within priotity First In First Out). It then allocates this Job to an available (and if local is applicable; closest) MEx, passing the Job on to the Active Jobs list.</p>
-<p>Active Jobs keep track of their own Tasks and updates the MEx on the MEx Sentinel. Upon Job completion (succes, cancel, abort) the Job is removed from the Active Jobs list and the MEx is freed and set to STANDBY in the MEx Sentinel.</p>
+<p>Every few seconds the Job Manager will check this Pending Job list and pick the first Pending Job (highest priority first, then within priotity First In First Out). It then allocates this Job to an available (and if local is applicable; closest) MEx, passing the Job on to the Active Jobs list.</p>
+<p>Active Jobs keep track of their own Tasks and updates the Mobile Executor (MEx) on the MEx Sentinel. Upon Job completion (succes, cancel, abort) the Job is removed from the Active Jobs list and the MEx is freed and set to STANDBY in the MEx Sentinel.</p>
 <table border="1" class="colwidths-given docutils" id="id1">
 <caption><span class="caption-text">Publish / subscribe information</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>

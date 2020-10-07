@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -239,7 +229,7 @@ Returns path length.</p>
 <code class="descclassname">JobManager.ClosestMex.</code><code class="descname">get_plan</code><span class="sig-paren">(</span><em>x_start</em>, <em>y_start</em>, <em>x_finish</em>, <em>y_finish</em>, <em>mex_id</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/JobManager/ClosestMex.html#get_plan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.ClosestMex.get_plan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate path to a location using (!) /move_base/make_plan on a certain MEx.
 For this function to function, the specific MEx must have the move_base package running. 
-Returns a moove_base/make_plan plan.</p>
+Returns a move_base/make_plan plan.</p>
 </dd></dl>
 
 </div>
@@ -297,7 +287,7 @@ Returns a moove_base/make_plan plan.</p>
 <dl class="class">
 <dt id="JobManager.Job.JobPriority">
 <em class="property">class </em><code class="descclassname">JobManager.Job.</code><code class="descname">JobPriority</code><a class="reference internal" href="../../_modules/JobManager/Job.html#JobPriority"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.JobPriority" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Enumerator for Job Priority levels.</p>
 <dl class="attribute">
 <dt id="JobManager.Job.JobPriority.CRITICAL">
@@ -324,7 +314,7 @@ Returns a moove_base/make_plan plan.</p>
 <dl class="class">
 <dt id="JobManager.Job.JobStatus">
 <em class="property">class </em><code class="descclassname">JobManager.Job.</code><code class="descname">JobStatus</code><a class="reference internal" href="../../_modules/JobManager/Job.html#JobStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Job.JobStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Enumerator for Job status.</p>
 <dl class="attribute">
 <dt id="JobManager.Job.JobStatus.ABORTED">
@@ -448,7 +438,7 @@ Then inserts/appends the Job to the Pending Jobs list depening on the priority.<
 <dl class="class">
 <dt id="JobManager.MobileExecutor.MExStatus">
 <em class="property">class </em><code class="descclassname">JobManager.MobileExecutor.</code><code class="descname">MExStatus</code><a class="reference internal" href="../../_modules/JobManager/MobileExecutor.html#MExStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Enumerator for Mobile Executor (MEx) status.</p>
 <dl class="attribute">
 <dt id="JobManager.MobileExecutor.MExStatus.ASSIGNED">
@@ -496,7 +486,7 @@ Then inserts/appends the Job to the Pending Jobs list depening on the priority.<
 <dl class="class">
 <dt id="JobManager.Order.OrderKeyword">
 <em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderKeyword</code><a class="reference internal" href="../../_modules/JobManager/Order.html#OrderKeyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderKeyword" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Enumerator for Order keywords.</p>
 <dl class="attribute">
 <dt id="JobManager.Order.OrderKeyword.FOLLOW">
@@ -528,7 +518,7 @@ Then inserts/appends the Job to the Pending Jobs list depening on the priority.<
 <dl class="class">
 <dt id="JobManager.Order.OrderResponseStatus">
 <em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderResponseStatus</code><a class="reference internal" href="../../_modules/JobManager/Order.html#OrderResponseStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderResponseStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Enumerator for Order Response status.</p>
 <dl class="attribute">
 <dt id="JobManager.Order.OrderResponseStatus.ERROR">
@@ -545,7 +535,7 @@ Then inserts/appends the Job to the Pending Jobs list depening on the priority.<
 <dl class="class">
 <dt id="JobManager.Order.OrderTypeArgCount">
 <em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderTypeArgCount</code><a class="reference internal" href="../../_modules/JobManager/Order.html#OrderTypeArgCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderTypeArgCount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Constants for Order types and the number of arguments associated with them.</p>
 <dl class="attribute">
 <dt id="JobManager.Order.OrderTypeArgCount.FOLLOW">
@@ -581,7 +571,7 @@ Then inserts/appends the Job to the Pending Jobs list depening on the priority.<
 <dl class="class">
 <dt id="JobManager.Tasks.AwaitingLoadCompletion">
 <em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">AwaitingLoadCompletion</code><a class="reference internal" href="../../_modules/JobManager/Tasks.html#AwaitingLoadCompletion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingLoadCompletion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.Task" title="JobManager.Tasks.Task"><code class="xref py py-class docutils literal"><span class="pre">JobManager.Tasks.Task</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.Task" title="JobManager.Tasks.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobManager.Tasks.Task</span></code></a></p>
 <p>Task class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the MEx as succeeded, cancelled, aborted.
 Used by the higher level Job class to populate a list with its job tasks.</p>
 <dl class="method">
@@ -604,7 +594,7 @@ ABORTED=4.</p>
 <dl class="class">
 <dt id="JobManager.Tasks.AwaitingUnloadCompletion">
 <em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">AwaitingUnloadCompletion</code><a class="reference internal" href="../../_modules/JobManager/Tasks.html#AwaitingUnloadCompletion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.AwaitingUnloadCompletion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.AwaitingLoadCompletion" title="JobManager.Tasks.AwaitingLoadCompletion"><code class="xref py py-class docutils literal"><span class="pre">JobManager.Tasks.AwaitingLoadCompletion</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.AwaitingLoadCompletion" title="JobManager.Tasks.AwaitingLoadCompletion"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobManager.Tasks.AwaitingLoadCompletion</span></code></a></p>
 <p>Task class: AwaitingUnloadCompletion, waits for input from user or system to mark unloading of the MEx as succeeded, cancelled, aborted.
 Used by the higher level Job class to populate a list with its job tasks.
 Inherets from AwaitingLoadCompletion.</p>
@@ -619,7 +609,7 @@ Inherets from AwaitingLoadCompletion.</p>
 <dl class="class">
 <dt id="JobManager.Tasks.RobotMoveBase">
 <em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">RobotMoveBase</code><span class="sig-paren">(</span><em>location</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/JobManager/Tasks.html#RobotMoveBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.RobotMoveBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.Task" title="JobManager.Tasks.Task"><code class="xref py py-class docutils literal"><span class="pre">JobManager.Tasks.Task</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#JobManager.Tasks.Task" title="JobManager.Tasks.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobManager.Tasks.Task</span></code></a></p>
 <p>Task class: RobotMoveBase, implements move_base action calls to robot navigation stack.
 Used by the higher level Job class to populate a list with its job tasks.</p>
 <dl class="method">
@@ -663,7 +653,7 @@ Retrieve the status of the move_base action.</p>
 <dl class="class">
 <dt id="JobManager.Tasks.Task">
 <em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>tasktype</em>, <em>child_start</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/JobManager/Tasks.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.Task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Base class from which specific child task classes inherit.</p>
 <dl class="method">
 <dt id="JobManager.Tasks.Task.get_status">
@@ -684,7 +674,7 @@ arguments: ‘self’, ‘mex_id’, ‘task_id’, ‘job_callback’.</p>
 <dl class="class">
 <dt id="JobManager.Tasks.TaskStatus">
 <em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">TaskStatus</code><a class="reference internal" href="../../_modules/JobManager/Tasks.html#TaskStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.TaskStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as Enumerator for Task status.</p>
 <dl class="attribute">
 <dt id="JobManager.Tasks.TaskStatus.ABORTED">
@@ -716,7 +706,7 @@ arguments: ‘self’, ‘mex_id’, ‘task_id’, ‘job_callback’.</p>
 <dl class="class">
 <dt id="JobManager.Tasks.TaskType">
 <em class="property">class </em><code class="descclassname">JobManager.Tasks.</code><code class="descname">TaskType</code><a class="reference internal" href="../../_modules/JobManager/Tasks.html#TaskType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Tasks.TaskType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Class that acts as an enum for the different kinds of tasks.</p>
 <dl class="attribute">
 <dt id="JobManager.Tasks.TaskType.AWAITINGLOADCOMPLETION">

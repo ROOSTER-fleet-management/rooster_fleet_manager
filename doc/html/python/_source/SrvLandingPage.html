@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -188,39 +178,48 @@
 <h1>ROS Services<a class="headerlink" href="#ros-services" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="assignjobtomex-srv">
 <span id="assignjobtomex-srv-label"></span><h2>AssignJobToMex srv<a class="headerlink" href="#assignjobtomex-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/AssignJobToMex.html">AssignJobToMex.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/AssignJobToMex.html">AssignJobToMex.srv</a> is a service message type which takes in a ‘MEx ID’ string and a ‘Job ID’ string and returns a boolean ‘succes’.</p>
+<p>The service message is used to assign a Job to a Mobile Executor in the MEx Sentinel, which is hosting the service. It is called by the Job Manager during Job Allocation.</p>
 </div>
 <div class="section" id="changemexstatus-srv">
 <span id="changemexstatus-srv-label"></span><h2>ChangeMexStatus srv<a class="headerlink" href="#changemexstatus-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/ChangeMexStatus.html">ChangeMexStatus.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/ChangeMexStatus.html">ChangeMexStatus.srv</a> is a service message type which takes in a ‘MEx ID’ string and a MEx Status integer. It returns a boolean ‘succes’.</p>
+<p>The service message is used to change a Mobile Executors status in the MEx Sentinel. The service is hosted by the MEx Sentinel and called by the Job Manager.</p>
 </div>
 <div class="section" id="getactivejobs-srv">
 <span id="getactivejobs-srv-label"></span><h2>GetActiveJobs srv<a class="headerlink" href="#getactivejobs-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/GetActiveJobs.html">GetActiveJobs.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/GetActiveJobs.html">GetActiveJobs.srv</a> is a service message which takes in no arguments and returns an integer ‘Job count’ as well as a list of all Active Jobs in the using the ‘ActiveJobs’ message type.</p>
+<p>The service is hosted by the Job Manager.</p>
 </div>
 <div class="section" id="getjobinfo-srv">
 <span id="getjobinfo-srv-label"></span><h2>GetJobInfo srv<a class="headerlink" href="#getjobinfo-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/GetJobInfo.html">GetJobInfo.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/GetJobInfo.html">GetJobInfo.srv</a> is a service message which takes in a ‘Job ID’ string and returns the Job Information in the shape of a ‘JobInfo’ message type. It also returns the error status and error report as strings.</p>
+<p>The service is hosted by the Job Manager.</p>
 </div>
 <div class="section" id="getmexlist-srv">
 <span id="getmexlist-srv-label"></span><h2>GetMexList srv<a class="headerlink" href="#getmexlist-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/GetMexList.html">GetMexList.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/GetMexList.html">GetMexList.srv</a> is a service message which takes in no arguments and returns a list of ‘MexInfo’ messages as well as a boolean indicating ‘succes’.</p>
+<p>The service is hosted by the MEx Sentinel.</p>
 </div>
 <div class="section" id="getmexstatus-srv">
 <span id="getmexstatus-srv-label"></span><h2>GetMexStatus srv<a class="headerlink" href="#getmexstatus-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/GetMexStatus.html">GetMexStatus.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/GetMexStatus.html">GetMexStatus.srv</a> is a service message which takes in a ‘MEx ID’ string and returns a ‘MEx Status’ string, a ‘Job ID’ string and a boolean indicating ‘succes’.</p>
+<p>The service is hosted by the MEx Sentinel.</p>
 </div>
 <div class="section" id="getpendingjobs-srv">
 <span id="getpendingjobs-srv-label"></span><h2>GetPendingJobs srv<a class="headerlink" href="#getpendingjobs-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/GetPendingJobs.html">GetPendingJobs.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/GetPendingJobs.html">GetPendingJobs.srv</a> is a service message which takes in no arguments and returns an integer ‘Job count’ as well as a list of ‘PendingJobs’ messages.</p>
+<p>The service is hosted by the Job Manager.</p>
 </div>
 <div class="section" id="placeorder-srv">
 <span id="placeorder-srv-label"></span><h2>PlaceOrder srv<a class="headerlink" href="#placeorder-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/PlaceOrder.html">PlaceOrder.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/PlaceOrder.html">PlaceOrder.srv</a> is a service message which takes in a ‘Keyword’ string, a ‘Priority’ string and a list of ‘Order argument’ strings. It returns a error status string and error report string.</p>
+<p>The service is hosted by the Job Manager.</p>
 </div>
 <div class="section" id="unassignjobfrommex-srv">
 <span id="unassignjobfrommex-srv-label"></span><h2>UnassignJobFromMex srv<a class="headerlink" href="#unassignjobfrommex-srv" title="Permalink to this headline">¶</a></h2>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/UnassignJobFromMex.html">UnassignJobFromMex.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/UnassignJobFromMex.html">UnassignJobFromMex.srv</a> is a service message which takes in a ‘MEx ID’ string and returns a boolean indicating ‘succes’.</p>
+<p>The service is hosted by the MEx Sentinel and is used to unassign a Job from a Mobile Executor.</p>
 </div>
 </div>
 

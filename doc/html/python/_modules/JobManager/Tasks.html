@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -179,10 +169,10 @@
 
 <span class="kn">import</span> <span class="nn">rospy</span>
 <span class="kn">import</span> <span class="nn">actionlib</span>
-<span class="kn">from</span> <span class="nn">move_base_msgs.msg</span> <span class="k">import</span> <span class="n">MoveBaseAction</span><span class="p">,</span> <span class="n">MoveBaseGoal</span>
-<span class="kn">from</span> <span class="nn">tf.transformations</span> <span class="k">import</span> <span class="n">quaternion_from_euler</span>
-<span class="kn">from</span> <span class="nn">std_msgs.msg</span> <span class="k">import</span> <span class="n">UInt8</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">move_base_msgs.msg</span> <span class="kn">import</span> <span class="n">MoveBaseAction</span><span class="p">,</span> <span class="n">MoveBaseGoal</span>
+<span class="kn">from</span> <span class="nn">tf.transformations</span> <span class="kn">import</span> <span class="n">quaternion_from_euler</span>
+<span class="kn">from</span> <span class="nn">std_msgs.msg</span> <span class="kn">import</span> <span class="n">UInt8</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 <span class="c1">#region ################## TODOLIST ########################</span>
 <span class="c1"># DONE 1. Add Task class and make other task classes inherit from it.</span>
@@ -207,7 +197,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class from which specific child task classes inherit.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasktype</span><span class="p">,</span> <span class="n">child_start</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasktype</span><span class="p">,</span> <span class="n">child_start</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="kc">None</span>                          <span class="c1"># ID of the MEx to perform the task on/with</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">PENDING</span>        <span class="c1"># Status of this task.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tasktype</span>                    <span class="c1"># Type of the task, defined by child.</span>
@@ -235,7 +225,7 @@
 <span class="sd">    Task class: RobotMoveBase, implements move_base action calls to robot navigation stack.</span>
 <span class="sd">    Used by the higher level Job class to populate a list with its job tasks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RobotMoveBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">TaskType</span><span class="o">.</span><span class="n">ROBOTMOVEBASE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_robot</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>            <span class="c1"># location of the goal of the move_base.</span>
 
@@ -322,7 +312,7 @@
 <span class="sd">    Task class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the MEx as succeeded, cancelled, aborted.</span>
 <span class="sd">    Used by the higher level Job class to populate a list with its job tasks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AwaitingLoadCompletion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">TaskType</span><span class="o">.</span><span class="n">AWAITINGLOADCOMPLETION</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_start</span><span class="p">)</span>
 
 <div class="viewcode-block" id="AwaitingLoadCompletion.child_start"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.AwaitingLoadCompletion.child_start">[docs]</a>    <span class="k">def</span> <span class="nf">child_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -360,7 +350,7 @@
 <span class="sd">    Used by the higher level Job class to populate a list with its job tasks.</span>
 <span class="sd">    Inherets from AwaitingLoadCompletion.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AwaitingUnloadCompletion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">TaskType</span><span class="o">.</span><span class="n">AWAITINGUNLOADCOMPLETION</span>
     
