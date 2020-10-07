@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fleet_manager_front module &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="marker_array ROS node" href="marker_array.html" />
+    <link rel="prev" title="mex_sentinel ROS node" href="mex_sentinel.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../SrcLandingPage.html">ROS nodes and source code API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="job_manager.html">job_manager ROS node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mex_sentinel.html">mex_sentinel ROS node</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fleet_manager_front module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marker_array.html">marker_array ROS node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="JobManager.html">JobManager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui.html">ui package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../SrcLandingPage.html">ROS nodes and source code API</a> &raquo;</li>
+        
+      <li>fleet_manager_front module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_source/src/fleet_manager_front.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-fleet_manager_front">
+<span id="fleet-manager-front-module"></span><h1>fleet_manager_front module<a class="headerlink" href="#module-fleet_manager_front" title="Permalink to this headline">¶</a></h1>
+<p>TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</p>
+<dl class="class">
+<dt id="fleet_manager_front.GuiMainWindow">
+<em class="property">class </em><code class="descclassname">fleet_manager_front.</code><code class="descname">GuiMainWindow</code><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">ui.fleet_manager_ui.Ui_MainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.about">
+<code class="descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.about" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a MessageBox with the application title, version number and general information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.add_order">
+<code class="descname">add_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.add_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.add_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a order to the Order List based on the Order tab input field values.
+Before adding, a check is performaned to make sure the supplied fields are set correctly.
+If this is not the case the user is notified with a MessageBox.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.clear_order_list">
+<code class="descname">clear_order_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.clear_order_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.clear_order_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the Order tab order list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes control of the close event, making sure the user cannot close the application before prompting them.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.close_application">
+<code class="descname">close_application</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.close_application"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.close_application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompts the user if they are sure they which to quit the application before quitting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.delete_orders_tree_item">
+<code class="descname">delete_orders_tree_item</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.delete_orders_tree_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.delete_orders_tree_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the currently selected item from the orders treeWidget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.open_context_menu">
+<code class="descname">open_context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.open_context_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.open_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens the Right-Mouse-Button context menu, showing an option to delete the order tree item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.place_order_list">
+<code class="descname">place_order_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.place_order_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.place_order_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place multiple orders from the Order tab Order list to the Job Manager.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fleet_manager_front.GuiMainWindow.update_order_arguments_placeholder_text">
+<code class="descname">update_order_arguments_placeholder_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.update_order_arguments_placeholder_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.update_order_arguments_placeholder_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the light gray placeholder text of the Order arguments lineEdit
+input field to match with the new keyword.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fleet_manager_front.job_list_cb">
+<code class="descclassname">fleet_manager_front.</code><code class="descname">job_list_cb</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#job_list_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.job_list_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timer callback function, attempts to call Job Manager ‘get_pending_jobs’ &amp; 
+‘get_active_jobs’ services for updating the Jobs treeWidget list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fleet_manager_front.load_orders_from_JSON">
+<code class="descclassname">fleet_manager_front.</code><code class="descname">load_orders_from_JSON</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#load_orders_from_JSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.load_orders_from_JSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function; Add one or multiple orders from a JSON file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fleet_manager_front.mex_list_info_cb">
+<code class="descclassname">fleet_manager_front.</code><code class="descname">mex_list_info_cb</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#mex_list_info_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.mex_list_info_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subscription callback for the MEx Sentinel mex_list_info topic. 
+1. Take in MEx info.
+2. Loop over exisiting MEx items in the treeWidget.
+3. If the MEx is in the list, update information.
+4. If it’s not in the list, mark index for removal.
+5. If not all list items have been processed, this means it’s new. Add new MEx items to the treeWidget.
+6. Loop over indices_for_removal list in descending order and remove all MEx items no longer existing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fleet_manager_front.update_jobs_list">
+<code class="descclassname">fleet_manager_front.</code><code class="descname">update_jobs_list</code><span class="sig-paren">(</span><em>combined_jobs_list</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#update_jobs_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.update_jobs_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add new/update existing items in the Jobs treeWidget with response information:
+1. Take in pending jobs and active jobs info into a single list.
+2. Loop over exisiting Job items in the treeWidget.
+3. If the job is in the list, update information.
+4. If it’s not in the list, mark index for removal.
+5. If not all list items have been processed, this means it’s new. Add new job items to the treeWidget.
+6. Loop over indices_for_removal list in descending order and remove all job items no longer existing.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="marker_array.html" class="btn btn-neutral float-right" title="marker_array ROS node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mex_sentinel.html" class="btn btn-neutral float-left" title="mex_sentinel ROS node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

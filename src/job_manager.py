@@ -2,6 +2,10 @@
 #import json         # Used for reading JSON files (loading jobs to JobQueue)
 #import os           # Used to get base filename and file and directory handling
 
+"""
+TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!
+"""
+
 import rospy
 #import actionlib
 

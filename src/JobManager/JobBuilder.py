@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+"""
+
 from Job import Job, JobPriority
 from Tasks import *
 from Location import Location

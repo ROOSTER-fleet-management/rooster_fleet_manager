@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+"""
+
 from Job import JobStatus
 from MobileExecutor import MExStatus
 from JobServiceMethods import call_get_mex_list, call_assign_job, call_change_mex_status
