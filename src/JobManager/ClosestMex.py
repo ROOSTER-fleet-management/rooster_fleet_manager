@@ -40,7 +40,7 @@ def get_plan(x_start, y_start, x_finish, y_finish, mex_id):
     """
     Function to calculate path to a location using (!) /move_base/make_plan on a certain MEx.
     For this function to function, the specific MEx must have the move_base package running. 
-    Returns a moove_base/make_plan plan.
+    Returns a move_base/make_plan plan.
     """
     start = PoseStamped() #current mex pose (will be defined by amcl)
     start.header.seq = 0

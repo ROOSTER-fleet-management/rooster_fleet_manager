@@ -302,7 +302,7 @@ if __name__ == '__main__':
 
         # Initialize timers for the JobBuilder, and JobAllocator.
         rospy.Timer(rospy.Duration(1), order_list_timer_cb)     # Every second check order list to try build rough jobs.
-        rospy.Timer(rospy.Duration(5), job_allocator_timer_cb)  # Call the job_allocator in 10 seconds to try allocating jobs. 
+        rospy.Timer(rospy.Duration(5), job_allocator_timer_cb)  # Call the job_allocator in 5 seconds to try allocating jobs. 
         # The above job_allocator timer should be replaced with something more elegant...
 
         # Keep node running.

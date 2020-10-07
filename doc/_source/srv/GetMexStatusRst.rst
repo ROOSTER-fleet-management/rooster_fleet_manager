@@ -1,6 +1,8 @@
 GetMexStatus srv
 ================
 
-This is a paragraph that contains a link to `GetMexStatus.srv`_.
+The `GetMexStatus.srv`_ is a service message which takes in a 'MEx ID' string and returns a 'MEx Status' string, a 'Job ID' string and a boolean indicating 'succes'.
+
+The service is hosted by the MEx Sentinel.
 
 .. _GetMexStatus.srv: ../../srv/GetMexStatus.html
