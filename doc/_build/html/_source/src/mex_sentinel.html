@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -189,12 +179,22 @@
             
   <div class="section" id="mex-sentinel-ros-node">
 <h1>mex_sentinel ROS node<a class="headerlink" href="#mex-sentinel-ros-node" title="Permalink to this headline">¶</a></h1>
-<p>TODO: This is a ROS node that holds the latest information about job and MEx statuses and
-interacts with (reads/writes from/to) the database for maintaining long term records
-(i.e. acts as front end to a database server like SQLite or MySQL)</p>
+<p>The MEx Sentinel is a ROS node that holds the latest information about Mobile Executors (MExs). It hosts services for retrieving and editing the MEx information:</p>
+<blockquote>
+<div><ul class="simple">
+<li>get_mex_list</li>
+<li>assign_job_to_mex</li>
+<li>unassign_job_from_mex</li>
+<li>get_mex_status</li>
+<li>change_mex_status</li>
+</ul>
+</div></blockquote>
+<p>Note: In it current state the MEx information is only stored in memory and no data is logged. It is however envision that the MEx Sentinel will interact with (reads/writes from/to) a database for maintaining long term records
+(i.e. acts as front end to a database server like SQLite or MySQL).</p>
 <div class="section" id="module-mex_sentinel">
 <span id="mex-sentinel-script"></span><h2>mex_sentinel script<a class="headerlink" href="#module-mex_sentinel" title="Permalink to this headline">¶</a></h2>
-<p>TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</p>
+<p>The MEx Sentinel ROS node keeps track of all information about the Mobile Executors (MExs). It provides services for retrieving and editing the MEx information.
+More information on each (callback) function can be found below.</p>
 <dl class="function">
 <dt id="mex_sentinel.assign_job">
 <code class="descclassname">mex_sentinel.</code><code class="descname">assign_job</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#assign_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.assign_job" title="Permalink to this definition">¶</a></dt>

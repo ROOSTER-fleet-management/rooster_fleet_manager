@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Tasks module is used by the Job Manager ROS node and Job module to store information and status of Tasks as class instances.
+Each Task has its own class, which inherits from a base Task class. For more information of each class see the descriptions below.
+Next to the Task classes the module also contains class definitions for the Task Type and Task Status enumerators.
 """
 
 import rospy

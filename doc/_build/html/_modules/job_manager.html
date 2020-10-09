@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -176,25 +166,35 @@
 <span class="c1">#import os           # Used to get base filename and file and directory handling</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</span>
+<span class="sd">Job Manager:</span>
+
+<span class="sd">The Job Manager ROS Node acts as the order processor.</span>
+<span class="sd">It takes in Orders from the Fleet Manager Front (GUI) and appends these on an order list. </span>
+<span class="sd">It processes orders into Jobs with Tasks and a priority value, </span>
+<span class="sd">starting with CRITICAL followed by HIGH, MEDIUM and finally LOW. </span>
+<span class="sd">Jobs with equal priority are sorted based on First In First Out.</span>
+<span class="sd">It queries the MEx Sentinel for available Mobile Executors (MEx) and allocates and refines Jobs.</span>
+<span class="sd">Active Jobs keep track of their own progress and trigger callbacks upon finalisation.</span>
+
+<span class="sd">Note: See also the documentation for a more detailed description.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">rospy</span>
 <span class="c1">#import actionlib</span>
 
 <span class="c1">#from JobManager.Tasks import TaskStatus, TaskType, RobotMoveBase, AwaitingLoadCompletion</span>
-<span class="kn">from</span> <span class="nn">JobManager.Job</span> <span class="k">import</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">JobPriority</span>
-<span class="kn">from</span> <span class="nn">JobManager.Location</span> <span class="k">import</span> <span class="n">Location</span><span class="p">,</span> <span class="n">make_location_dict</span>
-<span class="kn">from</span> <span class="nn">JobManager.JobBuilder</span> <span class="k">import</span> <span class="n">job_builder</span>
-<span class="kn">from</span> <span class="nn">JobManager.JobActivation</span> <span class="k">import</span> <span class="n">job_allocator</span><span class="p">,</span> <span class="n">job_refiner</span>
-<span class="kn">from</span> <span class="nn">JobManager.MobileExecutor</span> <span class="k">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
-<span class="kn">from</span> <span class="nn">JobManager.Order</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">JobManager.JobServiceMethods</span> <span class="k">import</span> <span class="n">call_get_mex_list</span><span class="p">,</span> <span class="n">call_unassign_job</span>
+<span class="kn">from</span> <span class="nn">JobManager.Job</span> <span class="kn">import</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">JobPriority</span>
+<span class="kn">from</span> <span class="nn">JobManager.Location</span> <span class="kn">import</span> <span class="n">Location</span><span class="p">,</span> <span class="n">make_location_dict</span>
+<span class="kn">from</span> <span class="nn">JobManager.JobBuilder</span> <span class="kn">import</span> <span class="n">job_builder</span>
+<span class="kn">from</span> <span class="nn">JobManager.JobActivation</span> <span class="kn">import</span> <span class="n">job_allocator</span><span class="p">,</span> <span class="n">job_refiner</span>
+<span class="kn">from</span> <span class="nn">JobManager.MobileExecutor</span> <span class="kn">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
+<span class="kn">from</span> <span class="nn">JobManager.Order</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">JobManager.JobServiceMethods</span> <span class="kn">import</span> <span class="n">call_get_mex_list</span><span class="p">,</span> <span class="n">call_unassign_job</span>
 
-<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="k">import</span> <span class="n">PlaceOrder</span><span class="p">,</span> <span class="n">PlaceOrderResponse</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">GetPendingJobsResponse</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="kn">import</span> <span class="n">PlaceOrder</span><span class="p">,</span> <span class="n">PlaceOrderResponse</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">GetPendingJobsResponse</span><span class="p">,</span> \
     <span class="n">GetActiveJobs</span><span class="p">,</span> <span class="n">GetActiveJobsResponse</span><span class="p">,</span> <span class="n">GetJobInfo</span><span class="p">,</span> <span class="n">GetJobInfoResponse</span><span class="p">,</span> \
     <span class="n">GetMexList</span><span class="p">,</span> <span class="n">GetMexListResponse</span><span class="p">,</span> <span class="n">GetMexListRequest</span><span class="p">,</span> <span class="n">AssignJobToMex</span><span class="p">,</span> <span class="n">AssignJobToMexRequest</span>
-<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="k">import</span> <span class="n">PendingJob</span><span class="p">,</span> <span class="n">ActiveJob</span><span class="p">,</span> <span class="n">JobInfo</span><span class="p">,</span> <span class="n">TaskInfo</span>
+<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="kn">import</span> <span class="n">PendingJob</span><span class="p">,</span> <span class="n">ActiveJob</span><span class="p">,</span> <span class="n">JobInfo</span><span class="p">,</span> <span class="n">TaskInfo</span>
 
 <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s2">&quot;[job_manager] &quot;</span>
 
@@ -479,7 +479,7 @@
 
         <span class="c1"># Initialize timers for the JobBuilder, and JobAllocator.</span>
         <span class="n">rospy</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">order_list_timer_cb</span><span class="p">)</span>     <span class="c1"># Every second check order list to try build rough jobs.</span>
-        <span class="n">rospy</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">job_allocator_timer_cb</span><span class="p">)</span>  <span class="c1"># Call the job_allocator in 10 seconds to try allocating jobs. </span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">job_allocator_timer_cb</span><span class="p">)</span>  <span class="c1"># Call the job_allocator in 5 seconds to try allocating jobs. </span>
         <span class="c1"># The above job_allocator timer should be replaced with something more elegant...</span>
 
         <span class="c1"># Keep node running.</span>

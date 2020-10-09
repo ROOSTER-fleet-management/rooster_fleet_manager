@@ -164,7 +164,13 @@
 <span></span><span class="ch">#! /usr/bin/env python</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!</span>
+<span class="sd">The ClosestMex module is used to determine the which Mobile Executor is </span>
+<span class="sd">closest to a given mmove or transport order location.</span>
+<span class="sd">First it will retrieve an up-to-date MEx list and filter on their status, leaving only those with the STANDBY status.</span>
+<span class="sd">Next, for each suitable (STANDBY) MEx, it waits for the amcl_pose message (location) of that MEx and then plans the route from which it will calculate the length of the path.</span>
+<span class="sd">The result is apended to a distances list as a Distance instance with the accompanying MEx ID.</span>
+<span class="sd">After all path length distances have been retrieved, it&#39;ll loop over all Distance class instances in the list and find the closest MEx, </span>
+<span class="sd">which is then returns as a tuple of closest MEx ID and distance.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">rospy</span>

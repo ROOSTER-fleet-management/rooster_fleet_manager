@@ -183,30 +183,6 @@
 <p>Every second the Job Manager then checks this Order List and builds Jobs with Tasks from the orders, sorting them based on priority and placing them in the Pending Job list.</p>
 <p>Every few seconds the Job Manager will check this Pending Job list and pick the first Pending Job (highest priority first, then within priotity First In First Out). It then allocates this Job to an available (and if local is applicable; closest) MEx, passing the Job on to the Active Jobs list.</p>
 <p>Active Jobs keep track of their own Tasks and updates the Mobile Executor (MEx) on the MEx Sentinel. Upon Job completion (succes, cancel, abort) the Job is removed from the Active Jobs list and the MEx is freed and set to STANDBY in the MEx Sentinel.</p>
-<table border="1" class="colwidths-given docutils" id="id1">
-<caption><span class="caption-text">Publish / subscribe information</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="34%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Publishes to / Subscribes to</th>
-<th class="head">Topic name</th>
-<th class="head">Msg Type</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Publishes to</td>
-<td>TO DO</td>
-<td>TO DO</td>
-</tr>
-<tr class="row-odd"><td>Subscribes to</td>
-<td>TO DO</td>
-<td>TO DO</td>
-</tr>
-</tbody>
-</table>
 <p>The Job Manager provides callable services locally for</p>
 <ul class="simple">
 <li>placing Orders (<a class="reference internal" href="../SrvLandingPage.html#placeorder-srv-label"><span class="std std-ref">PlaceOrder srv</span></a>)</li>
@@ -216,7 +192,15 @@
 </ul>
 <div class="section" id="module-job_manager">
 <span id="job-manager-script"></span><h2>job_manager script<a class="headerlink" href="#module-job_manager" title="Permalink to this headline">¶</a></h2>
-<p>TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</p>
+<p>Job Manager:</p>
+<p>The Job Manager ROS Node acts as the order processor.
+It takes in Orders from the Fleet Manager Front (GUI) and appends these on an order list. 
+It processes orders into Jobs with Tasks and a priority value, 
+starting with CRITICAL followed by HIGH, MEDIUM and finally LOW. 
+Jobs with equal priority are sorted based on First In First Out.
+It queries the MEx Sentinel for available Mobile Executors (MEx) and allocates and refines Jobs.
+Active Jobs keep track of their own progress and trigger callbacks upon finalisation.</p>
+<p>Note: See also the documentation for a more detailed description.</p>
 <dl class="function">
 <dt id="job_manager.get_active_jobs_service_cb">
 <code class="descclassname">job_manager.</code><code class="descname">get_active_jobs_service_cb</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/job_manager.html#get_active_jobs_service_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#job_manager.get_active_jobs_service_cb" title="Permalink to this definition">¶</a></dt>

@@ -9,19 +9,20 @@ Every few seconds the Job Manager will check this Pending Job list and pick the 
 
 Active Jobs keep track of their own Tasks and updates the Mobile Executor (MEx) on the MEx Sentinel. Upon Job completion (succes, cancel, abort) the Job is removed from the Active Jobs list and the MEx is freed and set to STANDBY in the MEx Sentinel.
 
-.. list-table:: Publish / subscribe information
-   :widths: 33 33 34
-   :header-rows: 1
+.. JOB MANAGER DOES NOT PUBLISH / SUBSCRIBE 
+.. .. list-table:: Publish / subscribe information      
+..    :widths: 33 33 34
+..    :header-rows: 1
 
-   * - Publishes to / Subscribes to
-     - Topic name
-     - Msg Type
-   * - Publishes to
-     - TO DO
-     - TO DO
-   * - Subscribes to
-     - TO DO
-     - TO DO
+..    * - Publishes to / Subscribes to
+..      - Topic name
+..      - Msg Type
+..    * - Publishes to
+..      - TO DO
+..      - TO DO
+..    * - Subscribes to
+..      - TO DO
+..      - TO DO
 
 The Job Manager provides callable services locally for
 

@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -186,11 +176,12 @@
             
   <div class="section" id="module-fleet_manager_front">
 <span id="fleet-manager-front-module"></span><h1>fleet_manager_front module<a class="headerlink" href="#module-fleet_manager_front" title="Permalink to this headline">¶</a></h1>
-<p>TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</p>
+<p>The Fleet Manager Front ROS node provides the GUI to the user. It allows for adding orders to an order list which can be send to the Job Manager via a service call (place_order).
+It also provides information on the current Jobs (Pending and Active) and Mobile Executors.</p>
 <dl class="class">
 <dt id="fleet_manager_front.GuiMainWindow">
 <em class="property">class </em><code class="descclassname">fleet_manager_front.</code><code class="descname">GuiMainWindow</code><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">ui.fleet_manager_ui.Ui_MainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ui.fleet_manager_ui.Ui_MainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
 <dl class="method">
 <dt id="fleet_manager_front.GuiMainWindow.about">
 <code class="descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fleet_manager_front.html#GuiMainWindow.about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fleet_manager_front.GuiMainWindow.about" title="Permalink to this definition">¶</a></dt>

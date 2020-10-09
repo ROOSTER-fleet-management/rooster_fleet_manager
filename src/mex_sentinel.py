@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The MEx Sentinel ROS node keeps track of all information about the Mobile Executors (MExs). It provides services for retrieving and editing the MEx information.
+More information on each (callback) function can be found below.
 """
 
 import rospy

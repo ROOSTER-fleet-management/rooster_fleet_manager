@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -189,7 +179,7 @@
             
   <div class="section" id="marker-array-ros-node">
 <h1>marker_array ROS node<a class="headerlink" href="#marker-array-ros-node" title="Permalink to this headline">¶</a></h1>
-<p>TODO: ADD DESCRIPTION OF THIS NODE HERE. REFER TO job_manager node documentation for reference.</p>
+<p>The Marker Array ROS node reads location information from the ROS parameter server. It then sets up the matching sphere and text markers and publishes these on the ‘visualization_marker_array’ topic.</p>
 <table border="1" class="colwidths-given docutils" id="id1">
 <caption><span class="caption-text">Publish / subscribe information</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
@@ -205,18 +195,19 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Publishes to</td>
-<td>TO DO</td>
-<td>TO DO</td>
+<td>/visualization_marker_array</td>
+<td>MarkerArray</td>
 </tr>
 <tr class="row-odd"><td>Subscribes to</td>
-<td>TO DO</td>
-<td>TO DO</td>
+<td>none</td>
+<td>none</td>
 </tr>
 </tbody>
 </table>
 <div class="section" id="module-marker_array">
 <span id="marker-array-script"></span><h2>marker_array script<a class="headerlink" href="#module-marker_array" title="Permalink to this headline">¶</a></h2>
-<p>TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</p>
+<p>The Marker Array ROS node retrieves a location dictionary from the ROS parameter server (“/locations”).
+It takes in these locations and populates a list with Sphere and Text Markers which it publishes on the ‘/visualization_marker_array’ topic.</p>
 <dl class="function">
 <dt id="marker_array.create_sphere_marker">
 <code class="descclassname">marker_array.</code><code class="descname">create_sphere_marker</code><span class="sig-paren">(</span><em>name</em>, <em>x_coordinate</em>, <em>y_coordinate</em>, <em>id</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/marker_array.html#create_sphere_marker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#marker_array.create_sphere_marker" title="Permalink to this definition">¶</a></dt>

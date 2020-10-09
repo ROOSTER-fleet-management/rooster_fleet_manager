@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -174,7 +164,8 @@
 <span></span><span class="ch">#! /usr/bin/env python</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</span>
+<span class="sd">The Fleet Manager Front ROS node provides the GUI to the user. It allows for adding orders to an order list which can be send to the Job Manager via a service call (place_order).</span>
+<span class="sd">It also provides information on the current Jobs (Pending and Active) and Mobile Executors. </span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">json</span>         <span class="c1"># Used for reading JSON files (loading jobs to JobQueue)</span>
@@ -182,13 +173,13 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">rospy</span>
-<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="kn">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
 
-<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="k">import</span> <span class="n">PlaceOrder</span><span class="p">,</span> <span class="n">PlaceOrderRequest</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">GetPendingJobsRequest</span><span class="p">,</span> <span class="n">GetActiveJobs</span><span class="p">,</span> <span class="n">GetActiveJobsRequest</span>
-<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="k">import</span> <span class="n">MexListInfo</span>
-<span class="kn">from</span> <span class="nn">ui</span> <span class="k">import</span> <span class="n">fleet_manager_ui</span>
-<span class="kn">from</span> <span class="nn">JobManager.Order</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">JobManager.Job</span> <span class="k">import</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">JobPriority</span>
+<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="kn">import</span> <span class="n">PlaceOrder</span><span class="p">,</span> <span class="n">PlaceOrderRequest</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">GetPendingJobsRequest</span><span class="p">,</span> <span class="n">GetActiveJobs</span><span class="p">,</span> <span class="n">GetActiveJobsRequest</span>
+<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="kn">import</span> <span class="n">MexListInfo</span>
+<span class="kn">from</span> <span class="nn">ui</span> <span class="kn">import</span> <span class="n">fleet_manager_ui</span>
+<span class="kn">from</span> <span class="nn">JobManager.Order</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">JobManager.Job</span> <span class="kn">import</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">JobPriority</span>
 
 <span class="c1">#region ################################### TO DO LIST #####################################</span>
 <span class="c1"># DONE 1.  Perform simple call /job_manager/place_order service.</span>
@@ -218,7 +209,7 @@
 
 <span class="c1">#region         ### PyQt GUI ###</span>
 <div class="viewcode-block" id="GuiMainWindow"><a class="viewcode-back" href="../_source/src/fleet_manager_front.html#fleet_manager_front.GuiMainWindow">[docs]</a><span class="k">class</span> <span class="nc">GuiMainWindow</span><span class="p">(</span><span class="n">fleet_manager_ui</span><span class="o">.</span><span class="n">Ui_MainWindow</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the ui widgets, items and varibles.</span>
 <span class="sd">        Connect up all UI interactions to their methods.</span>

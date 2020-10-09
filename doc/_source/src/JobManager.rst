@@ -1,10 +1,8 @@
 JobManager package
 ==================
 
-TO DO: ADD DESCRIPTION OF THIS PACKAGE HERE( IN THE doc/_source/src/JobManager.rst FILE)
-
-.. Submodules
-.. ----------
+The JobManager package contains the Python Modules as used by the Job Manager ROS node:
+Each Module with its functions is described in more detail below.
 
 JobManager\.ClosestMex module
 -----------------------------

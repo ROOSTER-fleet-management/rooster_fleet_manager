@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Marker Array ROS node retrieves a location dictionary from the ROS parameter server ("/locations").
+It takes in these locations and populates a list with Sphere and Text Markers which it publishes on the '/visualization_marker_array' topic.
 """
 
 import rospy
@@ -9,7 +10,7 @@ from visualization_msgs.msg import Marker, MarkerArray
 from JobManager.Location import Location, make_location_dict
 
 # NOTE: Launch the script and then open RViz, add "MarkerArray" view, choose the right topic.
-# Each location displays as two markers: a semi-transparent purple screen and white text label. 
+# Each location displays as two markers: a semi-transparent purple sphere and white text label. 
 # Each marker is created by a corresponding function
 
 def create_sphere_marker(name, x_coordinate, y_coordinate, id):

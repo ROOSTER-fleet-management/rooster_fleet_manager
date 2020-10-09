@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -174,13 +164,14 @@
 <span></span><span class="ch">#! /usr/bin/env python</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!</span>
+<span class="sd">The MEx Sentinel ROS node keeps track of all information about the Mobile Executors (MExs). It provides services for retrieving and editing the MEx information.</span>
+<span class="sd">More information on each (callback) function can be found below.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">rospy</span>
-<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="k">import</span> <span class="n">AssignJobToMex</span><span class="p">,</span> <span class="n">AssignJobToMexResponse</span><span class="p">,</span> <span class="n">UnassignJobFromMex</span><span class="p">,</span> <span class="n">UnassignJobFromMexResponse</span><span class="p">,</span> <span class="n">ChangeMexStatus</span><span class="p">,</span> <span class="n">ChangeMexStatusResponse</span><span class="p">,</span> <span class="n">GetMexStatus</span><span class="p">,</span> <span class="n">GetMexStatusResponse</span><span class="p">,</span> <span class="n">GetMexList</span><span class="p">,</span> <span class="n">GetMexListResponse</span>
-<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="k">import</span> <span class="n">MexInfo</span><span class="p">,</span> <span class="n">MexListInfo</span>
-<span class="kn">from</span> <span class="nn">JobManager.MobileExecutor</span> <span class="k">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
+<span class="kn">from</span> <span class="nn">simple_sim.srv</span> <span class="kn">import</span> <span class="n">AssignJobToMex</span><span class="p">,</span> <span class="n">AssignJobToMexResponse</span><span class="p">,</span> <span class="n">UnassignJobFromMex</span><span class="p">,</span> <span class="n">UnassignJobFromMexResponse</span><span class="p">,</span> <span class="n">ChangeMexStatus</span><span class="p">,</span> <span class="n">ChangeMexStatusResponse</span><span class="p">,</span> <span class="n">GetMexStatus</span><span class="p">,</span> <span class="n">GetMexStatusResponse</span><span class="p">,</span> <span class="n">GetMexList</span><span class="p">,</span> <span class="n">GetMexListResponse</span>
+<span class="kn">from</span> <span class="nn">simple_sim.msg</span> <span class="kn">import</span> <span class="n">MexInfo</span><span class="p">,</span> <span class="n">MexListInfo</span>
+<span class="kn">from</span> <span class="nn">JobManager.MobileExecutor</span> <span class="kn">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
 
 <span class="c1"># Make mex_list global</span>
 <span class="n">mex_list</span> <span class="o">=</span> <span class="p">[]</span>

@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -100,10 +90,11 @@
             
               <p class="caption"><span class="caption-text">Stuff to know:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../Overview.html">Fleet Manager Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../InstallInstructions.html">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../GettingStarted.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../SrcLandingPage.html">Python code API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SrcLandingPage.html">ROS nodes and source code API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MsgLandingPage.html">ROS messages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SrvLandingPage.html">ROS Services</a></li>
 </ul>
@@ -173,13 +164,17 @@
             
   <div class="section" id="fleet-manager-launch">
 <h1>fleet_manager.launch<a class="headerlink" href="#fleet-manager-launch" title="Permalink to this headline">¶</a></h1>
-<p>This Launch file launches the following ROS nodes:</p>
+<p>This launch file launches the following ROS nodes:</p>
 <ul class="simple">
 <li>mex_sentinel.py</li>
 <li>job_manager.py</li>
 <li>fleet_manager_front.py</li>
 <li>marker_array.py</li>
 </ul>
+<p>The order of node launching is important, first the MEx Sentinel node should be launched, which sets up a local robot list and the necessary services and publisher.
+Next the Job Manager node should be launched, which retrieves the MEx list from the MEx Sentinel, after which it sets up its own services.
+Finally the Fleet Manager Front node should be launched, which acts as the GUI for the Fleet Manager and calls the MEx Sentinel’s and Job Manager’s services to function.</p>
+<p>The Marker Array node launch order is irrelevent with respect to the above mentioned nodes as it acts independently from them. In order to see the markers however, an instance of dynaRViz (as launched from the Multi-Robot Sim launcher) or RViz (with the necessary Marker Array panel) should be running.</p>
 </div>
 
 

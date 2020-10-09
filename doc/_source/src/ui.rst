@@ -1,7 +1,7 @@
 ui package
 ==========
 
-TO DO: ADD DESCRIPTION OF THIS PACKAGE HERE( IN THE doc/_source/src/ui.rst FILE)
+The ui package contains files (fleet_manager_ui.py and images_rc.py) which have been automatically generated in from QtCreater files and define the GUI with it's resources. 
 
 .. Submodules
 .. ----------

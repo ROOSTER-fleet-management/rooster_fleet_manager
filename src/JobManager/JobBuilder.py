@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Job Builder module is used by the Job Manager ROS node and contains the job_builder function. 
+This function takes in orders from the order list and builds Job class instances with Task class instances based on the order type and attributes.
+It then appends these Job instances to the Pending Jobs list.
 """
 
 from Job import Job, JobPriority

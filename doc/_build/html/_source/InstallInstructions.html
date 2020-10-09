@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -180,7 +170,7 @@
 <li><p class="first">Install ridgeback and multi-ridgeback packages:</p>
 <ul>
 <li><p class="first">Install the ridgeback simulation and navigation packages by clearpath robotics using the bash commands in the terminal.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
 </pre></div>
 </div>
 <p>To learn about using these packages check out the <a class="reference external" href="&lt;http://www.clearpathrobotics.com/assets/guides/kinetic/ridgeback/simulation.html&gt;">tutorials</a> by Clearpath Robotics.</p>
@@ -188,7 +178,7 @@
 <li><p class="first">Install rospackage for teleoperation from terminal.</p>
 </li>
 <li><p class="first">Clone the multi_ridgeback_gazebo ROS package into the src directory of your catkin_ws and run catkin_make from the root of your catkin_ws.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">mkdir -p ~/catkin_ws/src</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir -p ~/catkin_ws/src</span>
 <span class="go">cd ~/catkin_ws/src</span>
 <span class="go">git clone https://contact/n.n.nagda@tudelft.nl/for/access.git</span>
 <span class="go">cd ..</span>
@@ -199,7 +189,7 @@
 <li><div class="first admonition note">
 <p class="first admonition-title">Note</p>
 <p>To confirm the installation uptil this point, run the following roslaunch command in a terminal.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_gazebo multi_ridgeback_world.launch</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_gazebo multi_ridgeback_world.launch</span>
 </pre></div>
 </div>
 <p class="last">This should launch a gazebo simulation with 2 ridgebacks that can be teleoperated using the teleop nodes running in the launched terminals.
@@ -207,7 +197,7 @@ Also, an instance of Rviz is launched, wherein you can visualize their laserscan
 </div>
 </li>
 <li><p class="first">Clone the multi_ridgeback_nav ROS package into the src directory of your catkin_ws and run catkin_make from the root of your catkin_ws.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws/src</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws/src</span>
 <span class="go">git clone https://contact/n.n.nagda@tudelft.nl/for/access.git</span>
 <span class="go">cd ..</span>
 <span class="go">catkin_make</span>
@@ -217,7 +207,7 @@ Also, an instance of Rviz is launched, wherein you can visualize their laserscan
 <li><div class="first admonition note">
 <p class="first admonition-title">Note</p>
 <p>To confirm the installation uptil this point, run the following roslaunch command in a terminal.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_nav multi_ridgeback_nav.launch</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_nav multi_ridgeback_nav.launch</span>
 </pre></div>
 </div>
 <p>This should launch a gazebo simulation with 3 ridgebacks and an instance of Rviz to issue navigation goals.
@@ -253,7 +243,7 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
 <div><blockquote>
 <div><ul>
 <li><p class="first">Installing dependency libraries</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install libopenblas-dev liblapack-dev libarpack2-dev libsuperlu-dev</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install libopenblas-dev liblapack-dev libarpack2-dev libsuperlu-dev</span>
 </pre></div>
 </div>
 </li>
@@ -262,7 +252,7 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
 <li><p class="first">Clone <a class="reference external" href="https://github.com/tysik/obstacle_detector">obstacle_detector</a> package into catkin workspace and catkin_make.</p>
 </li>
 <li><p class="first">Install pygame</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install python-pygame</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install python-pygame</span>
 </pre></div>
 </div>
 </li>
@@ -277,7 +267,7 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
 <li><p class="first">Clone the repository into the src folder of your catkin_ws.</p>
 </li>
 <li><p class="first">Install PyQt4 (Python bindings for Qt) by running the following bash command in a terminal.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install pyqt4-dev-tools pyqt4.qsci-dev libqt4-dev python-qt4</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install pyqt4-dev-tools pyqt4.qsci-dev libqt4-dev python-qt4</span>
 </pre></div>
 </div>
 </li>
@@ -286,18 +276,18 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
 <li><p class="first">Install the documentation generation tools</p>
 <ul>
 <li><p class="first">Install <a class="reference external" href="http://wiki.ros.org/rosdoc_lite">rosdoc_lite</a> ROS package using the following bash command in a terminal.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-rosdoc-lite</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-rosdoc-lite</span>
 </pre></div>
 </div>
 <p>This automatically installs doxygen, sphinx and epydoc.</p>
 </li>
 <li><p class="first">Install sphinx-rtd-theme, a sphinx extension that provides a beautiful theme for documentation.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user sphinx-rtd-theme</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user sphinx-rtd-theme</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Install catkin-sphinx, a sphinx extension that provides a ROS theme for documentation.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user catkin-sphinx</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user catkin-sphinx</span>
 </pre></div>
 </div>
 </li>

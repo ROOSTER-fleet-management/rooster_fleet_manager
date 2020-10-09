@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Location module is used by the Job Manager ROS node as a means to store the information for each location in a Location class instance.
+Each Location instance has an unique ID, name, position and orientation.
 """
 
 import rospy

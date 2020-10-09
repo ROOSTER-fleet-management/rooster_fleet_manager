@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Job module is used by the Job Manager ROS node. It contains the definitions of the Job Status and Job Priority enumerators as well as the Job class.
 """
 
 import rospy

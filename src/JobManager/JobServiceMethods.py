@@ -1,7 +1,13 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+This Job Service Methods module contains the functions used by the Job Manager to call the services as hosted by the MEx Sentinel.
+It contaisn functions for calling the following services:
+- get_mex_list
+- assign_job_to_mex
+- unassign_job_from_mex
+- change_mex_status
+
 """
 
 import rospy

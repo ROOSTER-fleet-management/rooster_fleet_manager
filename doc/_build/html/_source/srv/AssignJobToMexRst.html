@@ -26,21 +26,11 @@
   <![endif]-->
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -100,10 +90,13 @@
             
               <p class="caption"><span class="caption-text">Stuff to know:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../Overview.html">Fleet Manager Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../InstallInstructions.html">Installation Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../SrcLandingPage.html">src</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MsgLandingPage.html">MsgLandingPage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../SrvLandingPage.html">SrvLandingPage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SrvLandingPage.html">ROS Services</a></li>
 </ul>
 
             
@@ -171,7 +164,8 @@
             
   <div class="section" id="assignjobtomex-srv">
 <h1>AssignJobToMex srv<a class="headerlink" href="#assignjobtomex-srv" title="Permalink to this headline">¶</a></h1>
-<p>This is a paragraph that contains a link to <a class="reference external" href="../../srv/AssignJobToMex.html">AssignJobToMex.srv</a>.</p>
+<p>The <a class="reference external" href="../../srv/AssignJobToMex.html">AssignJobToMex.srv</a> is a service message type which takes in a ‘MEx ID’ string and a ‘Job ID’ string and returns a boolean ‘succes’.</p>
+<p>The service message is used to assign a Job to a Mobile Executor in the MEx Sentinel, which is hosting the service. It is called by the Job Manager during Job Allocation.</p>
 </div>
 
 

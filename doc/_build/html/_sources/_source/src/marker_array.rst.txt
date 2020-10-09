@@ -1,7 +1,7 @@
 marker\_array ROS node
 =====================
 
-TODO: ADD DESCRIPTION OF THIS NODE HERE. REFER TO job_manager node documentation for reference.
+The Marker Array ROS node reads location information from the ROS parameter server. It then sets up the matching sphere and text markers and publishes these on the 'visualization_marker_array' topic.
 
 .. list-table:: Publish / subscribe information
    :widths: 33 33 34
@@ -11,11 +11,11 @@ TODO: ADD DESCRIPTION OF THIS NODE HERE. REFER TO job_manager node documentation
      - Topic name
      - Msg Type
    * - Publishes to
-     - TO DO
-     - TO DO
+     - /visualization_marker_array
+     - MarkerArray
    * - Subscribes to
-     - TO DO
-     - TO DO
+     - none
+     - none
 
 marker\_array script
 ####################

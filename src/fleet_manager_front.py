@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE/ROS NODE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Fleet Manager Front ROS node provides the GUI to the user. It allows for adding orders to an order list which can be send to the Job Manager via a service call (place_order).
+It also provides information on the current Jobs (Pending and Active) and Mobile Executors. 
 """
 
 import json         # Used for reading JSON files (loading jobs to JobQueue)

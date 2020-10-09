@@ -1,7 +1,13 @@
 #! /usr/bin/env python
 
 """
-TO DO: ENTER THE DESCRIPTION OF THIS MODULE HERE (IN THE SOURCE CODE DOC STRING)!!!
+The Job Activation module consist of two functions, the Job Allocator and Job Refiner.
+The Job Allocator checks the Pending Jobs list and MExs list to assign a Job to a MEx.
+If the Job involves locomotion, such as MOVE and TRANSPORT Jobs, it will use the ClosestMEx module to retrieve the closest MEx instead.
+If a Job could be assigned, it is removed from the Pending Jobs list and passed along to the Job Refiner and a call is send to the MEx Sentinel service to update the allocated MEx's state.
+The Job Refiner takes in the (rough) Job and further refines it based on the allocated MEx.
+It then starts the Job and calls the MEx Sentinel service to update the MEx state once more. 
+Finally the Job is appended to the Active Jobs list.
 """
 
 from Job import JobStatus
