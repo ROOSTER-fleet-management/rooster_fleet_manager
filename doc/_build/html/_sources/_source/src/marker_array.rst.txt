@@ -17,7 +17,7 @@ The Marker Array ROS node reads location information from the ROS parameter serv
      - none
      - none
 
-marker\_array script
+marker\_array module
 ####################
 
 .. automodule:: marker_array

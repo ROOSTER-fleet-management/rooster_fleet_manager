@@ -2,11 +2,11 @@
 
 """
 The ClosestMex module is used to determine the which Mobile Executor is 
-closest to a given mmove or transport order location.
+closest to a given move or transport order location.
 First it will retrieve an up-to-date MEx list and filter on their status, leaving only those with the STANDBY status.
 Next, for each suitable (STANDBY) MEx, it waits for the amcl_pose message (location) of that MEx and then plans the route from which it will calculate the length of the path.
 The result is apended to a distances list as a Distance instance with the accompanying MEx ID.
-After all path length distances have been retrieved, it'll loop over all Distance class instances in the list and find the closest MEx, 
+After all path length distances have been retrieved, it will loop over all Distance class instances in the list and find the closest MEx, 
 which is then returns as a tuple of closest MEx ID and distance.
 """
 

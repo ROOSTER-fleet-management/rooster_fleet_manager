@@ -2,7 +2,7 @@
 
 """
 The Tasks module is used by the Job Manager ROS node and Job module to store information and status of Tasks as class instances.
-Each Task has its own class, which inherits from a base Task class. For more information of each class see the descriptions below.
+Each Task has its own class, which inherits from a base Task class. For more information on each class see the descriptions below.
 Next to the Task classes the module also contains class definitions for the Task Type and Task Status enumerators.
 """
 

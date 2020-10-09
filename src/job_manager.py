@@ -5,7 +5,7 @@
 """
 Job Manager:
 
-The Job Manager ROS Node acts as the order processor.
+The Job Manager ROS Node acts as the order processor and manager of (active and pending) Jobs.
 It takes in Orders from the Fleet Manager Front (GUI) and appends these on an order list. 
 It processes orders into Jobs with Tasks and a priority value, 
 starting with CRITICAL followed by HIGH, MEDIUM and finally LOW. 
@@ -13,7 +13,7 @@ Jobs with equal priority are sorted based on First In First Out.
 It queries the MEx Sentinel for available Mobile Executors (MEx) and allocates and refines Jobs.
 Active Jobs keep track of their own progress and trigger callbacks upon finalisation.
 
-Note: See also the documentation for a more detailed description.
+Note: See also the documentation below for a more detailed description.
 """
 
 import rospy

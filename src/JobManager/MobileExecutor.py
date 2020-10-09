@@ -3,7 +3,7 @@
 """
 The MobileExecutor module is used by the Job Manager and MEx Sentinel ROS nodes to store information on Mobile Executors (MExs) in MobileExecutor class instances.
 Each instance has an unique MEx ID, MEx Status and Job ID. 
-The MEx status is defined in thus module as an enumerator.
+Additionally, the MEx Status class is defined in this module as an enumerator.
 """
 
 from enum import Enum

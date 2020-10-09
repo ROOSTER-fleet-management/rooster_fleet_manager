@@ -3,7 +3,7 @@
 """
 The Order module contains definitions for several enumerator types; the Order Response status, the Order keyword and the Order argument count.
 
-Note: The follow Keyword and Type are not actively implemented.
+Note: The 'FOLLOW' OrderKeyword and OrderTypeArgCount are not actively implemented.
 """
 
 from enum import Enum
