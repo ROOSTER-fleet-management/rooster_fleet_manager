@@ -9,10 +9,10 @@ The MEx Sentinel is a ROS node that holds the latest information about Mobile Ex
  - get_mex_status
  - change_mex_status
 
-Note: In it current state the MEx information is only stored in memory and no data is logged. It is however envision that the MEx Sentinel will interact with (reads/writes from/to) a database for maintaining long term records 
+Note: In its current state the MEx information is only stored in memory and no data is logged. It is however envisioned that the MEx Sentinel will interact with (reads/writes from/to) a database for maintaining long term records 
 (i.e. acts as front end to a database server like SQLite or MySQL). 
 
-mex\_sentinel script
+mex\_sentinel module
 ####################
 
 .. automodule:: mex_sentinel

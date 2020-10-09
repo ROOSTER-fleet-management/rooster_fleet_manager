@@ -99,7 +99,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../SrcLandingPage.html">ROS nodes and source code API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="job_manager.html">job_manager ROS node</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">mex_sentinel ROS node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-mex_sentinel">mex_sentinel script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-mex_sentinel">mex_sentinel module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fleet_manager_front.html">fleet_manager_front module</a></li>
@@ -189,10 +189,10 @@
 <li>change_mex_status</li>
 </ul>
 </div></blockquote>
-<p>Note: In it current state the MEx information is only stored in memory and no data is logged. It is however envision that the MEx Sentinel will interact with (reads/writes from/to) a database for maintaining long term records
+<p>Note: In its current state the MEx information is only stored in memory and no data is logged. It is however envisioned that the MEx Sentinel will interact with (reads/writes from/to) a database for maintaining long term records
 (i.e. acts as front end to a database server like SQLite or MySQL).</p>
 <div class="section" id="module-mex_sentinel">
-<span id="mex-sentinel-script"></span><h2>mex_sentinel script<a class="headerlink" href="#module-mex_sentinel" title="Permalink to this headline">¶</a></h2>
+<span id="mex-sentinel-module"></span><h2>mex_sentinel module<a class="headerlink" href="#module-mex_sentinel" title="Permalink to this headline">¶</a></h2>
 <p>The MEx Sentinel ROS node keeps track of all information about the Mobile Executors (MExs). It provides services for retrieving and editing the MEx information.
 More information on each (callback) function can be found below.</p>
 <dl class="function">

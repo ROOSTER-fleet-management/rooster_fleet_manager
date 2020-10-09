@@ -168,7 +168,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Job Manager:</span>
 
-<span class="sd">The Job Manager ROS Node acts as the order processor.</span>
+<span class="sd">The Job Manager ROS Node acts as the order processor and manager of (active and pending) Jobs.</span>
 <span class="sd">It takes in Orders from the Fleet Manager Front (GUI) and appends these on an order list. </span>
 <span class="sd">It processes orders into Jobs with Tasks and a priority value, </span>
 <span class="sd">starting with CRITICAL followed by HIGH, MEDIUM and finally LOW. </span>
@@ -176,7 +176,7 @@
 <span class="sd">It queries the MEx Sentinel for available Mobile Executors (MEx) and allocates and refines Jobs.</span>
 <span class="sd">Active Jobs keep track of their own progress and trigger callbacks upon finalisation.</span>
 
-<span class="sd">Note: See also the documentation for a more detailed description.</span>
+<span class="sd">Note: See also the documentation below for a more detailed description.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">rospy</span>

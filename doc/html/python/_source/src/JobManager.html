@@ -192,11 +192,11 @@ Each Module with its functions is described in more detail below.</p>
 <div class="section" id="module-JobManager.ClosestMex">
 <span id="jobmanager-closestmex-module"></span><h2>JobManager.ClosestMex module<a class="headerlink" href="#module-JobManager.ClosestMex" title="Permalink to this headline">¶</a></h2>
 <p>The ClosestMex module is used to determine the which Mobile Executor is 
-closest to a given mmove or transport order location.
+closest to a given move or transport order location.
 First it will retrieve an up-to-date MEx list and filter on their status, leaving only those with the STANDBY status.
 Next, for each suitable (STANDBY) MEx, it waits for the amcl_pose message (location) of that MEx and then plans the route from which it will calculate the length of the path.
 The result is apended to a distances list as a Distance instance with the accompanying MEx ID.
-After all path length distances have been retrieved, it’ll loop over all Distance class instances in the list and find the closest MEx, 
+After all path length distances have been retrieved, it will loop over all Distance class instances in the list and find the closest MEx, 
 which is then returns as a tuple of closest MEx ID and distance.</p>
 <dl class="class">
 <dt id="JobManager.ClosestMex.Distance">
@@ -399,12 +399,16 @@ Then inserts/appends the Job to the Pending Jobs list depening on the priority.<
 </div>
 <div class="section" id="module-JobManager.JobServiceMethods">
 <span id="jobmanager-jobservicemethods-module"></span><h2>JobManager.JobServiceMethods module<a class="headerlink" href="#module-JobManager.JobServiceMethods" title="Permalink to this headline">¶</a></h2>
-<p>This Job Service Methods module contains the functions used by the Job Manager to call the services as hosted by the MEx Sentinel.
-It contaisn functions for calling the following services:
-- get_mex_list
-- assign_job_to_mex
-- unassign_job_from_mex
-- change_mex_status</p>
+<p>The Job Service Methods module contains the functions used by the Job Manager to call the services as hosted by the MEx Sentinel.
+It contains functions for calling the following services:</p>
+<blockquote>
+<div><ul class="simple">
+<li>get_mex_list</li>
+<li>assign_job_to_mex</li>
+<li>unassign_job_from_mex</li>
+<li>change_mex_status</li>
+</ul>
+</div></blockquote>
 <dl class="function">
 <dt id="JobManager.JobServiceMethods.call_assign_job">
 <code class="descclassname">JobManager.JobServiceMethods.</code><code class="descname">call_assign_job</code><span class="sig-paren">(</span><em>job_id</em>, <em>mex_id</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/JobManager/JobServiceMethods.html#call_assign_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.JobServiceMethods.call_assign_job" title="Permalink to this definition">¶</a></dt>
@@ -457,7 +461,7 @@ Each Location instance has an unique ID, name, position and orientation.</p>
 <span id="jobmanager-mobileexecutor-module"></span><h2>JobManager.MobileExecutor module<a class="headerlink" href="#module-JobManager.MobileExecutor" title="Permalink to this headline">¶</a></h2>
 <p>The MobileExecutor module is used by the Job Manager and MEx Sentinel ROS nodes to store information on Mobile Executors (MExs) in MobileExecutor class instances.
 Each instance has an unique MEx ID, MEx Status and Job ID. 
-The MEx status is defined in thus module as an enumerator.</p>
+Additionally, the MEx Status class is defined in this module as an enumerator.</p>
 <dl class="class">
 <dt id="JobManager.MobileExecutor.MExStatus">
 <em class="property">class </em><code class="descclassname">JobManager.MobileExecutor.</code><code class="descname">MExStatus</code><a class="reference internal" href="../../_modules/JobManager/MobileExecutor.html#MExStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.MobileExecutor.MExStatus" title="Permalink to this definition">¶</a></dt>
@@ -506,7 +510,7 @@ The MEx status is defined in thus module as an enumerator.</p>
 <div class="section" id="module-JobManager.Order">
 <span id="jobmanager-order-module"></span><h2>JobManager.Order module<a class="headerlink" href="#module-JobManager.Order" title="Permalink to this headline">¶</a></h2>
 <p>The Order module contains definitions for several enumerator types; the Order Response status, the Order keyword and the Order argument count.</p>
-<p>Note: The follow Keyword and Type are not actively implemented.</p>
+<p>Note: The ‘FOLLOW’ OrderKeyword and OrderTypeArgCount are not actively implemented.</p>
 <dl class="class">
 <dt id="JobManager.Order.OrderKeyword">
 <em class="property">class </em><code class="descclassname">JobManager.Order.</code><code class="descname">OrderKeyword</code><a class="reference internal" href="../../_modules/JobManager/Order.html#OrderKeyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#JobManager.Order.OrderKeyword" title="Permalink to this definition">¶</a></dt>
@@ -592,7 +596,7 @@ The MEx status is defined in thus module as an enumerator.</p>
 <div class="section" id="module-JobManager.Tasks">
 <span id="jobmanager-tasks-module"></span><h2>JobManager.Tasks module<a class="headerlink" href="#module-JobManager.Tasks" title="Permalink to this headline">¶</a></h2>
 <p>The Tasks module is used by the Job Manager ROS node and Job module to store information and status of Tasks as class instances.
-Each Task has its own class, which inherits from a base Task class. For more information of each class see the descriptions below.
+Each Task has its own class, which inherits from a base Task class. For more information on each class see the descriptions below.
 Next to the Task classes the module also contains class definitions for the Task Type and Task Status enumerators.</p>
 <dl class="class">
 <dt id="JobManager.Tasks.AwaitingLoadCompletion">
