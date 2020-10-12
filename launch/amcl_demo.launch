@@ -4,7 +4,7 @@
  <include file="$(find ridgeback_gazebo)/launch/ridgeback_world.launch"/>
 
   <!-- Run the map server -->
- <arg name="map_file" default="$(find simple_sim)/maps/mymap.yaml"/>
+ <arg name="map_file" default="$(find rooster_fleet_manager)/maps/mymap.yaml"/>
  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!--- Run AMCL -->

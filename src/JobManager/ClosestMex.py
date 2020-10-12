@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
-from simple_sim.srv import GetMexList, GetMexListRequest
+from rooster_fleet_manager.srv import GetMexList, GetMexListRequest
 from MobileExecutor import MExStatus
 from nav_msgs.srv import GetPlan, GetPlanResponse
 from geometry_msgs.msg import PoseStamped, PointStamped, PoseWithCovarianceStamped

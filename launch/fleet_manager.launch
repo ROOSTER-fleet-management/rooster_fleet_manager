@@ -1,14 +1,14 @@
 <launch>
   <!-- Run the MEx Sentinel -->
- <node name="mex_sentinel" pkg="simple_sim" type="mex_sentinel.py" output="screen"/>
+ <node name="mex_sentinel" pkg="rooster_fleet_manager" type="mex_sentinel.py" output="screen"/>
 
   <!-- Run the Job Manager -->
- <node name="job_manager" pkg="simple_sim" type="job_manager.py" output="screen"/>
+ <node name="job_manager" pkg="rooster_fleet_manager" type="job_manager.py" output="screen"/>
 
   <!-- Run the rviz locations marker publisher -->
- <node name="marker_array" pkg="simple_sim" type="marker_array.py" output="screen"/>
+ <node name="marker_array" pkg="rooster_fleet_manager" type="marker_array.py" output="screen"/>
 
   <!-- Run the Fleet Management Front End (GUI) -->
- <node name="fleet_manager_front" pkg="simple_sim" type="fleet_manager_front.py" output="screen"/>
+ <node name="fleet_manager_front" pkg="rooster_fleet_manager" type="fleet_manager_front.py" output="screen"/>
 
 </launch>
