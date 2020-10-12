@@ -193,14 +193,14 @@
 <div class="section" id="module-job_manager">
 <span id="job-manager-script"></span><h2>job_manager script<a class="headerlink" href="#module-job_manager" title="Permalink to this headline">¶</a></h2>
 <p>Job Manager:</p>
-<p>The Job Manager ROS Node acts as the order processor.
+<p>The Job Manager ROS Node acts as the order processor and manager of (active and pending) Jobs.
 It takes in Orders from the Fleet Manager Front (GUI) and appends these on an order list. 
 It processes orders into Jobs with Tasks and a priority value, 
 starting with CRITICAL followed by HIGH, MEDIUM and finally LOW. 
 Jobs with equal priority are sorted based on First In First Out.
 It queries the MEx Sentinel for available Mobile Executors (MEx) and allocates and refines Jobs.
 Active Jobs keep track of their own progress and trigger callbacks upon finalisation.</p>
-<p>Note: See also the documentation for a more detailed description.</p>
+<p>Note: See also the documentation below for a more detailed description.</p>
 <dl class="function">
 <dt id="job_manager.get_active_jobs_service_cb">
 <code class="descclassname">job_manager.</code><code class="descname">get_active_jobs_service_cb</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/job_manager.html#get_active_jobs_service_cb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#job_manager.get_active_jobs_service_cb" title="Permalink to this definition">¶</a></dt>

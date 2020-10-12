@@ -9,6 +9,10 @@ The envisioned Fleet manager consists of the following 3 components:
 * MEx Sentinel
 * Frontend GUI
 
+ .. image:: ../_static/images/ROOSTER_architectural_diagram.png
+    :alt: alternate text test
+    :width: 800
+
 Job Manager
 ===========
 This component of the fleet manager pertains to
