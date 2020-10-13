@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>job_manager &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_source/Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>job_manager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for job_manager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+<span class="c1">#import json         # Used for reading JSON files (loading jobs to JobQueue)</span>
+<span class="c1">#import os           # Used to get base filename and file and directory handling</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Job Manager:</span>
+
+<span class="sd">The Job Manager ROS Node acts as the order processor and manager of (active and pending) Jobs.</span>
+<span class="sd">It takes in Orders from the Fleet Manager Front (GUI) and appends these on an order list. </span>
+<span class="sd">It processes orders into Jobs with Tasks and a priority value, </span>
+<span class="sd">starting with CRITICAL followed by HIGH, MEDIUM and finally LOW. </span>
+<span class="sd">Jobs with equal priority are sorted based on First In First Out.</span>
+<span class="sd">It queries the MEx Sentinel for available Mobile Executors (MEx) and allocates and refines Jobs.</span>
+<span class="sd">Active Jobs keep track of their own progress and trigger callbacks upon finalisation.</span>
+
+<span class="sd">Note: See also the documentation below for a more detailed description.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="c1">#import actionlib</span>
+
+<span class="c1">#from JobManager.Tasks import TaskStatus, TaskType, RobotMoveBase, AwaitingLoadCompletion</span>
+<span class="kn">from</span> <span class="nn">JobManager.Job</span> <span class="kn">import</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">JobPriority</span>
+<span class="kn">from</span> <span class="nn">JobManager.Location</span> <span class="kn">import</span> <span class="n">Location</span><span class="p">,</span> <span class="n">make_location_dict</span>
+<span class="kn">from</span> <span class="nn">JobManager.JobBuilder</span> <span class="kn">import</span> <span class="n">job_builder</span>
+<span class="kn">from</span> <span class="nn">JobManager.JobActivation</span> <span class="kn">import</span> <span class="n">job_allocator</span><span class="p">,</span> <span class="n">job_refiner</span>
+<span class="kn">from</span> <span class="nn">JobManager.MobileExecutor</span> <span class="kn">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
+<span class="kn">from</span> <span class="nn">JobManager.Order</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">JobManager.JobServiceMethods</span> <span class="kn">import</span> <span class="n">call_get_mex_list</span><span class="p">,</span> <span class="n">call_unassign_job</span>
+
+<span class="kn">from</span> <span class="nn">rooster_fleet_manager.srv</span> <span class="kn">import</span> <span class="n">PlaceOrder</span><span class="p">,</span> <span class="n">PlaceOrderResponse</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">GetPendingJobsResponse</span><span class="p">,</span> \
+    <span class="n">GetActiveJobs</span><span class="p">,</span> <span class="n">GetActiveJobsResponse</span><span class="p">,</span> <span class="n">GetJobInfo</span><span class="p">,</span> <span class="n">GetJobInfoResponse</span><span class="p">,</span> \
+    <span class="n">GetMexList</span><span class="p">,</span> <span class="n">GetMexListResponse</span><span class="p">,</span> <span class="n">GetMexListRequest</span><span class="p">,</span> <span class="n">AssignJobToMex</span><span class="p">,</span> <span class="n">AssignJobToMexRequest</span>
+<span class="kn">from</span> <span class="nn">rooster_fleet_manager.msg</span> <span class="kn">import</span> <span class="n">PendingJob</span><span class="p">,</span> <span class="n">ActiveJob</span><span class="p">,</span> <span class="n">JobInfo</span><span class="p">,</span> <span class="n">TaskInfo</span>
+
+<span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s2">&quot;[job_manager] &quot;</span>
+
+<span class="c1">#region Service callback definitions</span>
+
+<span class="c1"># - PlaceOrder service callback -</span>
+<div class="viewcode-block" id="order_service_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.order_service_cb">[docs]</a><span class="k">def</span> <span class="nf">order_service_cb</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PlaceOrder service callback function.</span>
+<span class="sd">    Takes in a PlaceOrderRequest request with a order keyword, priority and arguments.</span>
+<span class="sd">    Processes these and adds the processed order in list form to the order_list.</span>
+<span class="sd">    Returns a PlaceOrderResponse response with information on if the call failed and why.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Order service has been called with: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="c1"># print(NODE_NAME + &quot;Arguments: &quot;, request.order_args, &quot;List size: &quot;, len(request.order_args) )</span>
+    <span class="n">order_response</span> <span class="o">=</span> <span class="n">PlaceOrderResponse</span><span class="p">()</span>
+
+    <span class="c1"># NOTE RUDIMENTARY ORDER PROCESSING, RIGID IN NATURE. </span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">TRANSPORT</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># Keyword: TRANSPORT.</span>
+        <span class="c1"># Expecting: transport, priority, [from_location, to_location]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">)</span> <span class="o">==</span> <span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">TRANSPORT</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">priority</span> <span class="o">=</span> <span class="n">JobPriority</span><span class="p">[</span><span class="n">request</span><span class="o">.</span><span class="n">priority</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>   <span class="c1"># Check if it&#39;s &gt;= 1 and &lt;= 4.</span>
+            <span class="n">from_loc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>        <span class="c1"># Check if it&#39;s in the known locations dictionary</span>
+            <span class="n">to_loc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>          <span class="c1"># Check if it&#39;s in the known locations dictionary</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">priority</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">priority</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">from_loc</span> <span class="ow">in</span> <span class="n">location_dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">to_loc</span> <span class="ow">in</span> <span class="n">location_dict</span><span class="p">):</span>
+                <span class="c1"># Succesful check on keyword and arguments, add order to order_list.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">SUCCES</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">order_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">request</span><span class="o">.</span><span class="n">keyword</span><span class="p">,</span> <span class="n">JobPriority</span><span class="p">(</span><span class="n">priority</span><span class="p">),</span> <span class="n">from_loc</span><span class="p">,</span> <span class="n">to_loc</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Error occured, set status to ERROR and supply erorr report.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> \
+                    <span class="s2">&quot;[TRANSPORT] Invalid priority (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">priority</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">priority</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">))</span> <span class="o">+</span> \
+                    <span class="s2">&quot;) or location argument (&quot;</span> <span class="o">+</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="ow">not</span> <span class="p">((</span><span class="n">from_loc</span> <span class="ow">in</span> <span class="n">location_dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">to_loc</span> <span class="ow">in</span> <span class="n">location_dict</span><span class="p">)))</span> <span class="o">+</span> \
+                    <span class="s2">&quot;).&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Error occured, set status to ERROR and supply erorr report.</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[TRANSPORT] Invalid number of arguments, expected &quot;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">TRANSPORT</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="s2">&quot;, received &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">))</span>
+        
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">MOVE</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>    <span class="c1"># Keyword: MOVE.</span>
+        <span class="c1"># Expecting: move, priority, [to_location]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">)</span> <span class="o">==</span> <span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">MOVE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">priority</span> <span class="o">=</span> <span class="n">JobPriority</span><span class="p">[</span><span class="n">request</span><span class="o">.</span><span class="n">priority</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>   <span class="c1"># Check if it&#39;s &gt;= 1 and &lt;= 4.</span>
+            <span class="n">to_loc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>          <span class="c1"># Check if it&#39;s in the known locations dictionary</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">priority</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">priority</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">to_loc</span> <span class="ow">in</span> <span class="n">location_dict</span><span class="p">):</span>
+                <span class="c1"># Succesful check on keyword and arguments, add order to order_list.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">SUCCES</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">order_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">request</span><span class="o">.</span><span class="n">keyword</span><span class="p">,</span> <span class="n">JobPriority</span><span class="p">(</span><span class="n">priority</span><span class="p">),</span> <span class="n">to_loc</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Error occured, set status to ERROR and supply error report.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[MOVE] Invalid priority (&quot;</span> <span class="o">+</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">priority</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">priority</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">))</span> <span class="o">+</span> \
+                    <span class="s2">&quot;) or location argument (&quot;</span> <span class="o">+</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">to_loc</span> <span class="ow">in</span> <span class="n">location_dict</span><span class="p">)</span> <span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;).&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Error occured, set status to ERROR and supply erorr report.</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[MOVE] Invalid number of arguments, expected &quot;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">MOVE</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="s2">&quot;, received &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">LOAD</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>     <span class="c1"># Keyword: LOAD</span>
+        <span class="c1"># Expecting: load, priority, []</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">)</span> <span class="o">==</span> <span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">LOAD</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">priority</span> <span class="o">=</span> <span class="n">JobPriority</span><span class="p">[</span><span class="n">request</span><span class="o">.</span><span class="n">priority</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># Check if it&#39;s &gt;= 1 and &lt;= 4.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">priority</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">priority</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">):</span>
+                <span class="c1"># Succesful check on keyword and arguments, add order to order_list.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">SUCCES</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">order_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">request</span><span class="o">.</span><span class="n">keyword</span><span class="p">,</span> <span class="n">JobPriority</span><span class="p">(</span><span class="n">priority</span><span class="p">)])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Error occured, set status to ERROR and supply error report.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[LOAD] Invalid priority.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Error occured, set status to ERROR and supply error report.</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[LOAD] Invalid number of arguments, expected &quot;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">LOAD</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="s2">&quot;, received &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">UNLOAD</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>     <span class="c1"># Keyword: UNLOAD</span>
+        <span class="c1"># Expecting: load, priority, []</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">)</span> <span class="o">==</span> <span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">UNLOAD</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">priority</span> <span class="o">=</span> <span class="n">JobPriority</span><span class="p">[</span><span class="n">request</span><span class="o">.</span><span class="n">priority</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># Check if it&#39;s &gt;= 1 and &lt;= 4.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">priority</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">priority</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">):</span>
+                <span class="c1"># Succesful check on keyword and arguments, add order to order_list.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">SUCCES</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">order_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">request</span><span class="o">.</span><span class="n">keyword</span><span class="p">,</span> <span class="n">JobPriority</span><span class="p">(</span><span class="n">priority</span><span class="p">)])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Error occured, set status to ERROR and supply error report.</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[LOAD] Invalid priority.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Error occured, set status to ERROR and supply error report.</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;[LOAD] Invalid number of arguments, expected &quot;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">OrderTypeArgCount</span><span class="o">.</span><span class="n">UNLOAD</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="s2">&quot;, received &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">order_args</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Error occured, set status to ERROR and supply erorr report.</span>
+        <span class="n">order_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="n">OrderResponseStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">order_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;Invalid keyword.&quot;</span>    <span class="c1"># Could not interpret order keyword.</span>
+
+    <span class="c1"># print(NODE_NAME + &quot;Order service is done, current order_list: &quot; + str(order_list))</span>
+    <span class="k">return</span> <span class="n">order_response</span> <span class="c1"># the service Response class, in this case PlaceOrderResponse</span></div>
+
+<span class="c1"># - GetPendingJobs service callback -</span>
+<div class="viewcode-block" id="get_pending_jobs_service_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.get_pending_jobs_service_cb">[docs]</a><span class="k">def</span> <span class="nf">get_pending_jobs_service_cb</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GetPendingJobs service callback function.</span>
+<span class="sd">    Takes in a empty request.</span>
+<span class="sd">    Returns a response with a list of all Pending Jobs and some basic information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(NODE_NAME + &quot;A service request for the Pending Jobs List has been received.&quot;)</span>
+    <span class="n">pending_jobs_response</span> <span class="o">=</span> <span class="n">GetPendingJobsResponse</span><span class="p">()</span>
+    <span class="n">pending_jobs_response</span><span class="o">.</span><span class="n">jobs_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pending_job_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">pending_job_list</span><span class="p">:</span>
+        <span class="n">pending_job</span> <span class="o">=</span> <span class="n">PendingJob</span><span class="p">()</span>
+        <span class="n">pending_job</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">priority</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">pending_job</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">pending_job</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">task_count</span>
+        <span class="n">pending_job</span><span class="o">.</span><span class="n">keyword</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">keyword</span>
+        <span class="n">pending_jobs_response</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pending_job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pending_jobs_response</span></div>
+
+<span class="c1"># - GetActiveJobs service callback -</span>
+<div class="viewcode-block" id="get_active_jobs_service_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.get_active_jobs_service_cb">[docs]</a><span class="k">def</span> <span class="nf">get_active_jobs_service_cb</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GetActiveJobs service callback function.</span>
+<span class="sd">    Takes in a empty request.</span>
+<span class="sd">    Returns a response with a list of all Active Jobs and all basic information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(NODE_NAME + &quot;A service request for the Active Jobs List has been received.&quot;)</span>
+    <span class="n">active_jobs_response</span> <span class="o">=</span> <span class="n">GetActiveJobsResponse</span><span class="p">()</span>
+    <span class="n">active_jobs_response</span><span class="o">.</span><span class="n">jobs_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">active_job_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">active_job_list</span><span class="p">:</span>
+        <span class="n">active_job</span> <span class="o">=</span> <span class="n">ActiveJob</span><span class="p">()</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">priority</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">mex_id</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">task_count</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">current_task</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">task_current</span>
+        <span class="n">active_job</span><span class="o">.</span><span class="n">keyword</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">keyword</span>
+        <span class="n">active_jobs_response</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">active_job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">active_jobs_response</span></div>
+
+<span class="c1"># - GetJobInfo service callback -</span>
+<div class="viewcode-block" id="get_job_info_service_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.get_job_info_service_cb">[docs]</a><span class="k">def</span> <span class="nf">get_job_info_service_cb</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GetJobInfo service callback function.</span>
+<span class="sd">    Takes in a request with a Job ID.</span>
+<span class="sd">    Returns a response with all information on the Job </span>
+<span class="sd">    matching the call ID, including a list of the Job&#39;s Tasks. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">job_id_to_find</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">job_id</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;A service request for the Get Job Info has been received for &quot;</span> <span class="o">+</span> <span class="n">job_id_to_find</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">job_info_response</span> <span class="o">=</span> <span class="n">GetJobInfoResponse</span><span class="p">()</span>
+    <span class="n">found_job</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">pending_job_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">job_id_to_find</span><span class="p">:</span>
+            <span class="n">found_job</span> <span class="o">=</span> <span class="n">job</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">active_job_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">job_id_to_find</span><span class="p">:</span>
+                <span class="n">found_job</span> <span class="o">=</span> <span class="n">job</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">job_info_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="s2">&quot;ERROR&quot;</span>  <span class="c1"># TODO Replace with error messages enum.</span>
+            <span class="n">job_info_response</span><span class="o">.</span><span class="n">error_report</span> <span class="o">=</span> <span class="s2">&quot;Could not find &quot;</span> <span class="o">+</span> <span class="n">job_id_to_find</span> <span class="o">+</span> <span class="s2">&quot; in pending or active job lists.&quot;</span>
+    
+    <span class="k">if</span> <span class="n">found_job</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">job_information</span> <span class="o">=</span> <span class="n">JobInfo</span><span class="p">()</span>
+        <span class="n">job_information</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">job_information</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">job_information</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">priority</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">job_information</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">mex_id</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">found_job</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">job_information</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">task_count</span> 
+        <span class="n">job_information</span><span class="o">.</span><span class="n">current_task</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">task_current</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">found_job</span><span class="o">.</span><span class="n">task_current</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">job_information</span><span class="o">.</span><span class="n">keyword</span> <span class="o">=</span> <span class="n">found_job</span><span class="o">.</span><span class="n">keyword</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">found_job</span><span class="o">.</span><span class="n">task_list</span><span class="p">:</span>
+            <span class="n">task_info</span> <span class="o">=</span> <span class="n">TaskInfo</span><span class="p">()</span>
+            <span class="n">task_info</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">task_info</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">job_information</span><span class="o">.</span><span class="n">task_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_info</span><span class="p">)</span>
+        <span class="n">job_info_response</span><span class="o">.</span><span class="n">job_info</span> <span class="o">=</span> <span class="n">job_information</span>
+        <span class="n">job_info_response</span><span class="o">.</span><span class="n">error_status</span> <span class="o">=</span> <span class="s2">&quot;SUCCES&quot;</span>
+
+    <span class="k">return</span> <span class="n">job_info_response</span></div>
+<span class="c1">#endregion</span>
+
+<span class="c1">#region Timer callback definitons</span>
+
+<span class="c1"># - Order list timer callback -</span>
+<div class="viewcode-block" id="order_list_timer_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.order_list_timer_cb">[docs]</a><span class="k">def</span> <span class="nf">order_list_timer_cb</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Order list timer callback function. Calls process_order_list function. &quot;&quot;&quot;</span>
+    <span class="c1">#print(NODE_NAME + &quot;Order list timer callback, processing order_list and building rough jobs.&quot;)</span>
+    <span class="n">process_order_list</span><span class="p">()</span></div>
+
+<span class="c1"># - Job allocator timer callback -</span>
+<div class="viewcode-block" id="job_allocator_timer_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.job_allocator_timer_cb">[docs]</a><span class="k">def</span> <span class="nf">job_allocator_timer_cb</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Job allocator timer callback function. Calls job allocator function. &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">job_allocator</span><span class="p">(</span><span class="n">pending_jobs_list</span><span class="o">=</span><span class="n">pending_job_list</span><span class="p">,</span> <span class="n">active_jobs_list</span><span class="o">=</span><span class="n">active_job_list</span><span class="p">,</span> <span class="n">mexs_list</span><span class="o">=</span><span class="n">mex_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># rospy.loginfo(&quot;Failed to allocate job.&quot;)</span>
+        <span class="k">pass</span></div>
+
+<span class="c1">#endregion</span>
+
+<span class="c1">#region Job completion callback definition</span>
+<div class="viewcode-block" id="job_completion_cb"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.job_completion_cb">[docs]</a><span class="k">def</span> <span class="nf">job_completion_cb</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">mex_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Job completion callback function, gets called when a </span>
+<span class="sd">    Jobs is finished (succesful, cancel, error or abort).</span>
+<span class="sd">    It is attached to a Job in the job_builder function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="s2">&quot;Job called the job_completion_cb function: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mex_id</span><span class="p">))</span>
+    <span class="c1"># First send update to MEx Sentinel to unassign job.</span>
+    <span class="n">call_unassign_job</span><span class="p">(</span><span class="n">mex_id</span><span class="o">=</span><span class="n">mex_id</span><span class="p">)</span>
+    <span class="c1"># Then call MEx Sentinel to provide latest MEx List.</span>
+    <span class="n">mex_list</span> <span class="o">=</span> <span class="n">call_get_mex_list</span><span class="p">()</span>
+
+    <span class="c1"># Remove completed Job from the active_job_list. </span>
+    <span class="n">index_to_pop</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">job</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">active_job_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">job_id</span><span class="p">:</span>
+            <span class="n">index_to_pop</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Couldn&#39;t find job_id in active_job_list... Handle this?</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">index_to_pop</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">active_job_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index_to_pop</span><span class="p">)</span></div>
+<span class="c1">#endregion</span>
+
+<div class="viewcode-block" id="process_order_list"><a class="viewcode-back" href="../_source/src/job_manager.html#job_manager.process_order_list">[docs]</a><span class="k">def</span> <span class="nf">process_order_list</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Build jobs from all orders in the order_list by calling </span>
+<span class="sd">    the job_builder function, then clear the order_list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">job_index</span>
+    <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">order_list</span><span class="p">:</span>
+        <span class="n">job_index</span> <span class="o">=</span> <span class="n">job_builder</span><span class="p">(</span><span class="n">pending_jobs_list</span><span class="o">=</span><span class="n">pending_job_list</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">job_index</span><span class="o">=</span><span class="n">job_index</span><span class="p">,</span> <span class="n">location_dict</span><span class="o">=</span><span class="n">location_dict</span><span class="p">,</span> <span class="n">completion_cb</span><span class="o">=</span><span class="n">job_completion_cb</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">order_list</span><span class="p">[:]</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Retrieve robots and set up a list of available MobileExecutor (MEx) instances</span>
+        <span class="n">mex_list</span> <span class="o">=</span> <span class="n">call_get_mex_list</span><span class="p">()</span>
+        <span class="c1"># for robot in robot_namespaces:</span>
+        <span class="c1">#     mex_list.append(MobileExecutor(robot))</span>
+        <span class="k">for</span> <span class="n">mex</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">NODE_NAME</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span> <span class="p">(</span><span class="n">mex</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">mex</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">mex</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+        
+        <span class="c1"># Lists for Orders, PendingJobs, ActiveJobs:</span>
+        <span class="n">order_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pending_job_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">active_job_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">job_index</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Testing the adding of multiple Location class instances, storing them in a dictionary.</span>
+        <span class="c1"># TODO Replace this with a dynamic(?) dictionary which is constructed from the MEx Sentinel.</span>
+        <span class="n">location_dict</span> <span class="o">=</span> <span class="n">make_location_dict</span><span class="p">()</span>
+        
+        <span class="c1"># Initialize the node.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;job_manager&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize services.</span>
+        <span class="n">order_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~place_order&#39;</span><span class="p">,</span> <span class="n">PlaceOrder</span> <span class="p">,</span> <span class="n">order_service_cb</span><span class="p">)</span>
+        <span class="n">get_pending_jobs_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~get_pending_jobs&#39;</span><span class="p">,</span> <span class="n">GetPendingJobs</span><span class="p">,</span> <span class="n">get_pending_jobs_service_cb</span><span class="p">)</span>
+        <span class="n">get_active_jobs_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~get_active_jobs&#39;</span><span class="p">,</span> <span class="n">GetActiveJobs</span><span class="p">,</span> <span class="n">get_active_jobs_service_cb</span><span class="p">)</span>
+        <span class="n">get_job_info_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~get_job_info&#39;</span><span class="p">,</span> <span class="n">GetJobInfo</span><span class="p">,</span> <span class="n">get_job_info_service_cb</span><span class="p">)</span>
+
+        <span class="c1"># Initialize timers for the JobBuilder, and JobAllocator.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">order_list_timer_cb</span><span class="p">)</span>     <span class="c1"># Every second check order list to try build rough jobs.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">Duration</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">job_allocator_timer_cb</span><span class="p">)</span>  <span class="c1"># Call the job_allocator in 5 seconds to try allocating jobs. </span>
+        <span class="c1"># The above job_allocator timer should be replaced with something more elegant...</span>
+
+        <span class="c1"># Keep node running.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSInterruptException</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

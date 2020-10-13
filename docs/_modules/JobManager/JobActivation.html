@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>JobManager.JobActivation &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>JobManager.JobActivation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for JobManager.JobActivation</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The Job Activation module consist of two functions, the Job Allocator and Job Refiner.</span>
+<span class="sd">The Job Allocator checks the Pending Jobs list and MExs list to assign a Job to a MEx.</span>
+<span class="sd">If the Job involves locomotion, such as MOVE and TRANSPORT Jobs, it will use the ClosestMEx module to retrieve the closest MEx instead.</span>
+<span class="sd">If a Job could be assigned, it is removed from the Pending Jobs list and passed along to the Job Refiner and a call is send to the MEx Sentinel service to update the allocated MEx&#39;s state.</span>
+<span class="sd">The Job Refiner takes in the (rough) Job and further refines it based on the allocated MEx.</span>
+<span class="sd">It then starts the Job and calls the MEx Sentinel service to update the MEx state once more. </span>
+<span class="sd">Finally the Job is appended to the Active Jobs list.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">Job</span> <span class="kn">import</span> <span class="n">JobStatus</span>
+<span class="kn">from</span> <span class="nn">MobileExecutor</span> <span class="kn">import</span> <span class="n">MExStatus</span>
+<span class="kn">from</span> <span class="nn">JobServiceMethods</span> <span class="kn">import</span> <span class="n">call_get_mex_list</span><span class="p">,</span> <span class="n">call_assign_job</span><span class="p">,</span> <span class="n">call_change_mex_status</span>
+<span class="kn">from</span> <span class="nn">Order</span> <span class="kn">import</span> <span class="n">OrderKeyword</span>
+<span class="kn">import</span> <span class="nn">ClosestMex</span> <span class="k">as</span> <span class="nn">cm</span>
+
+<span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;[JobActivation.py] &quot;</span>
+
+<span class="c1"># Job Allocator and Job Refiner.</span>
+<div class="viewcode-block" id="job_allocator"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.JobActivation.job_allocator">[docs]</a><span class="k">def</span> <span class="nf">job_allocator</span><span class="p">(</span><span class="n">pending_jobs_list</span><span class="p">,</span> <span class="n">active_jobs_list</span><span class="p">,</span> <span class="n">mexs_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Job Allocator function. Check Pending Jobs list and MExs list to assign a Job to a MEx.</span>
+
+<span class="sd">    Loops through the Pending Jobs list,</span>
+<span class="sd">    finds the first pending Job and matches it with an available MEx (Up to date mex_list retrieved from MEx Sentinel service).</span>
+<span class="sd">    If succesful, it removes this Job from the Pending Jobs list and passes</span>
+<span class="sd">    it along to the Job Refiner, sends an update to the MEx Sentinel to </span>
+<span class="sd">    update the allocated MEx state. If unsuccesful it returns None.</span>
+<span class="sd">    Should be called/triggered whenever a change is made to either list. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
+    <span class="n">error_code</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># First query the MEx Sentinal for an up-to-date MExs list.</span>
+    <span class="n">mexs_list</span> <span class="o">=</span> <span class="n">call_get_mex_list</span><span class="p">()</span>
+
+    <span class="n">allocated_job_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">job</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pending_jobs_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">allocated_job_index</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">NAME</span> <span class="o">+</span> <span class="s2">&quot;Allocated index: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">allocated_job_index</span><span class="p">))</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">PENDING</span><span class="p">:</span>
+            <span class="c1"># print(NAME + &quot;Trying for index: &quot; + str(index))</span>
+            <span class="c1"># Found a job which is still pending, now find available and/or closest MEx.</span>
+            <span class="c1"># First differentiate between Jobs that require a closest MEx and Jobs that do not.</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">MOVE</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="n">job</span><span class="o">.</span><span class="n">keyword</span> <span class="o">==</span> <span class="n">OrderKeyword</span><span class="o">.</span><span class="n">TRANSPORT</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="c1"># Find Closest MEx</span>
+                <span class="n">mex_id</span><span class="p">,</span> <span class="n">mex_distance</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">choose_closest_mex</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">task_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>   <span class="c1"># First task in MOVE or TRANSPORT is RobotMoveBase which has attribute location.</span>
+                <span class="k">if</span> <span class="n">mex_id</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">job</span><span class="o">.</span><span class="n">assign_mex</span><span class="p">(</span><span class="n">mex_id</span><span class="p">)</span>
+                    <span class="n">allocated_job_index</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Distance does not matter, so find first available MEx in the list.</span>
+                <span class="k">for</span> <span class="n">mex</span> <span class="ow">in</span> <span class="n">mexs_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">mex</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">STANDBY</span><span class="p">:</span>
+                        <span class="c1"># Found a MEx which is available (standby)</span>
+                        <span class="c1"># Check if the job has not got a MEx pre-assigned OR the pre-assigned mex_id matches the MEx&#39;s id</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">mex_id</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">==</span> <span class="n">mex</span><span class="o">.</span><span class="n">id</span><span class="p">):</span> 
+                            <span class="n">mex</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">ASSIGNED</span>
+                            <span class="n">mex</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span>
+                            <span class="n">job</span><span class="o">.</span><span class="n">assign_mex</span><span class="p">(</span><span class="n">mex</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                            <span class="n">allocated_job_index</span> <span class="o">=</span> <span class="n">index</span>
+                            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Loop ended without a break</span>
+        <span class="n">error_code</span> <span class="o">=</span> <span class="mi">1</span>      <span class="c1"># Could not allocate Job to MEx.</span>
+
+    <span class="k">if</span> <span class="n">allocated_job_index</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rough_job</span> <span class="o">=</span> <span class="n">pending_jobs_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">allocated_job_index</span><span class="p">)</span>  <span class="c1"># Removes the allocated job from the Pending Jobs lists.</span>
+        <span class="n">call_assign_job</span><span class="p">(</span><span class="n">rough_job</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">rough_job</span><span class="o">.</span><span class="n">mex_id</span><span class="p">)</span>         <span class="c1"># Send update to MEx Sentinel to update the assigned MEx state.</span>
+
+        <span class="k">return</span> <span class="n">job_refiner</span><span class="p">(</span><span class="n">active_jobs_list</span><span class="p">,</span> <span class="n">mexs_list</span><span class="p">,</span> <span class="n">rough_job</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">error_code</span>     <span class="c1"># Failed to allocate any pending jobs.</span></div>
+
+
+<div class="viewcode-block" id="job_refiner"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.JobActivation.job_refiner">[docs]</a><span class="k">def</span> <span class="nf">job_refiner</span><span class="p">(</span><span class="n">active_jobs_list</span><span class="p">,</span> <span class="n">mexs_list</span><span class="p">,</span> <span class="n">rough_job</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Job Refiner function.</span>
+<span class="sd">    Takes in a rough job and based on the allocated MEx refines the Jobs Tasks to match MEx attributes.</span>
+<span class="sd">    Starts the Job, sends update to the MEx Sentinel to update the MEx state and </span>
+<span class="sd">    then adds the refined Job to the Active Jobs list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">refined_job</span> <span class="o">=</span> <span class="n">rough_job</span>
+    <span class="c1"># TODO Refine the Job&#39;s tasks based on the rough job&#39;s tasks and the assigned MEx attributes.</span>
+
+    <span class="n">refined_job</span><span class="o">.</span><span class="n">start_job</span><span class="p">()</span>
+    <span class="c1"># Update local copy of MEx Sentinel mex_list (TODO Check: Does this change job_manager mex_list?)</span>
+    <span class="k">for</span> <span class="n">mex</span> <span class="ow">in</span> <span class="n">mexs_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mex</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">refined_job</span><span class="o">.</span><span class="n">mex_id</span> <span class="ow">and</span> <span class="n">mex</span><span class="o">.</span><span class="n">job_id</span> <span class="o">==</span> <span class="n">refined_job</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="n">mex</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">EXECUTING_TASK</span>
+    
+    <span class="c1"># Send update to MEx Sentinel to update the started MEx state.</span>
+    <span class="n">call_change_mex_status</span><span class="p">(</span><span class="n">refined_job</span><span class="o">.</span><span class="n">mex_id</span><span class="p">,</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">EXECUTING_TASK</span><span class="p">)</span>
+
+    <span class="n">active_jobs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refined_job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>    <span class="c1"># Return a 0, no errors.</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

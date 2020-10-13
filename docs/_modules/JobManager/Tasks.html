@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>JobManager.Tasks &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>JobManager.Tasks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for JobManager.Tasks</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The Tasks module is used by the Job Manager ROS node and Job module to store information and status of Tasks as class instances.</span>
+<span class="sd">Each Task has its own class, which inherits from a base Task class. For more information on each class see the descriptions below.</span>
+<span class="sd">Next to the Task classes the module also contains class definitions for the Task Type and Task Status enumerators.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">from</span> <span class="nn">move_base_msgs.msg</span> <span class="kn">import</span> <span class="n">MoveBaseAction</span><span class="p">,</span> <span class="n">MoveBaseGoal</span>
+<span class="kn">from</span> <span class="nn">tf.transformations</span> <span class="kn">import</span> <span class="n">quaternion_from_euler</span>
+<span class="kn">from</span> <span class="nn">std_msgs.msg</span> <span class="kn">import</span> <span class="n">UInt8</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="c1">#region ################## TODOLIST ########################</span>
+<span class="c1"># DONE 1. Add Task class and make other task classes inherit from it.</span>
+<span class="c1">#endregion #################################################</span>
+
+<div class="viewcode-block" id="TaskType"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.TaskType">[docs]</a><span class="k">class</span> <span class="nc">TaskType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that acts as an enum for the different kinds of tasks.&quot;&quot;&quot;</span>
+    <span class="n">ROBOTMOVEBASE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">AWAITINGLOADCOMPLETION</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">AWAITINGUNLOADCOMPLETION</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="TaskStatus"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.TaskStatus">[docs]</a><span class="k">class</span> <span class="nc">TaskStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class that acts as Enumerator for Task status. &quot;&quot;&quot;</span>
+    <span class="c1"># 0 = PENDING, 1 = ACTIVE, 2 = CANCELLED, 3 = SUCCEEDED, 4 = ABORTED</span>
+    <span class="n">PENDING</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ACTIVE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">CANCELLED</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">SUCCEEDED</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">ABORTED</span> <span class="o">=</span> <span class="mi">4</span></div>
+
+<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class from which specific child task classes inherit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasktype</span><span class="p">,</span> <span class="n">child_start</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="kc">None</span>                          <span class="c1"># ID of the MEx to perform the task on/with</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">PENDING</span>        <span class="c1"># Status of this task.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">tasktype</span>                    <span class="c1"># Type of the task, defined by child.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_start</span> <span class="o">=</span> <span class="n">child_start</span>          <span class="c1"># The child&#39;s task specific start method.</span>
+    
+<div class="viewcode-block" id="Task.start"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.Task.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mex_id</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">job_callback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start the task&#39;s specific action.</span>
+<span class="sd">        All job tasks should have this method (through inheritance): &#39;start&#39;, with these</span>
+<span class="sd">        arguments: &#39;self&#39;, &#39;mex_id&#39;, &#39;task_id&#39;, &#39;job_callback&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">mex_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span> <span class="o">=</span> <span class="n">task_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_callback</span> <span class="o">=</span> <span class="n">job_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ACTIVE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Task.get_status"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.Task.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the status of the task. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span></div></div>
+
+
+<div class="viewcode-block" id="RobotMoveBase"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.RobotMoveBase">[docs]</a><span class="k">class</span> <span class="nc">RobotMoveBase</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Task class: RobotMoveBase, implements move_base action calls to robot navigation stack.</span>
+<span class="sd">    Used by the higher level Job class to populate a list with its job tasks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RobotMoveBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">TaskType</span><span class="o">.</span><span class="n">ROBOTMOVEBASE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_robot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>            <span class="c1"># location of the goal of the move_base.</span>
+
+    <span class="c1">#region Callback definitions</span>
+<div class="viewcode-block" id="RobotMoveBase.active_cb"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.RobotMoveBase.active_cb">[docs]</a>    <span class="k">def</span> <span class="nf">active_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback for starting move_base action.</span>
+<span class="sd">        Connected to actionlib send_goal call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Goal pose being processed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RobotMoveBase.feedback_cb"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.RobotMoveBase.feedback_cb">[docs]</a>    <span class="k">def</span> <span class="nf">feedback_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback for continuous feedback of move_base position.</span>
+<span class="sd">        Connected to actionlib send_goal call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>    <span class="c1"># Don&#39;t spam the console for now..</span></div>
+        <span class="c1"># rospy.loginfo(&quot;Current location: &quot;+str(feedback))</span>
+
+<div class="viewcode-block" id="RobotMoveBase.done_cb"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.RobotMoveBase.done_cb">[docs]</a>    <span class="k">def</span> <span class="nf">done_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback for stopping of goal.</span>
+<span class="sd">        Connected to actionlib send_goal call.</span>
+<span class="sd">        move_base callback status options: PENDING=0, ACTIVE=1, PREEMPTED=2, SUCCEEDED=3,</span>
+<span class="sd">        ABORTED=4, REJECTED=5, PREEMPTING=6, RECALLING=7, RECALLED=8, LOST=9.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Goal reached&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">CANCELLED</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Goal cancelled&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ABORTED</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Goal aborted&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_callback</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_callback</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">])</span></div>
+    <span class="c1">#endregion</span>
+
+<div class="viewcode-block" id="RobotMoveBase.move_robot"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.RobotMoveBase.move_robot">[docs]</a>    <span class="k">def</span> <span class="nf">move_robot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start a move_base action using actionlib. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navclient</span> <span class="o">=</span> <span class="n">actionlib</span><span class="o">.</span><span class="n">SimpleActionClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39;/move_base&#39;</span><span class="p">,</span><span class="n">MoveBaseAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navclient</span><span class="o">.</span><span class="n">wait_for_server</span><span class="p">()</span>
+
+        <span class="n">goal</span> <span class="o">=</span> <span class="n">MoveBaseGoal</span><span class="p">()</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="s2">&quot;map&quot;</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">quaternion</span> <span class="o">=</span> <span class="n">quaternion_from_euler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">quaternion</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">quaternion</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">quaternion</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">quaternion</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">navclient</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span> <span class="n">done_cb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">done_cb</span><span class="p">,</span> <span class="n">active_cb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">active_cb</span><span class="p">,</span> <span class="n">feedback_cb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feedback_cb</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="RobotMoveBase.get_status"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.RobotMoveBase.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Overwrites base class get_status, but inherits using super().</span>
+<span class="sd">        Retrieve the status of the move_base action. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">navclient</span><span class="p">:</span>
+            <span class="c1"># navclient state options: PENDING=0, ACTIVE=1, PREEMPTED=2, SUCCEEDED=3,</span>
+            <span class="c1"># ABORTED=4, REJECTED=5, PREEMPTING=6, RECALLING=7, RECALLED=8, LOST=9.</span>
+            <span class="n">navclient_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">navclient</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ACTIVE</span>
+            <span class="k">elif</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">or</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">CANCELLED</span>
+            <span class="k">elif</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span>
+            <span class="k">elif</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">4</span> <span class="ow">or</span> <span class="n">navclient_state</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ACTIVE</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">RobotMoveBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="AwaitingLoadCompletion"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.AwaitingLoadCompletion">[docs]</a><span class="k">class</span> <span class="nc">AwaitingLoadCompletion</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Task class: AwaitingLoadCompletion, waits for input from user or system to mark loading of the MEx as succeeded, cancelled, aborted.</span>
+<span class="sd">    Used by the higher level Job class to populate a list with its job tasks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AwaitingLoadCompletion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">TaskType</span><span class="o">.</span><span class="n">AWAITINGLOADCOMPLETION</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_start</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AwaitingLoadCompletion.child_start"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.AwaitingLoadCompletion.child_start">[docs]</a>    <span class="k">def</span> <span class="nf">child_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start the task&#39;s specific action, subscribing to the /LoadInput topic on the MEx&#39;s namespace. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_subcriber</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;/LoadInput&quot;</span><span class="p">,</span> <span class="n">UInt8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_cb</span><span class="p">)</span>	<span class="c1"># Subscribe to /&#39;mex_id&#39;/LoadInput topic to listen for published user/system input.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Awaiting load completion input...&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="AwaitingLoadCompletion.input_cb"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.AwaitingLoadCompletion.input_cb">[docs]</a>    <span class="k">def</span> <span class="nf">input_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback method for any user or system input.</span>
+<span class="sd">        Updates the instance status and calls the higher level job_callback.</span>
+<span class="sd">        load status option: PENDING=0 ACTIVE=1, CANCELLED=2, SUCCEEDED=3,</span>
+<span class="sd">        ABORTED=4.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_callback</span><span class="p">:</span>      <span class="c1"># Only process callback if this task was started.</span>
+            <span class="c1"># Input received from user/system,</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="c1"># Loading was completed succesfully.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span>
+            <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="c1"># Loading was cancelled by user.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">CANCELLED</span>
+            <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="c1"># Loading encountered an error and had to abort.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">ABORTED</span>
+            
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>   <span class="c1"># User input meaning some kind of end: cancel, succes or abort.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">input_subcriber</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>   <span class="c1"># Unsubscribe to topic, as this task of the job is done.</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_callback</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">])</span>     <span class="c1"># Call the higher level Job callback.</span></div></div>
+
+<div class="viewcode-block" id="AwaitingUnloadCompletion"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.AwaitingUnloadCompletion">[docs]</a><span class="k">class</span> <span class="nc">AwaitingUnloadCompletion</span><span class="p">(</span><span class="n">AwaitingLoadCompletion</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Task class: AwaitingUnloadCompletion, waits for input from user or system to mark unloading of the MEx as succeeded, cancelled, aborted.</span>
+<span class="sd">    Used by the higher level Job class to populate a list with its job tasks.</span>
+<span class="sd">    Inherets from AwaitingLoadCompletion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AwaitingUnloadCompletion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">TaskType</span><span class="o">.</span><span class="n">AWAITINGUNLOADCOMPLETION</span>
+    
+<div class="viewcode-block" id="AwaitingUnloadCompletion.child_start"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Tasks.AwaitingUnloadCompletion.child_start">[docs]</a>    <span class="k">def</span> <span class="nf">child_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start the task&#39;s specific action, subscribing to the /UnloadInput topic on the MEx&#39;s namespace. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_subcriber</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;/UnloadInput&quot;</span><span class="p">,</span> <span class="n">UInt8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_cb</span><span class="p">)</span> <span class="c1"># Subscribe to /&#39;mex_id&#39;/UnloadInput topic to listen for published user/system input.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;. Awaiting unload completion input...&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

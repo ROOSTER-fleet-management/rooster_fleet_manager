@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mex_sentinel ROS node &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="fleet_manager_front module" href="fleet_manager_front.html" />
+    <link rel="prev" title="job_manager ROS node" href="job_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../SrcLandingPage.html">ROS nodes and source code API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="job_manager.html">job_manager ROS node</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">mex_sentinel ROS node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-mex_sentinel">mex_sentinel module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fleet_manager_front.html">fleet_manager_front module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marker_array.html">marker_array ROS node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="JobManager.html">JobManager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui.html">ui package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../SrcLandingPage.html">ROS nodes and source code API</a> &raquo;</li>
+        
+      <li>mex_sentinel ROS node</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/_source/src/mex_sentinel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mex-sentinel-ros-node">
+<h1>mex_sentinel ROS node<a class="headerlink" href="#mex-sentinel-ros-node" title="Permalink to this headline">¶</a></h1>
+<p>The MEx Sentinel is a ROS node that holds the latest information about Mobile Executors (MExs). It hosts services for retrieving and editing the MEx information:</p>
+<blockquote>
+<div><ul class="simple">
+<li>get_mex_list</li>
+<li>assign_job_to_mex</li>
+<li>unassign_job_from_mex</li>
+<li>get_mex_status</li>
+<li>change_mex_status</li>
+</ul>
+</div></blockquote>
+<p>Note: In its current state the MEx information is only stored in memory and no data is logged. It is however envisioned that the MEx Sentinel will interact with (reads/writes from/to) a database for maintaining long term records
+(i.e. acts as front end to a database server like SQLite or MySQL).</p>
+<div class="section" id="module-mex_sentinel">
+<span id="mex-sentinel-module"></span><h2>mex_sentinel module<a class="headerlink" href="#module-mex_sentinel" title="Permalink to this headline">¶</a></h2>
+<p>The MEx Sentinel ROS node keeps track of all information about the Mobile Executors (MExs). It provides services for retrieving and editing the MEx information.
+More information on each (callback) function can be found below.</p>
+<dl class="function">
+<dt id="mex_sentinel.assign_job">
+<code class="descclassname">mex_sentinel.</code><code class="descname">assign_job</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#assign_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.assign_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>AssignJob service callback function.
+Takes in a MEx ID and Job ID and assigns the Job to the MEx,
+updating it’s information.
+Returns a flag if the call was handled succesfully.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mex_sentinel.change_mex_status">
+<code class="descclassname">mex_sentinel.</code><code class="descname">change_mex_status</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#change_mex_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.change_mex_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>ChangeMexStatus service callback function.
+Takes in a MEx ID and status.
+Updates status of the MobileExecutor in the MEx list matching
+the provided ID.
+Returns a response with a flag if the call was handled succesfully.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mex_sentinel.get_mex_list">
+<code class="descclassname">mex_sentinel.</code><code class="descname">get_mex_list</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#get_mex_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.get_mex_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>GetMexList service callback function. 
+Takes in a empty request.
+Returns a GetMexListResponse response with 
+a list of MexInfo objects for each MExs and
+a flag if the call was handled succesfully.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mex_sentinel.get_mex_status">
+<code class="descclassname">mex_sentinel.</code><code class="descname">get_mex_status</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#get_mex_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.get_mex_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>GetMexStatus service callback function.
+Takes in a MEx ID. 
+Returns a response with the MEx status and Job ID, and a 
+flag if the call was handled succesfully.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mex_sentinel.mex_list_info">
+<code class="descclassname">mex_sentinel.</code><code class="descname">mex_list_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#mex_list_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.mex_list_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>MexListInfo publish function. 
+Sets up a published on the local /mex_list_info topic, publishing
+information on all MobileExecutors in the MEx list at a rate of 1 Hz.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mex_sentinel.mobile_executor_initialization">
+<code class="descclassname">mex_sentinel.</code><code class="descname">mobile_executor_initialization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#mobile_executor_initialization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.mobile_executor_initialization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which is called once to initialize MobileExecutors
+and add them the MEx list based on the ROS parameter server.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mex_sentinel.unassign_job">
+<code class="descclassname">mex_sentinel.</code><code class="descname">unassign_job</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mex_sentinel.html#unassign_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mex_sentinel.unassign_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>UnassignJob service callback function.
+Takes in a MEx ID and Job ID and unassigns the Job from the MEx,
+updating it’s information.
+Returns a flag if the call was handled succesfully.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="fleet_manager_front.html" class="btn btn-neutral float-right" title="fleet_manager_front module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="job_manager.html" class="btn btn-neutral float-left" title="job_manager ROS node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

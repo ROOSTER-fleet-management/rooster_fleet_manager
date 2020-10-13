@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mex_sentinel &mdash; simple_sim 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> simple_sim
+          
+
+          
+            
+            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Stuff to know:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_source/Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/MsgLandingPage.html">ROS messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_source/SrvLandingPage.html">ROS Services</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">simple_sim</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>mex_sentinel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mex_sentinel</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The MEx Sentinel ROS node keeps track of all information about the Mobile Executors (MExs). It provides services for retrieving and editing the MEx information.</span>
+<span class="sd">More information on each (callback) function can be found below.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">from</span> <span class="nn">rooster_fleet_manager.srv</span> <span class="kn">import</span> <span class="n">AssignJobToMex</span><span class="p">,</span> <span class="n">AssignJobToMexResponse</span><span class="p">,</span> <span class="n">UnassignJobFromMex</span><span class="p">,</span> <span class="n">UnassignJobFromMexResponse</span><span class="p">,</span> <span class="n">ChangeMexStatus</span><span class="p">,</span> <span class="n">ChangeMexStatusResponse</span><span class="p">,</span> <span class="n">GetMexStatus</span><span class="p">,</span> <span class="n">GetMexStatusResponse</span><span class="p">,</span> <span class="n">GetMexList</span><span class="p">,</span> <span class="n">GetMexListResponse</span>
+<span class="kn">from</span> <span class="nn">rooster_fleet_manager.msg</span> <span class="kn">import</span> <span class="n">MexInfo</span><span class="p">,</span> <span class="n">MexListInfo</span>
+<span class="kn">from</span> <span class="nn">JobManager.MobileExecutor</span> <span class="kn">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
+
+<span class="c1"># Make mex_list global</span>
+<span class="n">mex_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="mobile_executor_initialization"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.mobile_executor_initialization">[docs]</a><span class="k">def</span> <span class="nf">mobile_executor_initialization</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function which is called once to initialize MobileExecutors</span>
+<span class="sd">    and add them the MEx list based on the ROS parameter server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Read robot_list from ROS parameter server. Robotnames are strings.</span>
+    <span class="n">robot_namespaces</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;/robot_list&quot;</span><span class="p">)</span>
+    <span class="c1"># Go through the robot list, extract each name and create MobileExecutor object with that name, then append to the MEx list.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">robot_namespaces</span><span class="p">:</span>
+        <span class="n">robot_name</span> <span class="o">=</span> <span class="n">i</span> 
+        <span class="n">robot_instance</span> <span class="o">=</span> <span class="n">MobileExecutor</span><span class="p">(</span><span class="n">robot_name</span><span class="p">)</span>
+        <span class="n">mex_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">robot_instance</span><span class="p">)</span></div>
+
+<span class="c1">#service to provide all mex with status</span>
+<div class="viewcode-block" id="get_mex_list"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.get_mex_list">[docs]</a><span class="k">def</span> <span class="nf">get_mex_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GetMexList service callback function. </span>
+<span class="sd">    Takes in a empty request.</span>
+<span class="sd">    Returns a GetMexListResponse response with </span>
+<span class="sd">    a list of MexInfo objects for each MExs and</span>
+<span class="sd">    a flag if the call was handled succesfully.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">GetMexListResponse</span><span class="p">()</span> <span class="c1"># Initialize mex list and bool success to return.</span>
+
+    <span class="c1"># Making new list of MexInfo objects by copying each mex from original mex_info list.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span>
+        <span class="n">mex</span> <span class="o">=</span> <span class="n">MexInfo</span><span class="p">()</span>
+        <span class="n">mex</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">mex</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="c1"># Return the status as the Enum&#39;s name (string)</span>
+        <span class="n">mex</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">mex_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mex</span><span class="p">)</span> <span class="c1"># Add current object to the response list.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">mex_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mex_list</span><span class="p">):</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="assign_job"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.assign_job">[docs]</a><span class="k">def</span> <span class="nf">assign_job</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    AssignJob service callback function.</span>
+<span class="sd">    Takes in a MEx ID and Job ID and assigns the Job to the MEx,</span>
+<span class="sd">    updating it&#39;s information.</span>
+<span class="sd">    Returns a flag if the call was handled succesfully.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">assignment</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1">#flag</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">mex_id</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">job_id</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">ASSIGNED</span>
+            <span class="n">assignment</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">assignment</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">AssignJobToMexResponse</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">AssignJobToMexResponse</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="unassign_job"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.unassign_job">[docs]</a><span class="k">def</span> <span class="nf">unassign_job</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    UnassignJob service callback function.</span>
+<span class="sd">    Takes in a MEx ID and Job ID and unassigns the Job from the MEx,</span>
+<span class="sd">    updating it&#39;s information.</span>
+<span class="sd">    Returns a flag if the call was handled succesfully.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unassignment</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1">#flag</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">mex_id</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">STANDBY</span>
+            <span class="n">unassignment</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">unassignment</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">UnassignJobFromMexResponse</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">UnassignJobFromMexResponse</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">response</span></div>
+
+<span class="c1">#callback function for service that return status of a certain MEx</span>
+<div class="viewcode-block" id="get_mex_status"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.get_mex_status">[docs]</a><span class="k">def</span> <span class="nf">get_mex_status</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GetMexStatus service callback function.</span>
+<span class="sd">    Takes in a MEx ID. </span>
+<span class="sd">    Returns a response with the MEx status and Job ID, and a </span>
+<span class="sd">    flag if the call was handled succesfully.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1">#flag that is used for indicating successful search of MEx in MEx list</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">GetMexStatusResponse</span><span class="p">()</span> <span class="c1">#create response object </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span> <span class="c1">#search for MEx in MEx list</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">mex_id</span><span class="p">:</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">mex_status</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="c1">#MEx status query &#39;name&#39; method from enum object returns text</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span> <span class="c1">#if we found requested Mex in the list, together with status and job id we return bool success </span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">response</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="change_mex_status"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.change_mex_status">[docs]</a><span class="k">def</span> <span class="nf">change_mex_status</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ChangeMexStatus service callback function.</span>
+<span class="sd">    Takes in a MEx ID and status.</span>
+<span class="sd">    Updates status of the MobileExecutor in the MEx list matching</span>
+<span class="sd">    the provided ID.</span>
+<span class="sd">    Returns a response with a flag if the call was handled succesfully.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">mex_id</span><span class="p">:</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MExStatus</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">mex_new_status</span><span class="p">)</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">ChangeMexStatusResponse</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">ChangeMexStatusResponse</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="mex_list_info"><a class="viewcode-back" href="../_source/src/mex_sentinel.html#mex_sentinel.mex_list_info">[docs]</a><span class="k">def</span> <span class="nf">mex_list_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    MexListInfo publish function. </span>
+<span class="sd">    Sets up a published on the local /mex_list_info topic, publishing</span>
+<span class="sd">    information on all MobileExecutors in the MEx list at a rate of 1 Hz.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pub</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s1">&#39;~mex_list_info&#39;</span><span class="p">,</span> <span class="n">MexListInfo</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Rate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 1hz</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+        <span class="c1"># Loop here, publishing the MexListInfo message with a list of MexInfo objects at the specified rate.</span>
+        <span class="n">mexlistinfo</span> <span class="o">=</span> <span class="n">MexListInfo</span><span class="p">()</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">total_mex_number</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mex_list</span><span class="p">)</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">standby</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">charging</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">assigned</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">executing_task</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mex_list</span><span class="p">:</span>
+            <span class="n">mex_info</span> <span class="o">=</span> <span class="n">MexInfo</span><span class="p">()</span>
+            <span class="n">mex_info</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">mex_info</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">mex_info</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+            <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">mex_list_info_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mex_info</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">STANDBY</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">standby</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">CHARGING</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">charging</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">ASSIGNED</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">assigned</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">EXECUTING_TASK</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">executing_task</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">MExStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">mexlistinfo</span><span class="o">.</span><span class="n">error</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">pub</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">mexlistinfo</span><span class="p">)</span>
+        <span class="n">rate</span><span class="o">.</span><span class="n">sleep</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Initialize mobile executors</span>
+        <span class="n">mobile_executor_initialization</span><span class="p">()</span>
+
+        <span class="c1"># Initialize node.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;mex_sentinel&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize services.</span>
+        <span class="n">get_mex_list_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~get_mex_list&#39;</span><span class="p">,</span> <span class="n">GetMexList</span><span class="p">,</span> <span class="n">get_mex_list</span><span class="p">)</span>
+        <span class="n">assign_job_to_mex_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~assign_job_to_mex&#39;</span><span class="p">,</span> <span class="n">AssignJobToMex</span><span class="p">,</span> <span class="n">assign_job</span><span class="p">)</span>
+        <span class="n">unassign_job_from_mex_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~unassign_job_from_mex&#39;</span><span class="p">,</span> <span class="n">UnassignJobFromMex</span><span class="p">,</span> <span class="n">unassign_job</span><span class="p">)</span>
+        <span class="n">get_mex_status_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~get_mex_status&#39;</span><span class="p">,</span> <span class="n">GetMexStatus</span><span class="p">,</span> <span class="n">get_mex_status</span><span class="p">)</span>
+        <span class="n">change_mex_status_service</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;~change_mex_status&#39;</span><span class="p">,</span> <span class="n">ChangeMexStatus</span><span class="p">,</span> <span class="n">change_mex_status</span><span class="p">)</span>
+
+        <span class="c1"># Initialise mex list publisher </span>
+        <span class="n">mex_list_info</span><span class="p">()</span>
+
+        <span class="c1"># Maintain the services open.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSInterruptException</span><span class="p">:</span>
+        <span class="c1"># Handle InterruptExceptions without crashing.</span>
+        <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Denis Patrick Neel
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
