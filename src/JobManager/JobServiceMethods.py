@@ -13,7 +13,7 @@ It contains functions for calling the following services:
 
 import rospy
 
-from simple_sim.srv import GetMexListRequest, GetMexList, AssignJobToMex, AssignJobToMexRequest, \
+from rooster_fleet_manager.srv import GetMexListRequest, GetMexList, AssignJobToMex, AssignJobToMexRequest, \
     ChangeMexStatus, ChangeMexStatusRequest, UnassignJobFromMex, UnassignJobFromMexRequest
 from MobileExecutor import MExStatus, MobileExecutor
 

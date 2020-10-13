@@ -28,10 +28,10 @@ from JobManager.MobileExecutor import MExStatus, MobileExecutor
 from JobManager.Order import *
 from JobManager.JobServiceMethods import call_get_mex_list, call_unassign_job
 
-from simple_sim.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, \
+from rooster_fleet_manager.srv import PlaceOrder, PlaceOrderResponse, GetPendingJobs, GetPendingJobsResponse, \
     GetActiveJobs, GetActiveJobsResponse, GetJobInfo, GetJobInfoResponse, \
     GetMexList, GetMexListResponse, GetMexListRequest, AssignJobToMex, AssignJobToMexRequest
-from simple_sim.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
+from rooster_fleet_manager.msg import PendingJob, ActiveJob, JobInfo, TaskInfo
 
 NODE_NAME = "[job_manager] "
 

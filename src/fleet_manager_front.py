@@ -12,8 +12,8 @@ import sys
 import rospy
 from PyQt4 import QtGui, QtCore
 
-from simple_sim.srv import PlaceOrder, PlaceOrderRequest, GetPendingJobs, GetPendingJobsRequest, GetActiveJobs, GetActiveJobsRequest
-from simple_sim.msg import MexListInfo
+from rooster_fleet_manager.srv import PlaceOrder, PlaceOrderRequest, GetPendingJobs, GetPendingJobsRequest, GetActiveJobs, GetActiveJobsRequest
+from rooster_fleet_manager.msg import MexListInfo
 from ui import fleet_manager_ui
 from JobManager.Order import *
 from JobManager.Job import JobStatus, Job, JobPriority
@@ -210,7 +210,7 @@ class GuiMainWindow(fleet_manager_ui.Ui_MainWindow, QtGui.QMainWindow):
         text = "<center>" \
             "<h2>"+APPLICATION_TITLE+"</h2>" \
             "</center>" \
-            "The ROS package simple_sim is created by the Human " \
+            "The ROS package rooster_fleet_manager is created by the Human " \
             "Robot Co-production research group at the Industrial Design " \
             "Engineering faculty of the Delft University of Technology." \
             "<p>Version: "+VERSION+"<br/>" \

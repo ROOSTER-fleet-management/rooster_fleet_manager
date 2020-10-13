@@ -6,8 +6,8 @@ More information on each (callback) function can be found below.
 """
 
 import rospy
-from simple_sim.srv import AssignJobToMex, AssignJobToMexResponse, UnassignJobFromMex, UnassignJobFromMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse, GetMexList, GetMexListResponse
-from simple_sim.msg import MexInfo, MexListInfo
+from rooster_fleet_manager.srv import AssignJobToMex, AssignJobToMexResponse, UnassignJobFromMex, UnassignJobFromMexResponse, ChangeMexStatus, ChangeMexStatusResponse, GetMexStatus, GetMexStatusResponse, GetMexList, GetMexListResponse
+from rooster_fleet_manager.msg import MexInfo, MexListInfo
 from JobManager.MobileExecutor import MExStatus, MobileExecutor
 
 # Make mex_list global

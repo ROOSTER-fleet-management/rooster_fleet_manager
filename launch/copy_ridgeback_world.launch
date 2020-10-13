@@ -2,7 +2,7 @@
   <arg name="use_sim_time" default="true" />
   <arg name="gui" default="true" />
   <arg name="headless" default="false" />
-  <arg name="world_name" default="$(find simple_sim)/worlds/ridgeback_race.world" />
+  <arg name="world_name" default="$(find rooster_fleet_manager)/worlds/ridgeback_race.world" />
 
   <!-- Configuration of Ridgeback which you would like to simulate.
        See ridgeback_description for details. -->
