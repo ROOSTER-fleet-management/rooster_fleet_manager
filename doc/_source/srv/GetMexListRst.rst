@@ -5,4 +5,4 @@ The `GetMexList.srv`_ is a service message which takes in no arguments and retur
 
 The service is hosted by the MEx Sentinel.
 
-.. _GetMexList.srv: ../../srv/GetMexList.html
+.. _GetMexList.srv: ../srv/GetMexList.html

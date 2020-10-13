@@ -19,3 +19,4 @@ fi
 /bin/cp -r doc/html/python/* docs/
 /bin/cp -r doc/html/msg/ docs/
 /bin/cp -r doc/html/srv/ docs/
+/bin/cp doc/html/msg-styles.css docs/

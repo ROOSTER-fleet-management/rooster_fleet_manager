@@ -5,4 +5,4 @@ The `GetActiveJobs.srv`_ is a service message which takes in no arguments and re
 
 The service is hosted by the Job Manager.
 
-.. _GetActiveJobs.srv: ../../srv/GetActiveJobs.html
+.. _GetActiveJobs.srv: ../srv/GetActiveJobs.html
