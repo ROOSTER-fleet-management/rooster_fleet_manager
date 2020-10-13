@@ -5,4 +5,4 @@ The `PendingJob.msg`_ message type is used to send information about a specific 
 
 It contains information such as the Job ID, it's priority, the number of tasks it has, and a keyword signifying the type of Job.
 
-.. _PendingJob.msg: ../../msg/PendingJob.html
+.. _PendingJob.msg: ../msg/PendingJob.html
