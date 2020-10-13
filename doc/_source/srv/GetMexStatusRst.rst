@@ -5,4 +5,4 @@ The `GetMexStatus.srv`_ is a service message which takes in a 'MEx ID' string an
 
 The service is hosted by the MEx Sentinel.
 
-.. _GetMexStatus.srv: ../../srv/GetMexStatus.html
+.. _GetMexStatus.srv: ../srv/GetMexStatus.html
