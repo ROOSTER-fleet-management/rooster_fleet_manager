@@ -5,4 +5,4 @@ The `ActiveJob.msg`_ message type is used to send information about a specific A
 
 It contains information such as the Job ID, it's status, priority, linked MobileExecutor ID, the number of tasks it has, the current task index, and a keyword signifying the type of Job.
 
-.. _ActiveJob.msg: ../../msg/ActiveJob.html
+.. _ActiveJob.msg: ../msg/ActiveJob.html

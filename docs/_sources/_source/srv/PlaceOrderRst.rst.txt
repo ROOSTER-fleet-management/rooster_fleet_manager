@@ -5,4 +5,4 @@ The `PlaceOrder.srv`_ is a service message which takes in a 'Keyword' string, a 
 
 The service is hosted by the Job Manager.
 
-.. _PlaceOrder.srv: ../../srv/PlaceOrder.html
+.. _PlaceOrder.srv: ../srv/PlaceOrder.html

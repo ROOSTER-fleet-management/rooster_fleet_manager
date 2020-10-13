@@ -5,4 +5,4 @@ The `GetJobInfo.srv`_ is a service message which takes in a 'Job ID' string and 
 
 The service is hosted by the Job Manager.
 
-.. _GetJobInfo.srv: ../../srv/GetJobInfo.html
+.. _GetJobInfo.srv: ../srv/GetJobInfo.html

@@ -5,4 +5,4 @@ The `GetPendingJobs.srv`_ is a service message which takes in no arguments and r
 
 The service is hosted by the Job Manager.
 
-.. _GetPendingJobs.srv: ../../srv/GetPendingJobs.html
+.. _GetPendingJobs.srv: ../srv/GetPendingJobs.html
