@@ -5,7 +5,17 @@
 roscd rooster_fleet_manager
 rosdoc_lite .
 
+DIRECTORY=docs
+if [ ! -d "$DIRECTORY" ]; then
+    mkdir docs
+fi
+
+FILE=docs/.nojekyll
+if [ ! -e "$FILE" ]; then
+    touch docs/.nojekyll
+fi
+
 #copying built html files to docs folder to be viewed in browser
-cp -r doc/html/python/* docs/
-cp -r doc/html/msg/ docs/
-cp -r doc/html/srv/ docs/
+/bin/cp -r doc/html/python/* docs/
+/bin/cp -r doc/html/msg/ docs/
+/bin/cp -r doc/html/srv/ docs/
