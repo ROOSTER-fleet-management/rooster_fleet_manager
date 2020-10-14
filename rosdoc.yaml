@@ -20,7 +20,7 @@
 # exclude_symbols: (optional) override Doxygen property EXCLUDE_SYMBOLS. Default ""
 # predefined: (optional) override Doxygen property PREDEFINED. Default ""
 # use_mdfile_as_mainpage: (optional) override Doxygen property USE_MDFILE_AS_MAINPAGE. Default "" 
-# generate_tagfile: doc/tags/simple_sim.tag
+# generate_tagfile: doc/tags/rooster_fleet_manager.tag
 
 ##additional parameters for sphinx configuration
 # config: conf.py
