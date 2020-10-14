@@ -1,5 +1,5 @@
 marker\_array ROS node
-=====================
+======================
 
 The Marker Array ROS node reads location information from the ROS parameter server. It then sets up the matching sphere and text markers and publishes these on the 'visualization_marker_array' topic.
 
