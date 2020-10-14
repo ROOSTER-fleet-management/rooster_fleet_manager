@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# simple_sim documentation build configuration file, created by
+# rooster_fleet_manager documentation build configuration file, created by
 # sphinx-quickstart on Wed Aug 19 10:28:23 2020.
 #
 # This file is execfile()d with the current directory set to its
@@ -69,7 +69,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'simple_sim'
+project = u'rooster_fleet_manager'
 copyright = u'2020, Denis Patrick Neel'
 author = u'Denis Patrick Neel'
 
@@ -145,7 +145,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'simple_simdoc'
+htmlhelp_basename = 'rooster_fleet_managerdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -172,7 +172,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'simple_sim.tex', u'simple\\_sim Documentation',
+    (master_doc, 'rooster_fleet_manager.tex', u'rooster\\_fleet\\_manager Documentation',
      u'Denis Patrick Neel', 'manual'),
 ]
 
@@ -182,7 +182,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'simple_sim', u'simple_sim Documentation',
+    (master_doc, 'rooster_fleet_manager', u'rooster_fleet_manager Documentation',
      [author], 1)
 ]
 
@@ -193,8 +193,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'simple_sim', u'simple_sim Documentation',
-     author, 'simple_sim', 'One line description of project.',
+    (master_doc, 'rooster_fleet_manager', u'rooster_fleet_manager Documentation',
+     author, 'rooster_fleet_manager', 'One line description of project.',
      'Miscellaneous'),
 ]
 

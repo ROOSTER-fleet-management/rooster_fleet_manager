@@ -1,11 +1,11 @@
-# The simple_sim Fleet Management package
+# The rooster_fleet_manager Fleet Management package
 
 
 
 #### Dependencies
 **multi_robot_sim by @neel.nagda, @patrick.keesmaat**
 
-The simple_sim package is dependend upon the multi_robot_sim package, which can be found here: https://git.tu-delft.ne-kloud.de/neel.nagda/multi_robot_sim/src/melodic-devel
+The rooster_fleet_manager package is dependend upon the multi_robot_sim package, which can be found here: https://git.tu-delft.ne-kloud.de/neel.nagda/multi_robot_sim/src/melodic-devel
 
 Install this package before continuing, carefully following the README.md instructions. 
 
@@ -20,17 +20,17 @@ sudo apt-get install python-qt4
 ---
 
 #### Installation
-Once all dependencies have been succesfully installed you can continue with the simple_sim package itself.
+Once all dependencies have been succesfully installed you can continue with the rooster_fleet_manager package itself.
 
 1. Clone the repository into your workspace src folder. 
 2. Run catkin_make in the toplevel directory of your workspace.
 3. Launch the multi_robot_sim according to it's README.
-4. Use the following rosluanch command to launch the simple_sim package's nodes, starting the MEx Sentinel (MobileExecutor), Marker Array Publisher, Job Manager and finally the Fleet Manager Front End (GUI).
+4. Use the following rosluanch command to launch the rooster_fleet_manager package's nodes, starting the MEx Sentinel (MobileExecutor), Marker Array Publisher, Job Manager and finally the Fleet Manager Front End (GUI).
 
 ```console
-roslaunch simple_sim fleet_manager.launch
+roslaunch rooster_fleet_manager fleet_manager.launch
 ```
-*Note: Before launching the simple_sim Fleet Manager, first use the multi_robot_sim gui_based_launcher to set up the simulation environment and necessary ROS parameters, see also the [multi_robot_sim README.md file](https://git.tu-delft.ne-kloud.de/neel.nagda/multi_robot_sim/src/melodic-devel/README.md).*
+*Note: Before launching the rooster_fleet_manager Fleet Manager, first use the multi_robot_sim gui_based_launcher to set up the simulation environment and necessary ROS parameters, see also the [multi_robot_sim README.md file](https://git.tu-delft.ne-kloud.de/neel.nagda/multi_robot_sim/src/melodic-devel/README.md).*
 
 ---
 
@@ -42,7 +42,7 @@ In the **Orders tab** new orders can created, added to a pool and placed (send t
 
 Hovering over certain items in the Fleet Manager will provide further information in the *status bar* at the bottom of the application.
 
-More information on the Fleet Manager and simple_sim package, including license information, can be found in the *About screen* (File>About or *Ctrl+A*).
+More information on the Fleet Manager and rooster_fleet_manager package, including license information, can be found in the *About screen* (File>About or *Ctrl+A*).
 
 **Shortcuts**
 
@@ -85,7 +85,7 @@ In order to see these markers: open RViz, add "MarkerArray" view, and choose the
 ---
 
 #### Planned
-The following items are planned to be implemented in the simple_sim package:
+The following items are planned to be implemented in the rooster_fleet_manager package:
 
 - [ ] Job Refinement based on Mobile Executors capabilities and attributes.
 - [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
