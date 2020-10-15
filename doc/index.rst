@@ -7,6 +7,10 @@
 Welcome to rooster_fleet_manager's documentation!
 #################################################
 
+Robot Optimization, Scheduling, Task Execution and Routing (Ro.O.S.T.E.R.) 
+is an open source project to develop a heterogeneous fleet management solution 
+with task allocation, scheduling and autonomous navigation capabilities. 
+
 .. toctree::
    :maxdepth: 1
    :caption: Stuff to know:
