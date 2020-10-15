@@ -88,7 +88,7 @@ In order to see these markers: open RViz, add "MarkerArray" view, and choose the
 The following items are planned to be implemented in the simple_sim package:
 
 - [ ] Job Refinement based on Mobile Executors capabilities and attributes.
-- [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
+- [X] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
 - [ ] Job assignment optimization.
 - [ ] MEx/Task Routing 
 - [ ] Expansion of the supported Mobile Executor types; both Autonomous Mobile Robots (AMRs) and Human Controlled vehicles.
