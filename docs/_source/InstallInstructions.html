@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Getting Started" href="GettingStarted.html" />
-    <link rel="prev" title="Fleet Manager Overview" href="Overview.html" /> 
+    <link rel="prev" title="Fleet Simulation Ecosystem" href="rooster_ecosystem.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -57,7 +57,7 @@
 
           
             
-            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+            <img src="../_static/RoosterIcon v2.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -93,6 +93,7 @@
               <p class="caption"><span class="caption-text">Stuff to know:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Overview.html">Fleet Manager Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LaunchFilesLandingPage.html">Launch Files</a></li>
@@ -167,121 +168,64 @@
   <div class="section" id="installation-instructions">
 <h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
 <ul>
-<li><p class="first">Install ridgeback and multi-ridgeback packages:</p>
-<ul>
-<li><p class="first">Install the ridgeback simulation and navigation packages by clearpath robotics using the bash commands in the terminal.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
-</pre></div>
+<li><p class="first">Ensure you have a functional installation of ROS Melodic Morenia.
+(It is primarily targeted at the Ubuntu 18.04 (Bionic) release, though other Linux systems as well as Mac OS X, Android, and Windows are supported to varying degrees.
+For more information on compatibility on other platforms, please see <a class="reference external" href="https://www.ros.org/reps/rep-0003.html#melodic-morenia-may-2018-may-2023">REP 3: Target Platforms</a>).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Our software has been built and tested only on Ubuntu 18.04 using ROS Melodic.</p>
 </div>
-<p>To learn about using these packages check out the <a class="reference external" href="&lt;http://www.clearpathrobotics.com/assets/guides/kinetic/ridgeback/simulation.html&gt;">tutorials</a> by Clearpath Robotics.</p>
+<p>Refer these <a class="reference external" href="http://wiki.ros.org/melodic/Installation/Ubuntu">installation instructions</a> for installing ROS Melodic on Ubuntu 18.04.</p>
 </li>
-<li><p class="first">Install rospackage for teleoperation from terminal.</p>
-</li>
-<li><p class="first">Clone the multi_ridgeback_gazebo ROS package into the src directory of your catkin_ws and run catkin_make from the root of your catkin_ws.</p>
+<li><p class="first">In your home directory, make a folder called catkin_ws and an src folder within it.
+Do so by running the following command in a terminal <a class="footnote-reference" href="#id3" id="id1">[1]</a>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir -p ~/catkin_ws/src</span>
-<span class="go">cd ~/catkin_ws/src</span>
-<span class="go">git clone https://contact/n.n.nagda@tudelft.nl/for/access.git</span>
-<span class="go">cd ..</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Clone the following repositories into the src folder.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/rooster_fleet_manager.git">rooster_fleet_manager</a></li>
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_robot_sim.git">multi_robot_sim</a></li>
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_ridgeback_gazebo.git">multi_ridgeback_gazebo</a></li>
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_ridgeback_nav.git">multi_ridgeback_nav</a></li>
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_husky_gazebo.git">multi_husky_gazebo</a></li>
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_husky_nav.git">multi_husky_nav</a></li>
+</ul>
+</li>
+<li><p class="first">Install the ROS packages developed by Clearpathpath Robotics for simulating their robots ‘Ridgeback’ and ‘Husky’ <a class="footnote-reference" href="#id4" id="id2">[2]</a> .</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
+<span class="go">sudo apt install ros-melodic-husky-simulator ros-melodic-husky-desktop ros-melodic-husky-navigation</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<ul>
+<li><p class="first">Install python module PyQt4, required for rendering the GUI.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install python-qt4</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Build the cloned packages.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws</span>
 <span class="go">catkin_make</span>
 </pre></div>
 </div>
 </li>
-<li><div class="first admonition note">
-<p class="first admonition-title">Note</p>
-<p>To confirm the installation uptil this point, run the following roslaunch command in a terminal.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_gazebo multi_ridgeback_world.launch</span>
-</pre></div>
-</div>
-<p class="last">This should launch a gazebo simulation with 2 ridgebacks that can be teleoperated using the teleop nodes running in the launched terminals.
-Also, an instance of Rviz is launched, wherein you can visualize their laserscans and the TF tree.</p>
-</div>
-</li>
-<li><p class="first">Clone the multi_ridgeback_nav ROS package into the src directory of your catkin_ws and run catkin_make from the root of your catkin_ws.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws/src</span>
-<span class="go">git clone https://contact/n.n.nagda@tudelft.nl/for/access.git</span>
-<span class="go">cd ..</span>
-<span class="go">catkin_make</span>
+<li><p class="first">Add the setup.bash file of catkin_ws to .bashrc and source it to set up the environmnet variables pertaining to this ROS workspace.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">echo &quot;source ~/catkin_ws/devel/setup.bash&quot; &gt;&gt; ~/.bashrc</span>
+<span class="go">source ~/.bashrc</span>
 </pre></div>
 </div>
 </li>
-<li><div class="first admonition note">
-<p class="first admonition-title">Note</p>
-<p>To confirm the installation uptil this point, run the following roslaunch command in a terminal.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">roslaunch multi_ridgeback_nav multi_ridgeback_nav.launch</span>
-</pre></div>
-</div>
-<p>This should launch a gazebo simulation with 3 ridgebacks and an instance of Rviz to issue navigation goals.
-Additionally terminals are also launched to manually operate the robot if it is stuck.
-The 3 ridgebacks have IDs as rdg01 rdg02 and rdg03 respectively and their nodes and topics are live under those namespaces respectively.
-The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals to the respective robot by setting the current topic name for it in the tool properties.</p>
-<table border="1" class="colwidths-given last docutils" id="id1">
-<caption><span class="caption-text">setting 2D Nav Goal topic</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../_images/set_rviz_tool_properties_1.png"><img alt="alternate text" src="../_images/set_rviz_tool_properties_1.png" style="width: 150px;" /></a></td>
-<td><a class="reference internal" href="../_images/set_rviz_tool_properties_2.png"><img alt="alternate text" src="../_images/set_rviz_tool_properties_2.png" style="width: 150px;" /></a></td>
-<td><a class="reference internal" href="../_images/set_rviz_tool_properties_3.png"><img alt="alternate text" src="../_images/set_rviz_tool_properties_3.png" style="width: 150px;" /></a></td>
-</tr>
-<tr class="row-even"><td>Right click on 2D Nav Goal tool and click on tool properties</td>
-<td>Click the 2D Nav Goal topic</td>
-<td>Set the correct robot ID in the 2D Nav Goal topic base namespace</td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-</ul>
-</li>
-<li><p class="first">Install sfm_pmdm package including dependencies see <a class="reference external" href="https://git.tu-delft.ne-kloud.de/patrick.keesmaat/sfm_mpdm.">SFM-MPDM</a>.</p>
-</li>
-</ul>
-<blockquote>
-<div><blockquote>
-<div><ul>
-<li><p class="first">Installing dependency libraries</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install libopenblas-dev liblapack-dev libarpack2-dev libsuperlu-dev</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Installing <a class="reference external" href="http://arma.sourceforge.net/">Armadillo C++</a> library</p>
-</li>
-<li><p class="first">Clone <a class="reference external" href="https://github.com/tysik/obstacle_detector">obstacle_detector</a> package into catkin workspace and catkin_make.</p>
-</li>
-<li><p class="first">Install pygame</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install python-pygame</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Clone sfm_mpdm ROS package in the src directory of your workspace.</p>
-</li>
-</ul>
-</div></blockquote>
-</div></blockquote>
+<li><p class="first">[<strong>Optional</strong>] Install the tools required to develop and generate this documentation.</p>
 <ul>
-<li><p class="first">Build the multi_robot_sim ROS package.</p>
-<ul>
-<li><p class="first">Clone the repository into the src folder of your catkin_ws.</p>
-</li>
-<li><p class="first">Install PyQt4 (Python bindings for Qt) by running the following bash command in a terminal.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install pyqt4-dev-tools pyqt4.qsci-dev libqt4-dev python-qt4</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-<li><p class="first">Install the documentation generation tools</p>
-<ul>
-<li><p class="first">Install <a class="reference external" href="http://wiki.ros.org/rosdoc_lite">rosdoc_lite</a> ROS package using the following bash command in a terminal.</p>
+<li><p class="first">Install <a class="reference external" href="http://wiki.ros.org/rosdoc_lite">rosdoc_lite</a> ROS package using the following bash command[#]_ in a terminal.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-rosdoc-lite</span>
 </pre></div>
 </div>
-<p>This automatically installs doxygen, sphinx and epydoc.</p>
 </li>
-<li><p class="first">Install sphinx-rtd-theme, a sphinx extension that provides a beautiful theme for documentation.</p>
+<li><p class="first">Install sphinx_rtd_theme, the sphinx extension use for this documentation.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user sphinx-rtd-theme</span>
 </pre></div>
 </div>
@@ -294,6 +238,25 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
 </ul>
 </li>
 </ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Subsequent commands on this page, presented in the same looking highlighted boxes are to be run in the terminal as well.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>To learn about using these packages and to play around with these robots in simulation, check out the tutorials by Clearpath Robotics for <a class="reference external" href="http://www.clearpathrobotics.com/assets/guides/kinetic/ridgeback/simulation.html">Ridgeback</a> and <a class="reference external" href="http://www.clearpathrobotics.com/assets/guides/kinetic/husky/SimulatingHusky.html">Husky</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[3]</td><td>This command automatically installs doxygen, sphinx and epydoc as well.</td></tr>
+</tbody>
+</table>
 </div>
 
 
@@ -307,7 +270,7 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
         <a href="GettingStarted.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Overview.html" class="btn btn-neutral float-left" title="Fleet Manager Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="rooster_ecosystem.html" class="btn btn-neutral float-left" title="Fleet Simulation Ecosystem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -317,7 +280,7 @@ The 2d Nav Goal tool from the tool ribbon can be used to issue navigation goals 
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, Denis Patrick Neel
+        &copy; Copyright 
 
     </p>
   </div>

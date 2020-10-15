@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ROS nodes and source code API &mdash; rooster_fleet_manager 0.0.0 documentation</title>
+  <title>Fleet Simulation Ecosystem &mdash; rooster_fleet_manager 0.0.0 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="job_manager ROS node" href="src/job_manager.html" />
-    <link rel="prev" title="Launch Files" href="LaunchFilesLandingPage.html" /> 
+    <link rel="next" title="Installation Instructions" href="InstallInstructions.html" />
+    <link rel="prev" title="Fleet Manager Overview" href="Overview.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,19 +93,11 @@
               <p class="caption"><span class="caption-text">Stuff to know:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Overview.html">Fleet Manager Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="InstallInstructions.html">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LaunchFilesLandingPage.html">Launch Files</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ROS nodes and source code API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/job_manager.html">job_manager ROS node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/mex_sentinel.html">mex_sentinel ROS node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/fleet_manager_front.html">fleet_manager_front module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/marker_array.html">marker_array ROS node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/JobManager.html">JobManager package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/ui.html">ui package</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="SrcLandingPage.html">ROS nodes and source code API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MsgLandingPage.html">ROS messages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SrvLandingPage.html">ROS Services</a></li>
 </ul>
@@ -154,13 +146,13 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>ROS nodes and source code API</li>
+      <li>Fleet Simulation Ecosystem</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/_source/SrcLandingPage.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/_source/rooster_ecosystem.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -173,18 +165,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ros-nodes-and-source-code-api">
-<h1>ROS nodes and source code API<a class="headerlink" href="#ros-nodes-and-source-code-api" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="src/job_manager.html">job_manager ROS node</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/mex_sentinel.html">mex_sentinel ROS node</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/fleet_manager_front.html">fleet_manager_front module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/marker_array.html">marker_array ROS node</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/JobManager.html">JobManager package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/ui.html">ui package</a></li>
+  <div class="section" id="fleet-simulation-ecosystem">
+<h1>Fleet Simulation Ecosystem<a class="headerlink" href="#fleet-simulation-ecosystem" title="Permalink to this headline">¶</a></h1>
+<p>To simulate and assess the task allocation, scheduling and routing capabilites
+of the fleet manager, a collection of simulation related ROS packages have been developed
+in the ROOSTER fleet management ecosystem.</p>
+<p>These packages include</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_ridgeback_gazebo.git">multi_ridgeback_gazebo</a> and <a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_ridgeback_nav.git">and multi_ridgeback_nav</a></li>
+<li><a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_husky_gazebo.git">multi_husky_gazebo</a> and <a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_husky_nav.git">multi_husky_nav</a></li>
 </ul>
+<p>These packages have been built on top of simulation packages developed by Clearpath Robotics
+to simulate their robots ‘Ridgeback’ and ‘Husky’.
+The primary contribution of our packages is to facilitate a conflict-free multi-robot simulation by:</p>
+<ul class="simple">
+<li>Launching the localization, navigation, and other robot specific nodes in the correct namespace for each robot in the fleet</li>
+<li>Setting the correct tf (coordinate transformation) frame ids for the links of each robot</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Currently, only simulating Husky and Ridgeback is supported in ROOSTER.
+The platform can and will be extended to support more robots.</p>
 </div>
+<p>Additionally, <a class="reference external" href="https://github.com/ROOSTER-fleet-management/multi_robot_sim.git">multi_robot_sim</a>
+package</p>
+<ul class="simple">
+<li>provides a GUI interface to choose and launch the desired type and number of robots to form the heterogenous fleet</li>
+<li>launches a <a class="reference external" href="http://gazebosim.org/">gazebo</a> simulation with the specified map and chosen robots</li>
+<li>launches <a class="reference external" href="http://wiki.ros.org/rviz">rviz</a> to visualize the laser scan data of the robots and their navigation paths</li>
+</ul>
 </div>
 
 
@@ -195,10 +204,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="src/job_manager.html" class="btn btn-neutral float-right" title="job_manager ROS node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="InstallInstructions.html" class="btn btn-neutral float-right" title="Installation Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="LaunchFilesLandingPage.html" class="btn btn-neutral float-left" title="Launch Files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Overview.html" class="btn btn-neutral float-left" title="Fleet Manager Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

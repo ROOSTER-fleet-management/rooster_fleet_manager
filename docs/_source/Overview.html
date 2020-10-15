@@ -37,7 +37,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation Instructions" href="InstallInstructions.html" />
+    <link rel="next" title="Fleet Simulation Ecosystem" href="rooster_ecosystem.html" />
     <link rel="prev" title="Welcome to rooster_fleet_manager’s documentation!" href="../index.html" /> 
 </head>
 
@@ -57,7 +57,7 @@
 
           
             
-            <img src="../_static/ros.png" class="logo" alt="Logo"/>
+            <img src="../_static/RoosterIcon v2.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -93,12 +93,16 @@
               <p class="caption"><span class="caption-text">Stuff to know:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fleet Manager Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#job-manager">Job Manager</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-fleet-manager-application">The Fleet Manager application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mex-sentinel">MEx Sentinel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#job-manager">Job Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#marker-array">Marker Array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#order">Order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mobile-executor-mex">Mobile Executor (MEx)</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="InstallInstructions.html">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LaunchFilesLandingPage.html">Launch Files</a></li>
@@ -172,37 +176,94 @@
             
   <div class="section" id="fleet-manager-overview">
 <h1>Fleet Manager Overview<a class="headerlink" href="#fleet-manager-overview" title="Permalink to this headline">¶</a></h1>
-<p>This page describes the overall structure of the envisioned Fleet manager.
-The envisioned Fleet manager consists of the following 3 components:</p>
+<p>This page describes the overall structure of the Fleet manager with its components and its application.
+The Fleet manager consists of the following 4 main components:</p>
 <ul class="simple">
-<li>Job Manager</li>
-<li>MEx Sentinel</li>
-<li>Frontend GUI</li>
+<li><a class="reference internal" href="#the-fleet-manager-application">Front End GUI (application)</a></li>
+<li><a class="reference internal" href="#job-manager">Job Manager</a></li>
+<li><a class="reference internal" href="#mex-sentinel">MEx Sentinel</a></li>
+<li><a class="reference internal" href="#marker-array">Marker Array</a></li>
 </ul>
-<blockquote>
-<div><a class="reference internal image-reference" href="../_images/ROOSTER_architectural_diagram.png"><img alt="alternate text test" src="../_images/ROOSTER_architectural_diagram.png" style="width: 800px;" /></a>
-</div></blockquote>
+<dl class="docutils">
+<dt>The architectural diagram of the ROOSTER Fleet Manager looks as follows (each ROS node is signified by a blue outline):</dt>
+<dd><a class="first last reference internal image-reference" href="../_images/ROOSTER_architectural_diagram.png"><img alt="alternate text test" src="../_images/ROOSTER_architectural_diagram.png" style="width: 800px;" /></a>
+</dd>
+</dl>
+<div class="section" id="the-fleet-manager-application">
+<h2>The Fleet Manager application<a class="headerlink" href="#the-fleet-manager-application" title="Permalink to this headline">¶</a></h2>
+<p>In the Fleet Manager application you can get an overview of the current fleet and jobs, and place new orders. Each is on its own tab;</p>
+<p>In the <strong>Fleet tab</strong> an overview is given of the current <em>Jobs</em> and <em>Mobile Executors</em> in the fleet. Clicking any of the column headers will filter the lists in ascending or descending order based on that column’s header.</p>
+<p>In the <strong>Orders tab</strong> new orders can created, added to a pool and placed (send to the Job Manager). Right clicking an order in the <em>Order list</em> allows the user to delete it. Depending upon the provided <em>keyword</em>, a placeholder text is placed in the <em>Order arguments</em> input field clarifying the required and types of arguments.</p>
+<p>Hovering over certain items in the Fleet Manager will provide further information in the <em>status bar</em> at the bottom of the application.</p>
+<p>More information on the Fleet Manager and ROOSTER package version and license can be found in the <em>About screen</em> (File&gt;About or <em>Ctrl+A</em>).</p>
+<p><strong>Shortcuts</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Shortcut</strong></td>
+<td><strong>Explanation</strong></td>
+</tr>
+<tr class="row-even"><td><cite>Ctrl+A</cite></td>
+<td>Show the About screen.</td>
+</tr>
+<tr class="row-odd"><td><cite>Ctrl+Q</cite></td>
+<td>Quit the application.</td>
+</tr>
+<tr class="row-even"><td><cite>Alt+C</cite></td>
+<td>Clear the Order list.</td>
+</tr>
+<tr class="row-odd"><td><cite>Alt+P</cite></td>
+<td>Place the orders in the Order list.</td>
+</tr>
+<tr class="row-even"><td><cite>Alt+A</cite></td>
+<td>Add a new order to the Order list based on the provided input fields.</td>
+</tr>
+</tbody>
+</table>
+<p>For more information on the Fleet Manager Front node see <a class="reference external" href="src/fleet_manager_front.html">Fleet Manager Front node</a>.</p>
+</div>
+<div class="section" id="mex-sentinel">
+<h2>MEx Sentinel<a class="headerlink" href="#mex-sentinel" title="Permalink to this headline">¶</a></h2>
+<p>The MEx Sentinel runs in the background and keeps track of the Mobile Executor’s MEx ID, status and assigned Job ID.</p>
+<p>It provides <em>callable services locally</em> for retrieving the MEx List (<code class="code docutils literal notranslate"><span class="pre">/get_mex_list</span></code>), retrieving and changing a MEx’s status (<code class="code docutils literal notranslate"><span class="pre">/get_mex_status</span></code> and <code class="code docutils literal notranslate"><span class="pre">/change_mex_status</span></code>) and for assigning and unassigning Jobs (<code class="code docutils literal notranslate"><span class="pre">/assign_job_to_mex</span></code> and <code class="code docutils literal notranslate"><span class="pre">/unassign_job_from_mex</span></code>).</p>
+<p>It also publishes the <em>MEx List</em> to it’s local <code class="code docutils literal notranslate"><span class="pre">/mex_list_info</span></code> topic.</p>
+<p>For more information on the MEx Sentinel node see <a class="reference external" href="src/mex_sentinel.html">MEx Sentinel node</a>.</p>
+</div>
 <div class="section" id="job-manager">
 <h2>Job Manager<a class="headerlink" href="#job-manager" title="Permalink to this headline">¶</a></h2>
-<p>This component of the fleet manager pertains to
-obtaining orders from the Frontend GUI,
-either by a user or reading from a file,
-processing them to create job instances,
-allocating these jobs to the available robots (Mobile Executors),
-and dispatching these jobs to them
-and also updating information on the MEx Sentinel.</p>
-<p>It consists of:</p>
-<ul class="simple">
-<li>job builder</li>
-<li>job refiner</li>
-<li>job allocator</li>
-</ul>
-<div class="section" id="job">
-<h3>Job<a class="headerlink" href="#job" title="Permalink to this headline">¶</a></h3>
-<p>Each Job is made up of tasks. Currently available tasks are
-movebase, wait for load completion and wait for unload completion.
-TODO: describe more</p>
+<p>The Job Manager takes in orders from the Fleet Manager Front and appends them to an order list.</p>
+<p>Every second the Job Manager then checks this Order List and builds Jobs with Tasks from the orders, sorting them based on priority and placing them in the <em>Pending Job</em> list.</p>
+<p>Every few seconds the Job Manager will check this Pending Job list and pick the first Pending Job(highest priority first, then within priotity First In First Out). It then allocates this Job to an available (and if local is applicable; closest) MEx, passing the Job on to the <em>Active Jobs</em> list.</p>
+<p>Active Jobs keep track of their own Tasks and updates the MEx on the MEx Sentinel. Upon Job completion (succes, cancel, abort) the Job is removed from the Active Jobs list and the MEx is freed and set to STANDBY in the MEx Sentinel.</p>
+<p>The Job Manager provides <em>callable services locally</em> for placing Orders (<code class="code docutils literal notranslate"><span class="pre">/place_order</span></code>), retrieving the Pending Jobs list (<code class="code docutils literal notranslate"><span class="pre">/get_pending_jobs</span></code>), retrieving the Active Jobs list (<code class="code docutils literal notranslate"><span class="pre">/get_active_jobs</span></code>) and retrieving detailed Job Information (<code class="code docutils literal notranslate"><span class="pre">/get_job_info</span></code>).</p>
+<p>For more information on the Job Manager node see <a class="reference external" href="src/job_manager.html">Job Manager node</a>.</p>
 </div>
+<div class="section" id="marker-array">
+<h2>Marker Array<a class="headerlink" href="#marker-array" title="Permalink to this headline">¶</a></h2>
+<p>The Marker Array publisher takes in the Fleet’s order locations and publishes these to the <em>Rviz MarkerArray</em> topic (<code class="code docutils literal notranslate"><span class="pre">/visualization_marker_array</span></code>).</p>
+<p>Inside Rviz these Markers are visualized as magenta sphere’s with their name in white text.
+In order to see these markers: open RViz, add “MarkerArray” view, and choose the right topic as mentioned above.</p>
+<p>For more information on the Marker Array node, see <a class="reference external" href="src/marker_array.html">Marker Array node</a>.</p>
+</div>
+<div class="section" id="order">
+<h2>Order<a class="headerlink" href="#order" title="Permalink to this headline">¶</a></h2>
+<p>An order is a to-be-created Job. It comes in through the PlaceOrder service as hosted by the Job Manager. The PlaceOrder service is by default called by the Fleet Manager Front, but provided the right structure is used, any node could call the service to add orders.</p>
+<p>For more information on the PlaceOrder service, see <a class="reference external" href="SrvLandingPage.html">ROS Services</a>.</p>
+</div>
+<div class="section" id="jobs">
+<h2>Jobs<a class="headerlink" href="#jobs" title="Permalink to this headline">¶</a></h2>
+<p>Each Job is made up out of one or more Tasks. Currently available tasks are
+‘robot movebase’, ‘wait for load completion’ and ‘wait for unload completion’.</p>
+<p>For more information on Jobs, see the <a class="reference external" href="src/JobManager.html#module-JobManager.Job">Job Manager package, Job module</a>.</p>
+</div>
+<div class="section" id="mobile-executor-mex">
+<h2>Mobile Executor (MEx)<a class="headerlink" href="#mobile-executor-mex" title="Permalink to this headline">¶</a></h2>
+<p>A Mobile Executor or MEx is the overarching name for mobile robots and manually controlled vehicles.
+It signifies those vehicles, be it manned or autonomous, that are mobile and capable of executing Jobs.</p>
+<p>For more information on Mobile Executors, see the <a class="reference external" href="src/JobManager.html#module-JobManager.MobileExecutor">Job Manager package, MEx module</a>.</p>
 </div>
 </div>
 
@@ -214,7 +275,7 @@ TODO: describe more</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="InstallInstructions.html" class="btn btn-neutral float-right" title="Installation Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rooster_ecosystem.html" class="btn btn-neutral float-right" title="Fleet Simulation Ecosystem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to rooster_fleet_manager’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -227,7 +288,7 @@ TODO: describe more</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, Denis Patrick Neel
+        &copy; Copyright 
 
     </p>
   </div>
