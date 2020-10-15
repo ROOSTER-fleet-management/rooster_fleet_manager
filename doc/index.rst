@@ -17,6 +17,7 @@ with task allocation, scheduling and autonomous navigation capabilities.
    :name: mastertoc
 
    _source/Overview
+   _source/rooster_ecosystem
    _source/InstallInstructions
    _source/GettingStarted
    _source/LaunchFilesLandingPage
