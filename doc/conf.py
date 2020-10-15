@@ -27,7 +27,7 @@ catkin_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 catkin_package = catkin_pkg.package.parse_package(os.path.join(catkin_dir, catkin_pkg.package.PACKAGE_MANIFEST_FILENAME))
 
 # setting html_logo to ros logo
-html_logo = '_static/images/ros.png'
+html_logo = '_static/images/RoosterIcon v2.png'
 
 # Adding catkin-sphinx themes to html_theme_path
 import catkin_sphinx
@@ -70,7 +70,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'rooster_fleet_manager'
-copyright = u'2020, Denis Patrick Neel'
+#copyright = u'2020, Denis Patrick Neel'
 author = u'Denis Patrick Neel'
 
 # The version info for the project you're documenting, acts as replacement for

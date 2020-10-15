@@ -2,4 +2,5 @@
 Getting Started
 ***************
 
-This page will walk you through a tutorial on using this ROS package.
+To get started with using the ROOSTER robot fleet simulation and management tools, 
+check out this walk-through `video <https://youtu.be/qRdpv9bNOSY>`__.
