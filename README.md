@@ -1,8 +1,10 @@
-# The rooster_fleet_manager Fleet Management package
+# The rooster_fleet_manager package
 
+Robot Optimization, Scheduling, Task Execution and Routing (Ro.O.S.T.E.R.) is a ROS based open source project to develop a heterogeneous fleet management solution with task allocation, scheduling and autonomous navigation capabilities. rooster_fleet_manager is the central package in this ecosystem.
 
+Detailed documentation including architectural overview, installation instructions and source code API documentation can be found [here](https://rooster-fleet-management.github.io/rooster_fleet_manager/).
 
-#### Dependencies
+<!-- #### Dependencies
 **multi_robot_sim by @neel.nagda, @patrick.keesmaat**
 
 The rooster_fleet_manager package is dependend upon the multi_robot_sim package, which can be found here: https://git.tu-delft.ne-kloud.de/neel.nagda/multi_robot_sim/src/melodic-devel
@@ -82,13 +84,13 @@ The Marker Array publisher takes in the Fleet's order locations and publishes th
 Inside Rviz these Markers are visualized as magenta sphere's with their name in white text.<br/>
 In order to see these markers: open RViz, add "MarkerArray" view, and choose the right topic as mentioned above.<br/>
 
----
-
+--- -->
+<!-- 
 #### Planned
 The following items are planned to be implemented in the rooster_fleet_manager package:
 
 - [ ] Job Refinement based on Mobile Executors capabilities and attributes.
-- [ ] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
+- [X] Modular launching of Rviz based on provided Fleet information (Mobile Executors).
 - [ ] Job assignment optimization.
 - [ ] MEx/Task Routing 
-- [ ] Expansion of the supported Mobile Executor types; both Autonomous Mobile Robots (AMRs) and Human Controlled vehicles.
+- [ ] Expansion of the supported Mobile Executor types; both Autonomous Mobile Robots (AMRs) and Human Controlled vehicles. -->
