@@ -13,9 +13,9 @@ These packages include
 
 These packages have been built on top of simulation packages developed by Clearpath Robotics
 to simulate their robots 'Ridgeback' and 'Husky'.
-The primary contribution of our packages is :
+The primary contribution of our packages is to facilitate a conflict-free multi-robot simulation by:
 
-* launching the localization, navigation, and other robot specific nodes in the correct namespace for each robot in the fleet
+* Launching the localization, navigation, and other robot specific nodes in the correct namespace for each robot in the fleet
 * Setting the correct tf (coordinate transformation) frame ids for the links of each robot
 
 .. note::
