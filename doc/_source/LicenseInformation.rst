@@ -3,16 +3,22 @@ License Information
 *************************
 
 
-All the ROOSTER software is made available under the Apache License 2.0. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+All the ROOSTER software is made available under the Apache License 2.0 [#]_. 
+The license file has been included in the root directory of each software (ROS) package currently hosted under the ROOSTER Fleet Management github account. 
 
-You can find the licensing information of ROOSTER's dependencies below:
+The copyrights for this software are owned by the TU Delft and stakeholders of the 'Collaborating and coupled AGV swarms with extended environment recognition' project funded by EIT Manufacturing.
 
-* ROS
 
-* Clearpath robotics Husky packages 
+Here we mention the licensing information of ROOSTER's dependencies :
 
-* Clearpath Robotics Ridgeback packages
+* While the core parts of Robot Operating System (ROS) are licensed under the BSD license, other licenses are commonly used in the community packages, such as the Apache 2.0 license, the GPL license, the MIT license, and even proprietary licenses.
+  More information `here <https://www.ros.org/is-ros-for-me/>`__.
   
-  Missing license information at the time of writing this documentation, however the source code has been openly made available on the companies github repository. https://github.com/ridgeback
 
-* Qt4 and PyQt4 tools and libraries (required for GUI functionality) are made available under GPL and LGPLv3 open source licenses. More information can be found here https://www.qt.io/licensing/.
+* Some of the Clearpath Robotics' Husky and Ridgeback packages are released under the same BSD license as ROS. However, license information is not entirely clear for all the packages at the time of writing this documentation. Please look into the source code of these packages hosted on github for `Ridgeback <https://github.com/ridgeback>`__ and `Husky <https://github.com/husky>`__ for more clarity or contact the company.
+
+* Qt4 and PyQt4 tools and libraries (required for GUI functionality) are made available under GPL and LGPLv3 open source licenses. More information can be found `here <https://www.qt.io/licensing/>`__ and `here <https://riverbankcomputing.com/commercial/license-faq>`__ respectively.
+
+.. rubric:: Footnotes
+
+.. [#] You may obtain a copy of the license `here <http://www.apache.org/licenses/LICENSE-2.0>`__. 
