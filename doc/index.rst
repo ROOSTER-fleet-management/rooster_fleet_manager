@@ -24,6 +24,7 @@ funded by `EIT Manufacturing <https://eitmanufacturing.eu/>`__.
    _source/Overview
    _source/rooster_ecosystem
    _source/InstallInstructions
+   _source/LicenseInformation
    _source/GettingStarted
    _source/LaunchFilesLandingPage
    _source/SrcLandingPage
