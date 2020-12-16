@@ -26,18 +26,28 @@
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Getting Started" href="GettingStarted.html" />
+    <link rel="next" title="License Information" href="LicenseInformation.html" />
     <link rel="prev" title="Fleet Simulation Ecosystem" href="rooster_ecosystem.html" /> 
 </head>
 
@@ -95,6 +105,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Overview.html">Fleet Manager Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LicenseInformation.html">License Information</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LaunchFilesLandingPage.html">Launch Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SrcLandingPage.html">ROS nodes and source code API</a></li>
@@ -179,7 +190,7 @@ For more information on compatibility on other platforms, please see <a class="r
 </li>
 <li><p class="first">In your home directory, make a folder called catkin_ws and an src folder within it.
 Do so by running the following command in a terminal <a class="footnote-reference" href="#id3" id="id1">[1]</a>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir -p ~/catkin_ws/src</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">mkdir -p ~/catkin_ws/src</span>
 </pre></div>
 </div>
 </li>
@@ -194,7 +205,7 @@ Do so by running the following command in a terminal <a class="footnote-referenc
 </ul>
 </li>
 <li><p class="first">Install the ROS packages developed by Clearpathpath Robotics for simulating their robots ‘Ridgeback’ and ‘Husky’ <a class="footnote-reference" href="#id4" id="id2">[2]</a> .</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt install ros-melodic-ridgeback-simulator ros-melodic-ridgeback-desktop ros-melodic-ridgeback-navigation</span>
 <span class="go">sudo apt install ros-melodic-husky-simulator ros-melodic-husky-desktop ros-melodic-husky-navigation</span>
 </pre></div>
 </div>
@@ -202,18 +213,18 @@ Do so by running the following command in a terminal <a class="footnote-referenc
 </ul>
 <ul>
 <li><p class="first">Install python module PyQt4, required for rendering the GUI.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install python-qt4</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt install python-qt4</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Build the cloned packages.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">cd ~/catkin_ws</span>
 <span class="go">catkin_make</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Add the setup.bash file of catkin_ws to .bashrc and source it to set up the environmnet variables pertaining to this ROS workspace.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">echo &quot;source ~/catkin_ws/devel/setup.bash&quot; &gt;&gt; ~/.bashrc</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">echo &quot;source ~/catkin_ws/devel/setup.bash&quot; &gt;&gt; ~/.bashrc</span>
 <span class="go">source ~/.bashrc</span>
 </pre></div>
 </div>
@@ -221,17 +232,17 @@ Do so by running the following command in a terminal <a class="footnote-referenc
 <li><p class="first">[<strong>Optional</strong>] Install the tools required to develop and generate this documentation.</p>
 <ul>
 <li><p class="first">Install <a class="reference external" href="http://wiki.ros.org/rosdoc_lite">rosdoc_lite</a> ROS package using the following bash command[#]_ in a terminal.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-rosdoc-lite</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install ros-melodic-rosdoc-lite</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Install sphinx_rtd_theme, the sphinx extension use for this documentation.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user sphinx-rtd-theme</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user sphinx-rtd-theme</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Install catkin-sphinx, a sphinx extension that provides a ROS theme for documentation.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user catkin-sphinx</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">python2 -m pip install --user catkin-sphinx</span>
 </pre></div>
 </div>
 </li>
@@ -267,7 +278,7 @@ Do so by running the following command in a terminal <a class="footnote-referenc
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="GettingStarted.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="LicenseInformation.html" class="btn btn-neutral float-right" title="License Information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="rooster_ecosystem.html" class="btn btn-neutral float-left" title="Fleet Simulation Ecosystem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -280,7 +291,7 @@ Do so by running the following command in a terminal <a class="footnote-referenc
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 
+        &copy; Copyright 2020, TU Delft and stakeholders of &#39;Collaborating and coupled AGV swarms with extended environment recognition&#39; project funded by EIT Manufacturing.
 
     </p>
   </div>

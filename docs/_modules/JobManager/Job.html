@@ -26,11 +26,21 @@
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -93,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_source/Overview.html">Fleet Manager Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/LicenseInformation.html">License Information</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
@@ -170,10 +181,10 @@
 
 <span class="kn">import</span> <span class="nn">rospy</span>
 
-<span class="kn">from</span> <span class="nn">Tasks</span> <span class="kn">import</span> <span class="n">TaskStatus</span>
-<span class="kn">from</span> <span class="nn">MobileExecutor</span> <span class="kn">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
-<span class="kn">from</span> <span class="nn">Order</span> <span class="kn">import</span> <span class="n">OrderKeyword</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">Tasks</span> <span class="k">import</span> <span class="n">TaskStatus</span>
+<span class="kn">from</span> <span class="nn">MobileExecutor</span> <span class="k">import</span> <span class="n">MExStatus</span><span class="p">,</span> <span class="n">MobileExecutor</span>
+<span class="kn">from</span> <span class="nn">Order</span> <span class="k">import</span> <span class="n">OrderKeyword</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
 
 <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;[Job.py] &quot;</span>
 
@@ -196,7 +207,7 @@
 
 <div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Job.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class which contains overall job details and a list of job-tasks for individual jobs. &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">completion_cb</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">mex_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">JobPriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">completion_cb</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">mex_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">JobPriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">job_id</span>                                <span class="c1"># Unique identifier for this job, e.g. &quot;job001&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mex_id</span> <span class="o">=</span> <span class="n">mex_id</span>                            <span class="c1"># Unique identifier for an existing Mobile Executor (MEx), e.g. &quot;rdg01&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">PENDING</span>                 <span class="c1"># PENDING, ASSIGNED, ACTIVE, SUCCEEDED, ABORTED</span>
@@ -288,7 +299,7 @@
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 
+        &copy; Copyright 2020, TU Delft and stakeholders of &#39;Collaborating and coupled AGV swarms with extended environment recognition&#39; project funded by EIT Manufacturing.
 
     </p>
   </div>

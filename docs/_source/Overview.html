@@ -26,11 +26,21 @@
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -104,6 +114,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LicenseInformation.html">License Information</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LaunchFilesLandingPage.html">Launch Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SrcLandingPage.html">ROS nodes and source code API</a></li>
@@ -228,8 +239,8 @@ The Fleet manager consists of the following 4 main components:</p>
 <div class="section" id="mex-sentinel">
 <h2>MEx Sentinel<a class="headerlink" href="#mex-sentinel" title="Permalink to this headline">¶</a></h2>
 <p>The MEx Sentinel runs in the background and keeps track of the Mobile Executor’s MEx ID, status and assigned Job ID.</p>
-<p>It provides <em>callable services locally</em> for retrieving the MEx List (<code class="code docutils literal notranslate"><span class="pre">/get_mex_list</span></code>), retrieving and changing a MEx’s status (<code class="code docutils literal notranslate"><span class="pre">/get_mex_status</span></code> and <code class="code docutils literal notranslate"><span class="pre">/change_mex_status</span></code>) and for assigning and unassigning Jobs (<code class="code docutils literal notranslate"><span class="pre">/assign_job_to_mex</span></code> and <code class="code docutils literal notranslate"><span class="pre">/unassign_job_from_mex</span></code>).</p>
-<p>It also publishes the <em>MEx List</em> to it’s local <code class="code docutils literal notranslate"><span class="pre">/mex_list_info</span></code> topic.</p>
+<p>It provides <em>callable services locally</em> for retrieving the MEx List (<code class="code docutils literal"><span class="pre">/get_mex_list</span></code>), retrieving and changing a MEx’s status (<code class="code docutils literal"><span class="pre">/get_mex_status</span></code> and <code class="code docutils literal"><span class="pre">/change_mex_status</span></code>) and for assigning and unassigning Jobs (<code class="code docutils literal"><span class="pre">/assign_job_to_mex</span></code> and <code class="code docutils literal"><span class="pre">/unassign_job_from_mex</span></code>).</p>
+<p>It also publishes the <em>MEx List</em> to it’s local <code class="code docutils literal"><span class="pre">/mex_list_info</span></code> topic.</p>
 <p>For more information on the MEx Sentinel node see <a class="reference external" href="src/mex_sentinel.html">MEx Sentinel node</a>.</p>
 </div>
 <div class="section" id="job-manager">
@@ -238,12 +249,12 @@ The Fleet manager consists of the following 4 main components:</p>
 <p>Every second the Job Manager then checks this Order List and builds Jobs with Tasks from the orders, sorting them based on priority and placing them in the <em>Pending Job</em> list.</p>
 <p>Every few seconds the Job Manager will check this Pending Job list and pick the first Pending Job(highest priority first, then within priotity First In First Out). It then allocates this Job to an available (and if local is applicable; closest) MEx, passing the Job on to the <em>Active Jobs</em> list.</p>
 <p>Active Jobs keep track of their own Tasks and updates the MEx on the MEx Sentinel. Upon Job completion (succes, cancel, abort) the Job is removed from the Active Jobs list and the MEx is freed and set to STANDBY in the MEx Sentinel.</p>
-<p>The Job Manager provides <em>callable services locally</em> for placing Orders (<code class="code docutils literal notranslate"><span class="pre">/place_order</span></code>), retrieving the Pending Jobs list (<code class="code docutils literal notranslate"><span class="pre">/get_pending_jobs</span></code>), retrieving the Active Jobs list (<code class="code docutils literal notranslate"><span class="pre">/get_active_jobs</span></code>) and retrieving detailed Job Information (<code class="code docutils literal notranslate"><span class="pre">/get_job_info</span></code>).</p>
+<p>The Job Manager provides <em>callable services locally</em> for placing Orders (<code class="code docutils literal"><span class="pre">/place_order</span></code>), retrieving the Pending Jobs list (<code class="code docutils literal"><span class="pre">/get_pending_jobs</span></code>), retrieving the Active Jobs list (<code class="code docutils literal"><span class="pre">/get_active_jobs</span></code>) and retrieving detailed Job Information (<code class="code docutils literal"><span class="pre">/get_job_info</span></code>).</p>
 <p>For more information on the Job Manager node see <a class="reference external" href="src/job_manager.html">Job Manager node</a>.</p>
 </div>
 <div class="section" id="marker-array">
 <h2>Marker Array<a class="headerlink" href="#marker-array" title="Permalink to this headline">¶</a></h2>
-<p>The Marker Array publisher takes in the Fleet’s order locations and publishes these to the <em>Rviz MarkerArray</em> topic (<code class="code docutils literal notranslate"><span class="pre">/visualization_marker_array</span></code>).</p>
+<p>The Marker Array publisher takes in the Fleet’s order locations and publishes these to the <em>Rviz MarkerArray</em> topic (<code class="code docutils literal"><span class="pre">/visualization_marker_array</span></code>).</p>
 <p>Inside Rviz these Markers are visualized as magenta sphere’s with their name in white text.
 In order to see these markers: open RViz, add “MarkerArray” view, and choose the right topic as mentioned above.</p>
 <p>For more information on the Marker Array node, see <a class="reference external" href="src/marker_array.html">Marker Array node</a>.</p>
@@ -288,7 +299,7 @@ It signifies those vehicles, be it manned or autonomous, that are mobile and cap
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 
+        &copy; Copyright 2020, TU Delft and stakeholders of &#39;Collaborating and coupled AGV swarms with extended environment recognition&#39; project funded by EIT Manufacturing.
 
     </p>
   </div>

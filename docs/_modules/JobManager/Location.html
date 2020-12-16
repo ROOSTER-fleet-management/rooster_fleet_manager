@@ -26,11 +26,21 @@
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -93,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_source/Overview.html">Fleet Manager Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/LicenseInformation.html">License Information</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
@@ -175,7 +186,7 @@
 
 <div class="viewcode-block" id="Location"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.Location.Location">[docs]</a><span class="k">class</span> <span class="nc">Location</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class with location information (name, position, orientation) based on map reference frame. &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">x_coordinate</span><span class="p">,</span> <span class="n">y_coordinate</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">x_coordinate</span><span class="p">,</span> <span class="n">y_coordinate</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>                <span class="c1"># Unique identifier for this location, e.g. &quot;loc01&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>            <span class="c1"># Name of the location, string</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x_coordinate</span>       <span class="c1"># X position in map frame in meters, float</span>
@@ -194,7 +205,7 @@
 
     <span class="k">class</span> <span class="nc">my_dictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Class for location_dict to inherit the &#39;add&#39; method from in order to append locations. &quot;&quot;&quot;</span>
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
             <span class="bp">self</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span> 
           
         <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -220,7 +231,7 @@
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 
+        &copy; Copyright 2020, TU Delft and stakeholders of &#39;Collaborating and coupled AGV swarms with extended environment recognition&#39; project funded by EIT Manufacturing.
 
     </p>
   </div>

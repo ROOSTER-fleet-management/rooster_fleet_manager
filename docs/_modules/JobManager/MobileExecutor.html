@@ -26,11 +26,21 @@
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -93,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_source/Overview.html">Fleet Manager Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/rooster_ecosystem.html">Fleet Simulation Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/InstallInstructions.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_source/LicenseInformation.html">License Information</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/GettingStarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/LaunchFilesLandingPage.html">Launch Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_source/SrcLandingPage.html">ROS nodes and source code API</a></li>
@@ -170,7 +181,7 @@
 <span class="sd">Additionally, the MEx Status class is defined in this module as an enumerator.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
 
 <div class="viewcode-block" id="MExStatus"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.MobileExecutor.MExStatus">[docs]</a><span class="k">class</span> <span class="nc">MExStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class that acts as Enumerator for Mobile Executor (MEx) status. &quot;&quot;&quot;</span>
@@ -182,7 +193,7 @@
 
 <div class="viewcode-block" id="MobileExecutor"><a class="viewcode-back" href="../../_source/src/JobManager.html#JobManager.MobileExecutor.MobileExecutor">[docs]</a><span class="k">class</span> <span class="nc">MobileExecutor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class with Mobile Executor (MEx) information (MEx id, status, assigned job id) &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">MExStatus</span><span class="o">.</span><span class="n">STANDBY</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">MExStatus</span><span class="o">.</span><span class="n">STANDBY</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>                <span class="c1"># Unique identifier for this MEx, e.g. &quot;rdg01&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>        <span class="c1"># Status of the MEx (STANDBY, CHARGING, ASSIGNED, EXECUTING_TASK, ERROR)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">job_id</span>        <span class="c1"># The unique id of the job the MEx is assigned to.</span>
@@ -205,7 +216,7 @@
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 
+        &copy; Copyright 2020, TU Delft and stakeholders of &#39;Collaborating and coupled AGV swarms with extended environment recognition&#39; project funded by EIT Manufacturing.
 
     </p>
   </div>
