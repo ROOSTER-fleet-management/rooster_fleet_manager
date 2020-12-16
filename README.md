@@ -1,8 +1,16 @@
 # The rooster_fleet_manager package
 
-Robot Optimization, Scheduling, Task Execution and Routing (Ro.O.S.T.E.R.) is a ROS based open source project to develop a heterogeneous fleet management solution with task allocation, scheduling and autonomous navigation capabilities. rooster_fleet_manager is the central package in this ecosystem.
+Robot Optimization, Scheduling, Task Execution and Routing (Ro.O.S.T.E.R.) 
+is a ROS (Robot Operating System) based open source project to develop a heterogeneous fleet management solution 
+with task allocation, scheduling and autonomous navigation capabilities. 
 
-Detailed documentation including architectural overview, installation instructions and source code API documentation can be found [here](https://rooster-fleet-management.github.io/rooster_fleet_manager/).
+This software has been developed as part of the work at 
+the ['Center of Design for Advanced Manufacturing'](https://www.tudelft.nl/en/ide/research/research-labs/center-of-design-for-advanced-manufacturing/) lab of [TU Delft](https://www.tudelft.nl/en/) 
+on the ['Collaborating and coupled AGV swarms with extended environment recognition'](https://eitmanufacturing.eu/collaborating-and-coupled-agv-swarms-with-extended-environment-recognition/)  project
+funded by [EIT Manufacturing](<https://eitmanufacturing.eu/>).
+
+
+Detailed documentation including architectural overview, installation instructions, license information and source code API documentation can be found [here](https://rooster-fleet-management.github.io/rooster_fleet_manager/).
 
 <!-- #### Dependencies
 **multi_robot_sim by @neel.nagda, @patrick.keesmaat**
