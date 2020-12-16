@@ -70,7 +70,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'rooster_fleet_manager'
-#copyright = u'2020, Denis Patrick Neel'
+copyright = u'2020, TU Delft and stakeholders of \'Collaborating and coupled AGV swarms with extended environment recognition\' project funded by EIT Manufacturing.'
 author = u'Denis Patrick Neel'
 
 # The version info for the project you're documenting, acts as replacement for
